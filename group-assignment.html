@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Assignment Explainer — Gen AI: Pre-Trained Models</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* DesignArena warm palette */
+  --white: #ffffff;
+  --cream: #F7F6F5;
+  --cream-dark: #F3F1EF;
+  --cream-darker: #EEEDEA;
+  --warm-gray: #D9D9D9;
+  --warm-gray-dark: #898584;
+  --border: #D9D9D9;
+
+  /* Text */
+  --text-primary: #292C33;
+  --text-secondary: #6B7280;
+  --text-muted: #6A6A6A;
+  --text-light: #F8F7F6;
+
+  /* Earthy accents */
+  --teal: #487265;
+  --teal-light: #DDEFEF;
+  --teal-border: #568788;
+  --teal-dark: #407967;
+  --sage: #A0C3C4;
+  --olive: #AAB788;
+  --gold: #D4C68B;
+  --copper: #BC976A;
+  --bronze: #CAAB84;
+  --sand: #CB9F69;
+
+  /* Layout */
+  --max-w: 780px;
+  --header-h: 55px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: var(--white);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ───────────────────────────────── */
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.8rem; line-height: 1.05; letter-spacing: -0.05em; }
+h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
+h3 { font-size: 1.25rem; line-height: 1.3; margin: 1.5rem 0 .5rem; }
+h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  margin: 1.25rem 0 .4rem;
+  color: var(--text-primary);
+}
+p { margin-bottom: .75rem; }
+a { color: var(--teal); text-decoration: underline; }
+a:hover { color: var(--teal-dark); }
+
+/* ── Layout ───────────────────────────────────── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
+
+/* ── Fixed Header ─────────────────────────────── */
+header.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-inner {
+  width: 100%; max-width: var(--max-w); padding: 0 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-brand {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.header-brand .logo {
+  font-family: 'Playfair Display', serif; font-size: 1.15rem;
+  font-weight: 600; color: var(--text-primary); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header-brand .byline {
+  font-size: 11px; color: var(--warm-gray-dark);
+}
+.header-nav { display: flex; align-items: center; gap: 6px; }
+.header-nav a {
+  font-size: 14px; color: var(--text-primary); text-decoration: none;
+  padding: 6px 12px; border-radius: 9999px; transition: background .2s;
+}
+.header-nav a:hover { background: var(--cream); }
+.header-nav a.active {
+  background: var(--teal-light); border: 1px solid var(--teal-border);
+}
+
+/* ── Hero ──────────────────────────────────────── */
+.hero {
+  padding: calc(var(--header-h) + 48px) 0 48px;
+  text-align: center;
+}
+.hero h1 { margin-bottom: 16px; }
+.hero .subtitle {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 560px; margin: 0 auto 24px;
+}
+
+/* ── Pill Badges ──────────────────────────────── */
+.pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 20px 0;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px 8px 10px; border-radius: 40px;
+  font-size: 14px; font-weight: 500;
+  background: var(--cream); border: 1px solid var(--border);
+  color: var(--text-primary); transition: all .2s;
+}
+.pill .dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.pill.active {
+  background: var(--text-primary); color: var(--text-light);
+  border-color: var(--text-primary);
+}
+
+/* ── Prompt Box (signature element) ───────────── */
+.prompt-box {
+  max-width: 648px; margin: 0 auto 32px;
+  background: var(--cream); border: 1px solid var(--copper);
+  border-radius: 12px; padding: 20px;
+  text-align: left;
+}
+.prompt-box .prompt-label {
+  font-size: 12px; font-weight: 500; color: var(--warm-gray-dark);
+  margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em;
+}
+.prompt-box .prompt-text {
+  font-size: 1rem; color: var(--text-primary); line-height: 1.6;
+  font-style: italic;
+}
+.prompt-box .prompt-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 12px; font-size: 12px; color: var(--warm-gray-dark);
+}
+.prompt-box .prompt-meta .badge {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px; padding: 4px 10px; font-size: 12px; font-weight: 500;
+}
+
+/* ── Section Divider ──────────────────────────── */
+.section-warm {
+  background: var(--cream); padding: 48px 0;
+  margin: 0 -18px; padding-left: 18px; padding-right: 18px;
+}
+.section-white { padding: 48px 0; }
+
+/* ── Criterion Cards ──────────────────────────── */
+.criteria-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px; margin: 20px 0;
+}
+.criterion-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; position: relative;
+  transition: border-color .2s; cursor: pointer;
+}
+.criterion-card:hover { border-color: var(--teal-border); }
+.criterion-card.expanded { border-color: var(--teal-border); background: var(--white); }
+.criterion-card .card-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.criterion-card .card-marks {
+  flex-shrink: 0; background: var(--gold); color: var(--text-primary);
+  border-radius: 62px; padding: 4px 14px; font-size: 14px; font-weight: 500;
+  white-space: nowrap;
+}
+.criterion-card h4 {
+  margin: 0; font-size: 1rem; font-weight: 600;
+}
+.criterion-card .card-desc {
+  font-size: 14px; color: var(--text-secondary); margin-top: 8px;
+}
+.criterion-card .card-expand {
+  display: none; margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--cream-darker);
+}
+.criterion-card.expanded .card-expand { display: block; }
+.criterion-card .toggle-icon {
+  font-size: 12px; color: var(--warm-gray-dark);
+  transition: transform .2s;
+}
+.criterion-card.expanded .toggle-icon { transform: rotate(90deg); }
+
+/* ── Rubric Levels ────────────────────────────── */
+.rubric-levels {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 12px 0;
+}
+.rubric-level {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 8px; font-size: 14px;
+}
+.rubric-level .level-badge {
+  flex-shrink: 0; border-radius: 62px; padding: 2px 10px;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.level-good { background: #f0f7f4; }
+.level-good .level-badge { background: var(--sage); color: var(--text-primary); }
+.level-sat { background: #faf6ef; }
+.level-sat .level-badge { background: var(--gold); color: var(--text-primary); }
+.level-poor { background: #faf0ee; }
+.level-poor .level-badge { background: var(--copper); color: var(--white); }
+
+/* ── Step List ────────────────────────────────── */
+.step-list { list-style: none; padding: 0; margin: 20px 0; }
+.step-list li {
+  display: flex; gap: 16px; padding: 20px 0;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.step-list li:last-child { border-bottom: none; }
+.step-num {
+  flex-shrink: 0; width: 36px; height: 36px;
+  background: var(--text-primary); color: var(--text-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+}
+.step-content h4 { margin: 0 0 6px; font-size: 1rem; }
+.step-content p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+
+/* ── Insight Callouts ─────────────────────────── */
+.callout {
+  border-radius: 10px; padding: 16px 18px; margin: 16px 0;
+  font-size: 14px; line-height: 1.6;
+  border: 1px solid;
+}
+.callout.strategy {
+  background: var(--teal-light); border-color: var(--teal-border);
+}
+.callout.strategy::before {
+  content: 'Strategy '; font-weight: 600; color: var(--teal-dark);
+}
+.callout.warning {
+  background: #faf6ef; border-color: var(--copper);
+}
+.callout.warning::before {
+  content: 'Watch Out '; font-weight: 600; color: var(--copper);
+}
+.callout.golden {
+  background: #faf8f0; border-color: var(--gold);
+}
+.callout.golden::before {
+  content: 'Golden Rule '; font-weight: 600; color: var(--sand);
+}
+
+/* ── Bar Chart (earthy palette) ───────────────── */
+.bar-chart {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 8px; height: 200px; margin: 24px 0 8px; padding: 0 12px;
+}
+.bar-col {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex: 1; max-width: 100px;
+}
+.bar {
+  width: 100%; border-radius: 6px 6px 0 0;
+  transition: height .6s cubic-bezier(.4,0,.2,1);
+}
+.bar-label {
+  font-size: 11px; color: var(--text-secondary); text-align: center;
+  line-height: 1.3;
+}
+.bar-value {
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+}
+
+/* ── Expandable Sections ──────────────────────── */
+details.arena-details {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 10px; background: var(--white);
+  transition: border-color .2s;
+}
+details.arena-details:hover { border-color: var(--teal-border); }
+details.arena-details[open] { border-color: var(--teal-border); }
+details.arena-details > summary {
+  padding: 14px 18px; cursor: pointer; font-weight: 500;
+  font-size: 15px; list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+details.arena-details > summary::before {
+  content: '\25B6'; font-size: .65rem; color: var(--teal);
+  transition: transform .2s;
+}
+details.arena-details[open] > summary::before { transform: rotate(90deg); }
+details.arena-details > summary::-webkit-details-marker { display: none; }
+details.arena-details > .detail-body { padding: 0 18px 18px; }
+
+/* ── Checklist ────────────────────────────────── */
+.checklist { list-style: none; padding: 0; margin: 16px 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; font-size: 14px;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.checklist li:last-child { border-bottom: none; }
+.check-box {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;
+  border: 2px solid var(--warm-gray); border-radius: 4px;
+}
+
+/* ── Example Block ────────────────────────────── */
+.example-block {
+  background: var(--cream); border-radius: 10px;
+  padding: 16px 18px; margin: 12px 0; font-size: 14px;
+}
+.example-block .ex-label {
+  font-size: 12px; font-weight: 600; color: var(--teal-dark);
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
+}
+
+/* ── Code Block ───────────────────────────────── */
+.code-block {
+  background: var(--text-primary); color: var(--cream);
+  padding: 16px 18px; border-radius: 10px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px; line-height: 1.6; overflow-x: auto;
+  margin: 12px 0; white-space: pre-wrap; word-break: break-word;
+}
+
+/* ── Table ────────────────────────────────────── */
+.arena-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+}
+.arena-table th {
+  text-align: left; padding: 10px 12px; font-weight: 500;
+  color: var(--text-secondary); font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.arena-table td {
+  padding: 10px 12px; border-bottom: 1px solid var(--cream-darker);
+  vertical-align: top;
+}
+.arena-table tr:last-child td { border-bottom: none; }
+
+/* ── Progress Bar (win rate style) ────────────── */
+.progress-bar {
+  height: 6px; background: var(--cream-darker); border-radius: 3px;
+  overflow: hidden; margin-top: 4px;
+}
+.progress-bar .fill {
+  height: 100%; border-radius: 3px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── CTA Button ───────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text-primary); color: var(--text-light);
+  border: none; border-radius: 50px; padding: 14px 28px;
+  font-size: 16px; font-weight: 400; font-family: 'Inter', sans-serif;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s cubic-bezier(.4,0,.2,1);
+}
+.btn-primary:hover { background: #3a3d44; color: var(--text-light); text-decoration: none; }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal-dark); color: var(--text-light);
+  border: none; border-radius: 10px; padding: 8px 16px;
+  font-size: 14px; font-family: 'Inter', sans-serif;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s;
+}
+.btn-secondary:hover { background: var(--teal); color: var(--text-light); text-decoration: none; }
+
+/* ── Show more link ───────────────────────────── */
+.show-more {
+  color: var(--teal); font-size: 13px; text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Footer ───────────────────────────────────── */
+footer.site-footer {
+  padding: 32px 0 24px;
+  text-align: center; font-size: 14px; color: var(--text-muted);
+}
+footer.site-footer a {
+  color: var(--text-muted); text-decoration: none; margin: 0 8px;
+}
+footer.site-footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  .criteria-grid { grid-template-columns: 1fr; }
+  .bar-chart { height: 150px; gap: 4px; }
+  .pills { gap: 6px; }
+  .pill { font-size: 13px; padding: 6px 12px 6px 8px; }
+  .header-nav a { font-size: 13px; padding: 4px 8px; }
+}
+
+/* ── Print ────────────────────────────────────── */
+@media print {
+  header.site-header { display: none; }
+  .hero { padding-top: 24px; }
+  details.arena-details[open] > .detail-body { display: block !important; }
+  .criterion-card .card-expand { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">GroupAssignment</a>
+      <span class="byline">GenAI Pre-Trained Models</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#overview">Overview</a>
+      <a href="#criteria" class="active">Criteria</a>
+      <a href="#playbook">Playbook</a>
+      <a href="#maximizer">Maximizer</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="hero" id="overview">
+  <h1>Group Assignment<br>Explainer</h1>
+  <p class="subtitle">Design a Gen AI product that solves a real business problem. From vision to ROI &mdash; this is your startup pitch in academic form.</p>
+
+  <div class="pills">
+    <span class="pill"><span class="dot" style="background:var(--sage)"></span> 50 Marks</span>
+    <span class="pill"><span class="dot" style="background:var(--gold)"></span> 40% Weightage</span>
+    <span class="pill"><span class="dot" style="background:var(--olive)"></span> 6 Criteria</span>
+    <span class="pill"><span class="dot" style="background:var(--copper)"></span> 10-Slide Pitch</span>
+    <span class="pill"><span class="dot" style="background:var(--sage)"></span> Group Work</span>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-label">The Assignment in One Sentence</div>
+    <div class="prompt-text">&ldquo;Identify a challenging business problem, design a Gen AI solution using techniques from this course, create a product roadmap with ROI analysis, and pitch it in 10 slides as if presenting to a VC.&rdquo;</div>
+    <div class="prompt-meta">
+      <span>GGU DBA &mdash; upGrad Course 8919</span>
+      <span class="badge">Group Project</span>
+    </div>
+  </div>
+
+  <a href="#playbook" class="btn-primary">View the Playbook &darr;</a>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MARK DISTRIBUTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-warm">
+  <div class="container">
+    <h2>Mark Distribution</h2>
+    <p style="color:var(--text-secondary); margin-bottom: 24px;">Six criteria, weighted unevenly. The solution design, roadmap, and report quality carry the most weight &mdash; 10 points each. The chart below shows where your marks live.</p>
+
+    <div class="bar-chart" id="barChart">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="text-align:center; font-size: 12px; color: var(--warm-gray-dark); margin-top: 4px;">Points out of 50 &mdash; hover for details</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SIX CRITERIA -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="section-white" id="criteria">
+  <h2>The Six Criteria</h2>
+  <p style="color:var(--text-secondary);">Click any criterion to expand the rubric breakdown, scoring guidance, and examples of what &ldquo;Good&rdquo; looks like.</p>
+
+  <div id="criteriaContainer"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PLAYBOOK -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-warm">
+<div class="container" id="playbook">
+  <h2>The Playbook</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 8px;">Eight steps from blank page to polished submission. Follow this sequence and you will naturally hit every rubric criterion.</p>
+
+  <ol class="step-list">
+    <li>
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <h4>Pick a Problem Worth Solving</h4>
+        <p>Choose a business problem where Gen AI creates a <strong>defensible advantage</strong> &mdash; not just automation. The rubric rewards &ldquo;well-defined and complex&rdquo; problems. Think: unstructured data, domain expertise bottleneck, high-volume decisions. Avoid toy problems.</p>
+        <div class="callout strategy">Pick problems where humans currently spend 30+ minutes per decision using scattered information. That's where RAG + LLM creates the most compelling before/after story.</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <h4>Write Vision &amp; Mission Statements</h4>
+        <p><strong>Vision:</strong> Where the world is going (aspirational, 5-year horizon). <strong>Mission:</strong> What your product does to get there (concrete, measurable). These anchor your entire pitch.</p>
+        <div class="example-block">
+          <div class="ex-label">Example &mdash; Legal Document Intelligence</div>
+          <strong>Vision:</strong> A world where legal professionals spend their time on strategy and advocacy, not document review.<br>
+          <strong>Mission:</strong> Build an AI-powered document analysis platform that reduces contract review time by 80% while flagging critical risks with 95%+ recall.
+        </div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <h4>Design the Gen AI Solution</h4>
+        <p>This is <strong>20% of your grade</strong> (10 points). Your solution must clearly use Gen AI techniques from the course: LLMs, prompt engineering, RAG, fine-tuning, embeddings, agents. Name specific models and tools.</p>
+        <div class="callout golden">The rubric says: &ldquo;method of estimating the success of the approach is also clearly stated.&rdquo; This means you MUST include evaluation metrics &mdash; not just architecture. How do you measure if it works?</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <h4>Build the Product Roadmap</h4>
+        <p>Another <strong>10 points</strong>. Show a phased plan from MVP to full product. The rubric expects &ldquo;short-term to 3 years&rdquo; and &ldquo;technically correct.&rdquo;</p>
+        <div class="arena-table" style="margin-top: 12px;">
+          <table class="arena-table">
+            <thead><tr><th>Phase</th><th>Timeline</th><th>What to Include</th></tr></thead>
+            <tbody>
+              <tr><td><strong>MVP</strong></td><td>0-3 months</td><td>Core RAG pipeline, basic UI, 1 use case, internal testing</td></tr>
+              <tr><td><strong>Beta</strong></td><td>3-6 months</td><td>Multi-use-case support, feedback loop, pilot users</td></tr>
+              <tr><td><strong>v1.0</strong></td><td>6-12 months</td><td>Production deployment, integrations, analytics dashboard</td></tr>
+              <tr><td><strong>Scale</strong></td><td>1-3 years</td><td>Multi-tenant, additional domains, agentic workflows, marketplace</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <h4>ROI Analysis</h4>
+        <p>Yet another <strong>10 points</strong>. Cover both expense and revenue sides. The grader wants to see you can think about this as a business, not just a technology exercise.</p>
+        <div class="callout warning">Generic statements like &ldquo;AI saves time&rdquo; score poorly. Quantify everything: &ldquo;Contract review currently takes 4 hours &times; $200/hr paralegal cost. Our tool reduces this to 45 minutes, saving $650 per contract. At 200 contracts/month, annual savings = $1.56M.&rdquo;</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <h4>Build the 10-Slide Elevator Pitch</h4>
+        <p>This is your &ldquo;Quality of Report and Presentation&rdquo; criterion (<strong>10 points</strong>). Ten slides max &mdash; make every one count.</p>
+        <div class="example-block">
+          <div class="ex-label">Recommended Slide Structure</div>
+          <strong>1.</strong> Problem &amp; Market Size &nbsp;
+          <strong>2.</strong> Vision &amp; Mission &nbsp;
+          <strong>3.</strong> Solution Overview &nbsp;
+          <strong>4.</strong> Gen AI Architecture &nbsp;
+          <strong>5.</strong> Demo / Proof of Concept &nbsp;
+          <strong>6.</strong> Product Roadmap &nbsp;
+          <strong>7.</strong> Business Model &amp; ROI &nbsp;
+          <strong>8.</strong> Competitive Landscape &nbsp;
+          <strong>9.</strong> Team &amp; Unique Aspects &nbsp;
+          <strong>10.</strong> Ask / Next Steps
+        </div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">7</span>
+      <div class="step-content">
+        <h4>Highlight Unique Aspects</h4>
+        <p>The final <strong>5 points</strong> reward uniqueness. The rubric explicitly mentions three dimensions: patent potential, publishable quality, and VC-presentable. You don't need all three &mdash; but aim for at least one.</p>
+        <div class="callout strategy">Frame your unique angle explicitly: &ldquo;Our approach to [specific technique] could be filed as a provisional patent because...&rdquo; or &ldquo;This methodology section could be adapted into a conference paper for [venue].&rdquo; Don't leave the grader guessing.</div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">8</span>
+      <div class="step-content">
+        <h4>Polish &amp; Rehearse</h4>
+        <p>Oral presentations happen in Sessions 14-15. The quality of your presentation is scored &mdash; not just the written report. Rehearse as a group. Time your pitch to 10 minutes or less.</p>
+      </div>
+    </li>
+  </ol>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PROBLEM IDEAS -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="section-white">
+  <h2>Problem Idea Arena</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">You can choose your own problem or build on the 10 jobs from Assignment 1. Here are high-impact problem spaces that naturally suit Gen AI solutions:</p>
+
+  <div id="problemIdeas"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ROI DEEP-DIVE -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-warm">
+<div class="container">
+  <h2>ROI Analysis Framework</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">Structure your ROI as a two-sided balance sheet. The rubric says &ldquo;covering expenses and revenue aspects.&rdquo;</p>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div style="background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px;">
+      <h4 style="color:var(--teal-dark); margin-top:0;">Costs (Year 1)</h4>
+      <ul style="font-size:14px; color:var(--text-secondary); padding-left: 18px;">
+        <li>LLM API costs (per-token pricing)</li>
+        <li>Vector DB hosting (Pinecone/Weaviate)</li>
+        <li>Embedding computation</li>
+        <li>Development team (FTEs)</li>
+        <li>Cloud infrastructure (compute, storage)</li>
+        <li>KB curation &amp; maintenance</li>
+        <li>Security &amp; compliance</li>
+      </ul>
+    </div>
+    <div style="background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px;">
+      <h4 style="color:var(--teal-dark); margin-top:0;">Value &amp; Revenue</h4>
+      <ul style="font-size:14px; color:var(--text-secondary); padding-left: 18px;">
+        <li>Time saved &times; hourly labor cost</li>
+        <li>Error reduction &times; cost per error</li>
+        <li>Throughput increase (more decisions/day)</li>
+        <li>Subscription revenue (SaaS model)</li>
+        <li>Reduced onboarding time for new hires</li>
+        <li>Competitive advantage / market share</li>
+        <li>Data-driven insights (new revenue stream)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-block" style="margin-top:16px;">
+    <div class="ex-label">Example ROI Summary Table</div>
+    <table class="arena-table">
+      <thead><tr><th>Item</th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
+      <tbody>
+        <tr><td>Development Cost</td><td>$180K</td><td>$90K</td><td>$90K</td></tr>
+        <tr><td>Infrastructure &amp; APIs</td><td>$36K</td><td>$60K</td><td>$84K</td></tr>
+        <tr><td><strong>Total Cost</strong></td><td><strong>$216K</strong></td><td><strong>$150K</strong></td><td><strong>$174K</strong></td></tr>
+        <tr><td>Labor Savings</td><td>$120K</td><td>$480K</td><td>$720K</td></tr>
+        <tr><td>New Revenue</td><td>$0</td><td>$200K</td><td>$600K</td></tr>
+        <tr><td><strong>Net ROI</strong></td><td style="color:var(--copper)"><strong>-$96K</strong></td><td style="color:var(--teal)"><strong>+$530K</strong></td><td style="color:var(--teal)"><strong>+$1.15M</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCORING MAXIMIZER -->
+<!-- ═══════════════════════════════════════════════ -->
+<section class="section-white" id="maximizer">
+  <h2>Scoring Maximizer</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">Check every item before submitting. Each maps directly to rubric language.</p>
+
+  <details class="arena-details" open>
+    <summary>Problem Definition <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Problem is specific and clearly scoped (not vague &ldquo;improve efficiency&rdquo;)</li>
+        <li><span class="check-box"></span> Explained why this problem is suitable for Gen AI specifically</li>
+        <li><span class="check-box"></span> Defined clear objectives with measurable success criteria</li>
+        <li><span class="check-box"></span> Described the current state (how is this done today, what's the pain)</li>
+        <li><span class="check-box"></span> Estimated market size or organizational impact</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Gen AI Solution Design <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Named specific Gen AI techniques used (RAG, fine-tuning, agents, etc.)</li>
+        <li><span class="check-box"></span> Chose specific tools and models (not &ldquo;an LLM&rdquo; but &ldquo;GPT-4o-mini via Azure OpenAI&rdquo;)</li>
+        <li><span class="check-box"></span> Described the full pipeline: data ingestion &rarr; processing &rarr; inference &rarr; output</li>
+        <li><span class="check-box"></span> Included evaluation methodology with specific metrics</li>
+        <li><span class="check-box"></span> Explained why Gen AI vs traditional ML/rule-based approaches</li>
+        <li><span class="check-box"></span> Addressed data requirements (what data, how much, quality needs)</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Product Roadmap <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Phased timeline from MVP to 3-year vision</li>
+        <li><span class="check-box"></span> Each phase has specific deliverables (not vague milestones)</li>
+        <li><span class="check-box"></span> Technical architecture is correct and feasible</li>
+        <li><span class="check-box"></span> Addressed scaling strategy (users, data volume, features)</li>
+        <li><span class="check-box"></span> Included risk mitigation for each phase</li>
+        <li><span class="check-box"></span> Aligned with vision/mission statements</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>ROI Analysis <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Quantified costs (development, infrastructure, ongoing operations)</li>
+        <li><span class="check-box"></span> Quantified revenue or value (time saved, error reduction, new revenue)</li>
+        <li><span class="check-box"></span> Multi-year projection (at least 3 years)</li>
+        <li><span class="check-box"></span> Break-even analysis (when does investment pay off?)</li>
+        <li><span class="check-box"></span> Compared ROI to current state / alternative solutions</li>
+        <li><span class="check-box"></span> Stated assumptions clearly</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Report &amp; Presentation Quality <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Elevator pitch is exactly 10 slides (not more)</li>
+        <li><span class="check-box"></span> Slides are visual, not walls of text</li>
+        <li><span class="check-box"></span> Consistent design theme across all slides</li>
+        <li><span class="check-box"></span> Written report is well-structured with clear sections</li>
+        <li><span class="check-box"></span> Figures and diagrams are labeled and referenced</li>
+        <li><span class="check-box"></span> Group practiced the oral presentation together</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Unique Aspects <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 points</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Explicitly stated what makes this unique/novel</li>
+        <li><span class="check-box"></span> Addressed at least one: patent potential, publishable, VC-presentable</li>
+        <li><span class="check-box"></span> Described competitive differentiation (what's new vs existing solutions)</li>
+        <li><span class="check-box"></span> If applicable: described IP or data moat</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="callout golden" style="margin-top: 24px;">Structure your report sections to <strong>mirror the 6 rubric criteria</strong> &mdash; Problem Definition, Solution Design, Product Roadmap, ROI Analysis, Unique Aspects. Make the grader's job easy. When they look for &ldquo;ROI Analysis,&rdquo; there should be a section titled exactly that.</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- COMPARISON: ASSIGNMENT 1 vs GROUP -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="section-warm">
+<div class="container">
+  <h2>Assignment 1 vs Group Assignment</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">These are fundamentally different exercises. Don't reuse your Assignment 1 without rethinking the framing.</p>
+
+  <table class="arena-table">
+    <thead><tr><th style="width:25%;">Dimension</th><th>Assignment 1 (25 marks)</th><th>Group Assignment (50 marks)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Scope</strong></td><td>One pre-defined task for one job</td><td>Any business problem (your choice)</td></tr>
+      <tr><td><strong>Focus</strong></td><td>RAG architecture design</td><td>Full product: vision &rarr; roadmap &rarr; ROI</td></tr>
+      <tr><td><strong>Output</strong></td><td>7+3 page written note</td><td>Written report + 10-slide pitch + oral presentation</td></tr>
+      <tr><td><strong>Evaluation</strong></td><td>Technical correctness</td><td>Business viability + technical design + uniqueness</td></tr>
+      <tr><td><strong>Team</strong></td><td>Individual</td><td>Group collaboration</td></tr>
+      <tr><td><strong>Unique angle</strong></td><td>Not scored</td><td>5 points for patent/publishable/VC potential</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout strategy" style="margin-top:16px;">You <em>can</em> build on your Assignment 1 job &mdash; but the group assignment demands you go far beyond a RAG pipeline. You need business context (market, competition, revenue model), a roadmap, and ROI. Think of Assignment 1 as the technical kernel inside a much larger business wrapper.</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <a href="#overview">Top</a> |
+  <a href="#criteria">Criteria</a> |
+  <a href="#playbook">Playbook</a> |
+  <a href="#maximizer">Maximizer</a>
+  <div style="margin-top:12px; font-size:12px;">Study guide &mdash; not affiliated with GGU or upGrad</div>
+</footer>
+
+</div><!-- /container -->
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ═══════════════════════════════════════════════ -->
+<script>
+(function() {
+  "use strict";
+
+  // ── Bar Chart ──────────────────────────────────
+  var criteria = [
+    { label: "Problem\nDefinition", points: 5, color: "#A0C3C4" },
+    { label: "GenAI Solution\nDesign", points: 10, color: "#AAB788" },
+    { label: "Product\nRoadmap", points: 10, color: "#D4C68B" },
+    { label: "ROI\nAnalysis", points: 10, color: "#BC976A" },
+    { label: "Report &\nPresentation", points: 10, color: "#CAAB84" },
+    { label: "Unique\nAspects", points: 5, color: "#DBD6D2" }
+  ];
+
+  var maxPts = 10;
+  var chartEl = document.getElementById("barChart");
+  criteria.forEach(function(c) {
+    var col = document.createElement("div");
+    col.className = "bar-col";
+
+    var val = document.createElement("div");
+    val.className = "bar-value";
+    val.appendChild(document.createTextNode(c.points + " pts"));
+
+    var bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.backgroundColor = c.color;
+    bar.style.height = ((c.points / maxPts) * 140) + "px";
+
+    var lbl = document.createElement("div");
+    lbl.className = "bar-label";
+    lbl.appendChild(document.createTextNode(c.label.replace("\n", " ")));
+
+    col.appendChild(val);
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    chartEl.appendChild(col);
+  });
+
+  // ── Criteria Cards ─────────────────────────────
+  var criteriaData = [
+    {
+      title: "Problem Definition",
+      marks: "5 pts",
+      marksColor: "#A0C3C4",
+      desc: "How well-defined and complex is the problem you chose?",
+      good: "Shortlisted a very good problem with clear objectives that is naturally suited to Gen AI. Stakeholders, pain points, and success metrics are explicit.",
+      sat: "Problem statement is clear but may not be the best fit for Gen AI. Objectives are vague or success criteria are missing.",
+      poor: "Problem statement is unclear. No explanation of why Gen AI is relevant to this problem.",
+      tips: [
+        "State the problem in one sentence, then elaborate",
+        "Explain why traditional approaches fall short",
+        "Quantify the current pain (cost, time, error rate)",
+        "Show why Gen AI is the right fit (unstructured data, knowledge synthesis, natural language)"
+      ]
+    },
+    {
+      title: "Gen AI Solution Design",
+      marks: "10 pts",
+      marksColor: "#AAB788",
+      desc: "Is the approach clearly described? Is the evaluation method stated?",
+      good: "Architecture is clearly described with specific models, tools, and pipeline. Method of evaluating success is explicitly stated with metrics.",
+      sat: "Either the solution description or the evaluation methodology is unclear. Technical choices are vague.",
+      poor: "Neither the solution architecture nor how to evaluate it is described clearly.",
+      tips: [
+        "Name every component: embedding model, vector DB, LLM, framework",
+        "Include an architecture diagram (even hand-drawn is fine)",
+        "CRITICAL: State your evaluation methodology with specific metrics",
+        "Reference course concepts: RAG, prompt engineering, fine-tuning, agents"
+      ]
+    },
+    {
+      title: "Product Roadmap",
+      marks: "10 pts",
+      marksColor: "#D4C68B",
+      desc: "Clear short-to-long-term plan? Technically correct and implementable?",
+      good: "Clear phased roadmap from MVP to 3 years. Each phase has specific deliverables. Solution is technically correct and implementable.",
+      sat: "Some gaps in the technical plan. Roadmap exists but phases are vague or the solution has feasibility questions.",
+      poor: "Solution is not technically correct. Roadmap is unconvincing or missing.",
+      tips: [
+        "Use a 4-phase structure: MVP (0-3mo), Beta (3-6mo), v1.0 (6-12mo), Scale (1-3yr)",
+        "Each phase should have concrete deliverables, not just goals",
+        "Address technical risks at each phase",
+        "Show how user feedback loops into the next phase"
+      ]
+    },
+    {
+      title: "ROI Analysis",
+      marks: "10 pts",
+      marksColor: "#BC976A",
+      desc: "Quantified costs and revenue? Clear investment rationale?",
+      good: "Clearly stated analysis covering both expense and revenue aspects. Specific numbers, multi-year projections, break-even timeline.",
+      sat: "Satisfactory analysis covering all aspects but lacking specificity or missing key cost/revenue items.",
+      poor: "Basic level of analysis. Vague statements about saving time or money without numbers.",
+      tips: [
+        "Build a 3-year cost table (development, infrastructure, operations)",
+        "Quantify value: time saved x hourly rate x volume",
+        "Show break-even point clearly",
+        "Compare ROI to doing nothing or using non-AI alternatives"
+      ]
+    },
+    {
+      title: "Report & Presentation Quality",
+      marks: "10 pts",
+      marksColor: "#CAAB84",
+      desc: "Well-structured report and compelling 10-slide elevator pitch?",
+      good: "Very good report with clear structure. Presentation is compelling, visual, and well-rehearsed. Slides are not text-heavy.",
+      sat: "Decent report and presentation. Some structural issues or slides are too dense.",
+      poor: "Basic report and presentation. Hard to follow or poorly organized.",
+      tips: [
+        "Limit slides to 10 (the rubric says 'limited to 10 slides')",
+        "One key message per slide with supporting visuals",
+        "Written report sections should mirror the 6 rubric criteria",
+        "Practice the oral presentation as a group — timing and transitions matter"
+      ]
+    },
+    {
+      title: "Unique Aspects",
+      marks: "5 pts",
+      marksColor: "#DBD6D2",
+      desc: "Patent potential? Publishable? VC-presentable?",
+      good: "Significant uniqueness — could be filed as a patent, published as a paper, or presented to a VC for funding.",
+      sat: "Medium level of uniqueness. Some novel elements but not fully developed.",
+      poor: "Basic solution with no distinguishing novel aspects.",
+      tips: [
+        "Explicitly state your novel contribution in one paragraph",
+        "Address at least one of: patent potential, publishable methodology, VC pitch-readiness",
+        "Describe competitive differentiation — what's new vs. existing tools",
+        "If applicable: describe your data advantage or IP moat"
+      ]
+    }
+  ];
+
+  var container = document.getElementById("criteriaContainer");
+  criteriaData.forEach(function(c) {
+    var card = document.createElement("div");
+    card.className = "criterion-card";
+
+    // Header
+    var header = document.createElement("div");
+    header.className = "card-header";
+    var titleEl = document.createElement("h4");
+    titleEl.appendChild(document.createTextNode(c.title));
+    var marksEl = document.createElement("span");
+    marksEl.className = "card-marks";
+    marksEl.style.backgroundColor = c.marksColor;
+    marksEl.appendChild(document.createTextNode(c.marks));
+    var toggleEl = document.createElement("span");
+    toggleEl.className = "toggle-icon";
+    toggleEl.appendChild(document.createTextNode("\u25B6"));
+    header.appendChild(titleEl);
+    header.appendChild(marksEl);
+    header.appendChild(toggleEl);
+
+    // Description
+    var descEl = document.createElement("div");
+    descEl.className = "card-desc";
+    descEl.appendChild(document.createTextNode(c.desc));
+
+    // Expandable
+    var expandEl = document.createElement("div");
+    expandEl.className = "card-expand";
+
+    // Rubric levels
+    var levels = document.createElement("div");
+    levels.className = "rubric-levels";
+
+    function addLevel(cls, badgeText, text) {
+      var row = document.createElement("div");
+      row.className = "rubric-level " + cls;
+      var badge = document.createElement("span");
+      badge.className = "level-badge";
+      badge.appendChild(document.createTextNode(badgeText));
+      var desc = document.createElement("span");
+      desc.appendChild(document.createTextNode(text));
+      row.appendChild(badge);
+      row.appendChild(desc);
+      levels.appendChild(row);
+    }
+
+    addLevel("level-good", "Good", c.good);
+    addLevel("level-sat", "Satisfactory", c.sat);
+    addLevel("level-poor", "Needs Work", c.poor);
+    expandEl.appendChild(levels);
+
+    // Tips
+    var tipsH = document.createElement("h4");
+    tipsH.appendChild(document.createTextNode("How to Score Maximum"));
+    tipsH.style.marginTop = "16px";
+    expandEl.appendChild(tipsH);
+
+    var tipsList = document.createElement("ul");
+    tipsList.style.fontSize = "14px";
+    tipsList.style.paddingLeft = "18px";
+    tipsList.style.color = "#6B7280";
+    c.tips.forEach(function(t) {
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(t));
+      li.style.marginBottom = "4px";
+      tipsList.appendChild(li);
+    });
+    expandEl.appendChild(tipsList);
+
+    card.appendChild(header);
+    card.appendChild(descEl);
+    card.appendChild(expandEl);
+
+    card.addEventListener("click", function() {
+      var isExpanded = card.classList.contains("expanded");
+      // Close all
+      var allCards = document.querySelectorAll(".criterion-card");
+      for (var i = 0; i < allCards.length; i++) {
+        allCards[i].classList.remove("expanded");
+      }
+      if (!isExpanded) card.classList.add("expanded");
+    });
+
+    container.appendChild(card);
+  });
+
+  // ── Problem Ideas ──────────────────────────────
+  var problems = [
+    {
+      category: "Legal & Compliance",
+      color: "#A0C3C4",
+      ideas: [
+        { name: "Contract Risk Analyzer", desc: "RAG-based tool that reviews contracts, flags risky clauses, and suggests amendments based on historical legal outcomes." },
+        { name: "Regulatory Change Tracker", desc: "Agent that monitors regulatory updates, assesses impact on existing policies, and drafts compliance action items." }
+      ]
+    },
+    {
+      category: "Healthcare",
+      color: "#AAB788",
+      ideas: [
+        { name: "Clinical Trial Matcher", desc: "Match patients to eligible clinical trials using medical records + trial criteria. RAG over medical literature for context." },
+        { name: "Medical Report Summarizer", desc: "Generate patient-friendly summaries of complex medical reports with accuracy verification." }
+      ]
+    },
+    {
+      category: "Finance & Insurance",
+      color: "#D4C68B",
+      ideas: [
+        { name: "Claims Processing Copilot", desc: "Automate document review, gap detection, and decision recommendations for insurance claims." },
+        { name: "Financial Advisory RAG", desc: "Personalized investment advice grounded in market data, regulations, and client risk profiles." }
+      ]
+    },
+    {
+      category: "Education & Training",
+      color: "#BC976A",
+      ideas: [
+        { name: "Adaptive Learning Companion", desc: "AI tutor that adapts explanations to student's learning style using RAG over curriculum materials." },
+        { name: "Corporate Onboarding Agent", desc: "New employee assistant that answers role-specific questions from company knowledge bases." }
+      ]
+    },
+    {
+      category: "Sales & Marketing",
+      color: "#CAAB84",
+      ideas: [
+        { name: "Proposal Generator", desc: "Generate tailored client proposals by retrieving past winning proposals and adapting to new requirements." },
+        { name: "Competitive Intelligence Bot", desc: "Monitor competitor activity, synthesize insights, and generate briefings for sales teams." }
+      ]
+    }
+  ];
+
+  var ideasContainer = document.getElementById("problemIdeas");
+  problems.forEach(function(cat) {
+    var details = document.createElement("details");
+    details.className = "arena-details";
+
+    var summary = document.createElement("summary");
+    var dot = document.createElement("span");
+    dot.className = "dot";
+    dot.style.backgroundColor = cat.color;
+    dot.style.display = "inline-block";
+    dot.style.width = "10px";
+    dot.style.height = "10px";
+    dot.style.borderRadius = "50%";
+    dot.style.marginRight = "8px";
+    dot.style.marginLeft = "4px";
+    summary.appendChild(dot);
+    summary.appendChild(document.createTextNode(cat.category));
+
+    var body = document.createElement("div");
+    body.className = "detail-body";
+
+    cat.ideas.forEach(function(idea) {
+      var block = document.createElement("div");
+      block.style.marginBottom = "12px";
+      var nameEl = document.createElement("strong");
+      nameEl.appendChild(document.createTextNode(idea.name));
+      var descEl = document.createElement("p");
+      descEl.style.fontSize = "14px";
+      descEl.style.color = "#6B7280";
+      descEl.style.margin = "4px 0 0";
+      descEl.appendChild(document.createTextNode(idea.desc));
+      block.appendChild(nameEl);
+      block.appendChild(descEl);
+      body.appendChild(block);
+    });
+
+    details.appendChild(summary);
+    details.appendChild(body);
+    ideasContainer.appendChild(details);
+  });
+
+})();
+</script>
+
+</body>
+</html>
