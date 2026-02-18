@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 1 Workbook — DBA Gen AI Professor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* DesignArena warm palette */
+  --white: #ffffff;
+  --cream: #F7F6F5;
+  --cream-dark: #F3F1EF;
+  --cream-darker: #EEEDEA;
+  --warm-gray: #D9D9D9;
+  --warm-gray-dark: #898584;
+  --border: #D9D9D9;
+
+  /* Text */
+  --text-primary: #292C33;
+  --text-secondary: #6B7280;
+  --text-muted: #6A6A6A;
+  --text-light: #F8F7F6;
+
+  /* Earthy accents */
+  --teal: #487265;
+  --teal-light: #DDEFEF;
+  --teal-border: #568788;
+  --teal-dark: #407967;
+  --sage: #A0C3C4;
+  --olive: #AAB788;
+  --gold: #D4C68B;
+  --copper: #BC976A;
+  --bronze: #CAAB84;
+  --sand: #CB9F69;
+
+  /* Layout */
+  --max-w: 820px;
+  --header-h: 55px;
+  --sidebar-w: 220px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: var(--white);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ───────────────────────────────── */
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.4rem; line-height: 1.1; letter-spacing: -0.04em; }
+h2 { font-size: 1.6rem; line-height: 1.25; margin-bottom: .65rem; }
+h3 { font-size: 1.15rem; line-height: 1.3; margin: 1.25rem 0 .4rem; }
+h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: .9rem; font-weight: 600;
+  margin: 1rem 0 .35rem;
+  color: var(--text-primary);
+}
+p { margin-bottom: .65rem; }
+li { margin-bottom: .3rem; }
+ul, ol { padding-left: 1.5rem; }
+a { color: var(--teal); text-decoration: underline; }
+a:hover { color: var(--teal-dark); }
+
+/* ── Layout ───────────────────────────────────── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
+
+/* ── Fixed Header ─────────────────────────────── */
+header.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: var(--header-h); background: var(--white);
+  border-bottom: 1px solid var(--cream-darker);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-inner {
+  width: 100%; max-width: calc(var(--max-w) + var(--sidebar-w) + 40px);
+  padding: 0 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-brand {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.header-brand .logo {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  font-weight: 600; color: var(--text-primary); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header-brand .byline {
+  font-size: 11px; color: var(--warm-gray-dark);
+}
+.header-actions {
+  display: flex; align-items: center; gap: 12px;
+}
+.header-actions a {
+  font-size: 13px; color: var(--text-secondary); text-decoration: none;
+  padding: 5px 12px; border-radius: 9999px;
+  border: 1px solid var(--border);
+  transition: all .2s;
+}
+.header-actions a:hover { border-color: var(--teal-border); color: var(--teal); }
+
+/* ── Progress Bar ─────────────────────────────── */
+.progress-bar-wrap {
+  position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 190;
+  background: var(--cream-darker); height: 3px;
+}
+.progress-bar-fill {
+  height: 100%; background: var(--teal); width: 0%;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  position: fixed; top: calc(var(--header-h) + 6px); right: 18px;
+  z-index: 190; font-size: 11px; color: var(--text-muted);
+  background: var(--white); padding: 2px 8px; border-radius: 10px;
+  border: 1px solid var(--cream-darker);
+}
+
+/* ── Main Layout with Sidebar ─────────────────── */
+.layout {
+  display: flex;
+  align-items: flex-start;
+  max-width: calc(var(--max-w) + var(--sidebar-w) + 40px);
+  margin: 0 auto;
+  padding: 0 18px;
+  gap: 32px;
+}
+
+/* ── Sidebar Nav ──────────────────────────────── */
+.sidebar {
+  flex-shrink: 0;
+  width: var(--sidebar-w);
+  position: sticky;
+  top: calc(var(--header-h) + 18px);
+  max-height: calc(100vh - var(--header-h) - 36px);
+  overflow-y: auto;
+  padding: 16px 0;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--warm-gray); border-radius: 99px; }
+.sidebar-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--warm-gray-dark);
+  padding: 0 12px; margin-bottom: 8px;
+}
+.sidebar-nav { list-style: none; padding: 0; }
+.sidebar-nav li { margin-bottom: 2px; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px; border-radius: 8px;
+  font-size: 13px; color: var(--text-secondary);
+  text-decoration: none; transition: all .2s;
+  line-height: 1.3;
+}
+.sidebar-nav a:hover { background: var(--cream); color: var(--text-primary); }
+.sidebar-nav a.active { background: var(--teal-light); color: var(--teal-dark); font-weight: 500; }
+.sidebar-nav .sn-badge {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--cream-darker); display: flex; align-items: center;
+  justify-content: center; font-size: 11px; font-weight: 600;
+  color: var(--text-primary); transition: background .2s;
+}
+.sidebar-nav a.active .sn-badge {
+  background: var(--teal); color: var(--white);
+}
+.sidebar-nav a.done .sn-badge {
+  background: var(--olive); color: var(--white);
+}
+.sidebar-nav a.done .sn-badge::after { content: ''; }
+.sidebar-divider { height: 1px; background: var(--cream-darker); margin: 10px 12px; }
+
+/* ── Main Content ─────────────────────────────── */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding-top: calc(var(--header-h) + 28px);
+  padding-bottom: 80px;
+}
+
+/* ── Hero Strip ───────────────────────────────── */
+.hero-strip {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  margin-bottom: 32px;
+}
+.hero-strip h1 { margin-bottom: 8px; }
+.hero-strip .subtitle {
+  font-size: .95rem; color: var(--text-secondary); margin-bottom: 16px;
+}
+.hero-pills {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 8px; border-radius: 40px;
+  font-size: 13px; font-weight: 500;
+  background: var(--white); border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.pill .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* ── Workbook Section ─────────────────────────── */
+.wb-section {
+  margin-bottom: 48px;
+  scroll-margin-top: calc(var(--header-h) + 20px);
+}
+
+/* ── Section Header ───────────────────────────── */
+.section-header {
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 16px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.section-num {
+  flex-shrink: 0; width: 38px; height: 38px;
+  background: var(--text-primary); color: var(--text-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+  margin-top: 3px;
+}
+.section-header-text { flex: 1; }
+.section-header-text h2 { margin: 0 0 4px; }
+.section-header-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.criterion-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 500;
+  background: var(--cream-darker); color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.marks-badge {
+  display: inline-block; background: var(--gold); color: var(--text-primary);
+  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 600;
+}
+.ungraded-badge {
+  display: inline-block; background: var(--cream-darker); color: var(--text-muted);
+  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 500;
+}
+
+/* ── Rubric Reminder ──────────────────────────── */
+.rubric-reminder {
+  background: var(--teal-light);
+  border: 1px solid var(--teal-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.rubric-reminder .rubric-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--teal-dark); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.rubric-reminder .rubric-label::before {
+  content: '';
+  display: inline-block;
+  width: 12px; height: 12px; border-radius: 3px;
+  background: var(--teal); flex-shrink: 0;
+}
+.rubric-reminder ul {
+  margin: 0; padding-left: 1.25rem;
+  color: var(--teal-dark);
+}
+.rubric-reminder li { margin-bottom: .2rem; }
+
+/* ── Your Work Area ───────────────────────────── */
+.your-work {
+  background: var(--cream);
+  border: 1.5px dashed var(--warm-gray);
+  border-radius: 12px;
+  padding: 24px 22px;
+  min-height: 140px;
+  position: relative;
+}
+.your-work-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.your-work-label .yw-icon {
+  width: 18px; height: 18px; border-radius: 4px;
+  background: var(--warm-gray); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; font-size: 10px;
+}
+.your-work-placeholder {
+  color: var(--text-muted); font-style: italic; font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Callouts ─────────────────────────────────── */
+.callout {
+  border-radius: 10px; padding: 14px 16px; margin: 14px 0;
+  font-size: 13.5px; line-height: 1.6;
+  border: 1px solid;
+}
+.callout.strategy {
+  background: var(--teal-light); border-color: var(--teal-border);
+}
+.callout.strategy::before {
+  content: 'Tip  '; font-weight: 700; color: var(--teal-dark);
+}
+.callout.warning {
+  background: #faf6ef; border-color: var(--copper);
+}
+.callout.warning::before {
+  content: 'Watch Out  '; font-weight: 700; color: var(--copper);
+}
+.callout.golden {
+  background: #faf8f0; border-color: var(--gold);
+}
+.callout.golden::before {
+  content: 'Key Decision  '; font-weight: 700; color: var(--sand);
+}
+
+/* ── Cards ────────────────────────────────────── */
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--teal-border); }
+.card h4 { margin-top: 0; }
+
+/* ── Table ────────────────────────────────────── */
+.arena-table {
+  width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px;
+}
+.arena-table th {
+  text-align: left; padding: 9px 11px; font-weight: 500;
+  color: var(--text-secondary); font-size: 12px;
+  border-bottom: 1px solid var(--border); background: var(--cream);
+}
+.arena-table td {
+  padding: 9px 11px; border-bottom: 1px solid var(--cream-darker);
+  vertical-align: top;
+}
+.arena-table tr:last-child td { border-bottom: none; }
+
+/* ── Arena Details / Summary ──────────────────── */
+details.arena-details {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 8px; background: var(--white);
+  transition: border-color .2s;
+}
+details.arena-details:hover { border-color: var(--teal-border); }
+details.arena-details[open] { border-color: var(--teal-border); }
+details.arena-details > summary {
+  padding: 12px 16px; cursor: pointer; font-weight: 500;
+  font-size: 14px; list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+details.arena-details > summary::before {
+  content: '\25B6'; font-size: .6rem; color: var(--teal);
+  transition: transform .2s;
+}
+details.arena-details[open] > summary::before { transform: rotate(90deg); }
+details.arena-details > summary::-webkit-details-marker { display: none; }
+details.arena-details > .detail-body { padding: 0 16px 16px; }
+
+/* ── Code Block ───────────────────────────────── */
+.code-block {
+  background: var(--text-primary); color: var(--cream);
+  padding: 14px 16px; border-radius: 10px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12.5px; line-height: 1.6; overflow-x: auto;
+  margin: 10px 0; white-space: pre-wrap; word-break: break-word;
+}
+.code-block .comment { color: var(--warm-gray-dark); }
+.code-block .keyword { color: var(--sage); }
+.code-block .string { color: var(--olive); }
+
+/* ── Example Block ────────────────────────────── */
+.example-block {
+  background: var(--cream-dark); border-radius: 10px;
+  padding: 14px 16px; margin: 10px 0; font-size: 13.5px;
+  border-left: 3px solid var(--bronze);
+}
+.example-block .ex-label {
+  font-size: 11px; font-weight: 700; color: var(--sand);
+  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px;
+}
+
+/* ── Checklist ────────────────────────────────── */
+.checklist { list-style: none; padding: 0; margin: 12px 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 4px; font-size: 13.5px;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.checklist li:last-child { border-bottom: none; }
+.check-input {
+  flex-shrink: 0; width: 17px; height: 17px; margin-top: 3px;
+  accent-color: var(--teal); cursor: pointer;
+}
+
+/* ── Progress Indicator Block ─────────────────── */
+.progress-block {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 10px; font-size: 12.5px; color: var(--text-secondary);
+}
+.progress-block .pb-bar-wrap {
+  flex: 1; height: 6px; background: var(--cream-darker);
+  border-radius: 99px; overflow: hidden;
+}
+.progress-block .pb-bar { height: 100%; background: var(--gold); border-radius: 99px; }
+
+/* ── Floating Page Budget ─────────────────────── */
+.page-budget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 300;
+  background: var(--text-primary); color: var(--text-light);
+  border-radius: 12px; padding: 12px 16px;
+  font-size: 12px; text-align: center; min-width: 100px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  transition: background .3s;
+}
+.page-budget.warn { background: var(--copper); }
+.page-budget.danger { background: #b05050; }
+.page-budget .pb-count {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 600; line-height: 1;
+  margin-bottom: 3px; display: block;
+}
+.page-budget .pb-label { color: rgba(255,255,255,.7); font-size: 10.5px; }
+
+/* ── Footer ───────────────────────────────────── */
+footer.site-footer {
+  padding: 28px 0 24px;
+  text-align: center; font-size: 13px; color: var(--text-muted);
+  border-top: 1px solid var(--cream-darker);
+  margin-top: 16px;
+}
+footer.site-footer a {
+  color: var(--text-muted); text-decoration: none; margin: 0 8px;
+}
+footer.site-footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .layout { padding: 0 14px; }
+}
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.3rem; }
+  .layout { padding: 0 12px; }
+  .arena-table { font-size: 12px; }
+  .arena-table th, .arena-table td { padding: 7px 8px; }
+  .page-budget { bottom: 14px; right: 14px; }
+}
+
+/* ── Print ────────────────────────────────────── */
+@media print {
+  header.site-header, .sidebar, .page-budget, .progress-bar-wrap, .progress-label { display: none; }
+  .main-content { padding-top: 12px; }
+  .layout { display: block; padding: 0 16px; }
+  details.arena-details[open] > .detail-body { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FIXED HEADER -->
+<!-- ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">Assignment 1 Workbook</a>
+      <span class="byline">DBA Gen AI Professor &bull; Job #5</span>
+    </div>
+    <div class="header-actions">
+      <a href="assignment1.html">&#8592; Back to Explainer</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress Bar ──────────────────────────────── -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="globalProgressBar"></div>
+</div>
+<div class="progress-label" id="globalProgressLabel">0 / 9 sections</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ── Sidebar ──────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="#s1" data-sec="1"><span class="sn-badge">1</span>Job Choice</a></li>
+      <li><a href="#s2" data-sec="2"><span class="sn-badge">2</span>GenAI Capability</a></li>
+      <li><a href="#s3" data-sec="3"><span class="sn-badge">3</span>Knowledge Base</a></li>
+      <li><a href="#s4" data-sec="4"><span class="sn-badge">4</span>Build Approach</a></li>
+      <li><a href="#s5" data-sec="5"><span class="sn-badge">5</span>RAG Architecture</a></li>
+      <li><a href="#s6" data-sec="6"><span class="sn-badge">6</span>Prompts &amp; Enhancements</a></li>
+      <li><a href="#s7" data-sec="7"><span class="sn-badge">7</span>Limitations &amp; Risks</a></li>
+      <li><a href="#s8" data-sec="8"><span class="sn-badge">8</span>Hands-On Tryout</a></li>
+      <li><a href="#s9" data-sec="9"><span class="sn-badge">9</span>Final Assembly</a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label" style="margin-top:4px;">Marks</div>
+    <div style="padding: 0 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.7;">
+      <div>C1 KB Design &mdash; <strong>5</strong></div>
+      <div>C2 RAG Architecture &mdash; <strong>5</strong></div>
+      <div>C3 Prompts &mdash; <strong>5</strong></div>
+      <div>C4 Limitations &mdash; <strong>5</strong></div>
+      <div>C5 Tryout &mdash; <strong>5</strong></div>
+      <div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--cream-darker); font-weight:600; color:var(--text-primary);">Total &mdash; 25</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ── Hero Strip ──────────────────────────────── -->
+    <div class="hero-strip">
+      <h1>DBA Gen AI Professor<br><span style="font-size:1.5rem; color:var(--text-secondary);">Assignment 1 Working Notebook</span></h1>
+      <p class="subtitle">Your working document for designing a RAG-based GenAI assistant for an academic professor. Fill in each section as you work through the assignment.</p>
+      <div class="hero-pills">
+        <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 Marks</span>
+        <span class="pill"><span class="dot" style="background:var(--gold)"></span> 10 Pages Max</span>
+        <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 Criteria</span>
+        <span class="pill"><span class="dot" style="background:var(--bronze)"></span> Job #5 Customized</span>
+        <span class="pill"><span class="dot" style="background:var(--teal)"></span> RAG Pipeline</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 1: Job Choice & Justification -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-header-text">
+          <h2>Job Choice &amp; Justification</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Not directly graded &mdash; sets up all criteria</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Your customization must be plausible and specific &mdash; "DBA Gen AI Professor" needs a concrete task description, not just a job title.</li>
+          <li>Explicitly state <em>which</em> Job # from the assignment you chose and why the customization makes RAG more compelling than the base job.</li>
+          <li>Graders reward clarity here: a crisp one-paragraph justification signals a student who understands the assignment structure.</li>
+        </ul>
+      </div>
+
+      <div class="callout strategy">Job #5 is "Secondary School Teacher." Customizing it to "DBA Gen AI Professor" gives you a richer, more specialized KB &mdash; research papers, textbooks, and course materials are exactly the structured text corpus where RAG excels. This also lets you speak with genuine subject-matter authority.</div>
+
+      <details class="arena-details">
+        <summary>Context: What makes this customization strong?</summary>
+        <div class="detail-body">
+          <p>A secondary school teacher's KB might be general curricula, lesson plans, and textbooks. A <strong>DBA Gen AI Professor</strong>'s KB is far richer:</p>
+          <ul>
+            <li>Peer-reviewed research papers on LLMs, RAG, and AI ethics</li>
+            <li>Academic textbooks on machine learning and NLP</li>
+            <li>Course syllabi, assignment rubrics, and grading schemas</li>
+            <li>Student FAQ archives from previous cohorts</li>
+            <li>Conference proceedings (NeurIPS, ICML, ACL)</li>
+          </ul>
+          <p>Each document type has a clear retrieval use case, making your RAG story airtight.</p>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 1
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: 2&ndash;3 paragraphs. (a) State Job #5 chosen, (b) describe your customization to "DBA Gen AI Professor" with specifics about the student population and teaching context, (c) explain why this customization makes the RAG use case stronger than the base job.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 2: GenAI Capability Assessment -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-header-text">
+          <h2>GenAI Capability Assessment</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Feeds into Criteria 1&ndash;4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q1</strong> (Fully/Mostly/Partly/Hardly): Pick one level and justify it with a task decomposition &mdash; not just an assertion.</li>
+          <li><strong>Q2</strong> (Can vs. Can't table): Be specific and symmetric &mdash; every "can" should have a paired "limitation." Avoid vague entries like "GenAI can help students."</li>
+          <li>The table is a key grading artifact; make it substantive (4&ndash;6 rows minimum).</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q1: How much can GenAI help a DBA Gen AI Professor?</summary>
+        <div class="detail-body">
+          <p>Choose your level and justify it by decomposing the professor's tasks:</p>
+          <table class="arena-table">
+            <thead><tr><th>Professor Sub-Task</th><th>GenAI Capability</th><th>Rationale</th></tr></thead>
+            <tbody>
+              <tr><td>Answering student questions on course concepts</td><td style="color:var(--teal-dark); font-weight:500;">High (80%+)</td><td>RAG retrieves exact textbook/paper passages; factual answers</td></tr>
+              <tr><td>Recommending readings for a topic</td><td style="color:var(--teal-dark); font-weight:500;">High (90%+)</td><td>Semantic search over paper KB by topic</td></tr>
+              <tr><td>Explaining a paper's methodology</td><td style="color:var(--sand); font-weight:500;">Medium (60%)</td><td>LLM summarization is strong but may miss subtle nuance</td></tr>
+              <tr><td>Grading student assignments</td><td style="color:var(--copper); font-weight:500;">Low (20%)</td><td>Requires academic judgment and rubric interpretation</td></tr>
+              <tr><td>Generating new lecture examples</td><td style="color:var(--teal-dark); font-weight:500;">High (80%)</td><td>LLM generation from retrieved context</td></tr>
+            </tbody>
+          </table>
+          <div class="callout golden">For a DBA Gen AI Professor, <strong>"Mostly (80%+)"</strong> is the defensible choice. Most tasks are information-retrieval and explanation tasks where RAG excels. Grading and original research design remain human-only.</div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Q2: Can vs. Can't Table (scaffold provided)</summary>
+        <div class="detail-body">
+          <p>Your two-column analysis. Expand with your specific rows:</p>
+          <table class="arena-table">
+            <thead><tr><th style="width:50%">GenAI <em>Can</em> Do</th><th>GenAI <em>Cannot</em> Do</th></tr></thead>
+            <tbody>
+              <tr><td>Retrieve relevant passages from uploaded research papers</td><td>Verify a paper's claims against real-world empirical data</td></tr>
+              <tr><td>Summarize a paper's abstract and methodology section</td><td>Assess the paper's originality or academic contribution</td></tr>
+              <tr><td>Answer factual student questions using the course KB</td><td>Exercise academic judgment on borderline student work</td></tr>
+              <tr><td>Generate worked examples aligned to a textbook chapter</td><td>Create genuinely novel pedagogical insights beyond retrieved content</td></tr>
+              <tr><td>Cross-reference multiple papers on a subtopic (e.g., chunking strategies)</td><td>Detect when a student is engaging in academic dishonesty</td></tr>
+              <tr><td>Suggest pre-requisite readings based on a student's stated confusion</td><td>Adapt real-time to a student's emotional state or learning disability</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 2 (Q1 + Q2)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) State your Q1 choice with 2&ndash;3 sentence justification referencing your task decomposition above. (b) Your completed Can/Can't table with 5&ndash;7 rows specific to the professor context. Aim for 0.5&ndash;1 page.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 3: Knowledge Base Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-header-text">
+          <h2>Knowledge Base Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 1</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Describe the <strong>schema</strong> of your KB: document types, metadata fields, how documents are chunked and indexed.</li>
+          <li>Provide <strong>3&ndash;5 sample documents</strong> (realistic titles, sizes, formats) &mdash; not just generic "research papers."</li>
+          <li>Include <strong>3&ndash;5 sample queries</strong> that a professor or student would actually type, paired with which KB documents would retrieve.</li>
+          <li>Graders check: Is the KB specific enough to be believable? Would retrieval actually work on this corpus?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>KB Schema &mdash; Reference Design</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Field</th><th>Type</th><th>Example Value</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>doc_id</code></td><td>string</td><td>paper_vaswani_2017</td><td>Unique identifier</td></tr>
+              <tr><td><code>doc_type</code></td><td>enum</td><td>research_paper</td><td>Filter by source type</td></tr>
+              <tr><td><code>title</code></td><td>string</td><td>"Attention Is All You Need"</td><td>Display and search</td></tr>
+              <tr><td><code>authors</code></td><td>string[]</td><td>["Vaswani", "Shazeer", ...]</td><td>Attribution</td></tr>
+              <tr><td><code>year</code></td><td>int</td><td>2017</td><td>Recency filter</td></tr>
+              <tr><td><code>topic_tags</code></td><td>string[]</td><td>["transformers", "attention", "NLP"]</td><td>Topic-based filtering</td></tr>
+              <tr><td><code>chunk_index</code></td><td>int</td><td>3</td><td>Positional context in parent doc</td></tr>
+              <tr><td><code>chunk_text</code></td><td>text</td><td>"The encoder maps an input sequence..."</td><td>The retrieved passage</td></tr>
+              <tr><td><code>embedding</code></td><td>float[1536]</td><td>[0.021, -0.034, ...]</td><td>Semantic search vector</td></tr>
+              <tr><td><code>course_relevance</code></td><td>string[]</td><td>["Week 3", "Module 2"]</td><td>Curriculum alignment</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">Chunk size recommendation: 400&ndash;600 tokens with 50-token overlap. Each paper becomes ~20&ndash;40 chunks.</p>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Documents (5 realistic examples)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Doc 1 &mdash; Research Paper</div>
+            <strong>Title:</strong> "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al., 2020)<br>
+            <strong>Format:</strong> PDF, 12 pages, ~6,000 words<br>
+            <strong>KB Role:</strong> Core reading on RAG architecture; answers "What is RAG?" and "How does retrieval interact with generation?"
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 2 &mdash; Textbook Chapter</div>
+            <strong>Title:</strong> "Chapter 7: Large Language Models" from <em>Speech and Language Processing</em> (Jurafsky &amp; Martin, 2024 draft)<br>
+            <strong>Format:</strong> PDF, 45 pages, ~22,000 words<br>
+            <strong>KB Role:</strong> Foundational theory; answers questions on tokenization, pretraining, and prompting
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 3 &mdash; Course Syllabus</div>
+            <strong>Title:</strong> "GGU DBA Course 8919 Syllabus &amp; Assignment Rubrics" (current term)<br>
+            <strong>Format:</strong> DOCX, 8 pages<br>
+            <strong>KB Role:</strong> Student Q&amp;A on assignments, deadlines, grading criteria
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 4 &mdash; Student FAQ Archive</div>
+            <strong>Title:</strong> "Cohort 2024 Q&amp;A Log &mdash; Anonymized" (500 Q&amp;A pairs)<br>
+            <strong>Format:</strong> JSON / CSV, ~30,000 tokens<br>
+            <strong>KB Role:</strong> Answers recurring student questions; reduces repetitive professor load
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 5 &mdash; Conference Paper</div>
+            <strong>Title:</strong> "Evaluating RAG Systems: Metrics and Benchmarks" (Gao et al., 2023)<br>
+            <strong>Format:</strong> PDF, 9 pages<br>
+            <strong>KB Role:</strong> Evaluation methodology for Week 6 lectures; answers "How do we measure RAG quality?"
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Queries &amp; Retrieval Targets</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Sample Query</th><th>Retrieved Doc(s)</th><th>Expected Response Type</th></tr></thead>
+            <tbody>
+              <tr><td>"What is the difference between dense and sparse retrieval in RAG?"</td><td>Lewis et al. 2020 (chunks 3&ndash;5); Jurafsky Ch.7 (chunk 12)</td><td>Comparative explanation with citations</td></tr>
+              <tr><td>"How is Assignment 1 graded for Criterion 2?"</td><td>Course Syllabus (chunks 4&ndash;6)</td><td>Direct rubric quote + elaboration</td></tr>
+              <tr><td>"Why do transformers use multi-head attention instead of single-head?"</td><td>Vaswani 2017 (chunks 7&ndash;9); Jurafsky Ch.7 (chunks 15&ndash;17)</td><td>Technical explanation from primary source</td></tr>
+              <tr><td>"What evaluation metrics should I use for my RAG project?"</td><td>Gao et al. 2023 (chunks 2&ndash;6)</td><td>Structured list: RAGAS, faithfulness, relevance scores</td></tr>
+              <tr><td>"Can I submit Assignment 2 late without penalty?"</td><td>Course Syllabus (chunk 2); Cohort FAQ (Q#47)</td><td>Policy statement with qualification</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 3 (Criterion 1, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) KB schema table with your chosen metadata fields, (b) 4&ndash;5 sample documents with realistic details, (c) 4&ndash;5 sample queries with retrieval mappings. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 1</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 4: Build Approach -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-header-text">
+          <h2>Build Approach &mdash; Why RAG?</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Q3 &mdash; Frames Criterion 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q3</strong> asks you to compare at least 3 approaches: from-scratch training, fine-tuning, pure prompting, and RAG. You must argue <em>why RAG wins</em> for your specific job.</li>
+          <li>Use concrete reasons tied to your KB &mdash; e.g., "research papers update frequently, so a static fine-tune would go stale" is stronger than "RAG is flexible."</li>
+          <li>A comparison table earns clear marks for structure.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q3: Approach Comparison Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Approach</th><th>Feasibility for Professor KB</th><th>Key Limitation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Train from Scratch</strong></td><td style="color:var(--copper);">Not feasible</td><td>Requires billions of tokens and massive compute; KB is ~100 docs. No justification.</td></tr>
+              <tr><td><strong>Fine-Tuning</strong></td><td style="color:var(--sand);">Partially feasible</td><td>Fine-tuning on 100 papers is possible but expensive, and KB updates require re-tuning. Papers publish continuously. Knowledge becomes stale within weeks.</td></tr>
+              <tr><td><strong>Pure Prompting</strong></td><td style="color:var(--sand);">Partially feasible</td><td>Context window limits mean only 1&ndash;2 papers fit per prompt. Can't scale to a 500-paper corpus. Loses citation traceability.</td></tr>
+              <tr><td><strong>RAG (chosen)</strong></td><td style="color:var(--teal-dark); font-weight:600;">Optimal</td><td>Dynamically retrieves relevant chunks at query time. KB updates = re-index only. Full citation provenance. No GPU training cost. Scales to any corpus size.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout strategy">For the professor context, the killer argument for RAG is <strong>knowledge freshness</strong>: new papers publish weekly, and RAG lets you add them to the KB in minutes without retraining. Fine-tuning cannot match this velocity.</div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 4 (Q3)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) Your Q3 comparison table with professor-specific reasoning, (b) 2&ndash;3 paragraph argument for why RAG is the right choice for this knowledge domain, citing cost, latency, freshness, and accuracy. Aim for 0.5&ndash;0.75 pages.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 5: RAG Architecture Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-header-text">
+          <h2>RAG Architecture Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 2</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q4</strong> requires a full RAG pipeline description: ingestion, chunking, embedding, vector store, retrieval, augmentation, generation, and output.</li>
+          <li>Name your chosen tools/models at each stage (e.g., "OpenAI text-embedding-3-small for embeddings, Pinecone for vector store").</li>
+          <li>Include your <strong>evaluation methodology</strong>: how will you measure if the RAG system is working? Mention at least 2 metrics.</li>
+          <li>A flow diagram or numbered pipeline steps earns clarity marks.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q4: Full RAG Pipeline &mdash; 8-Stage Architecture</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 1 &mdash; Document Ingestion</h4>
+            <p style="font-size:13.5px; margin:0;">Source formats: PDF (papers), DOCX (syllabus), JSON (FAQ). Tools: <code>pypdf2</code> for PDF extraction, <code>python-docx</code> for DOCX, custom JSON parser. Output: raw text strings with source metadata attached.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 2 &mdash; Chunking</h4>
+            <p style="font-size:13.5px; margin:0;">Strategy: recursive character splitter, 500-token chunks, 50-token overlap. Papers chunked by paragraph boundary. FAQ chunked as individual Q&amp;A pairs. Rationale: 500 tokens fits well within gpt-4o context while providing enough context per chunk.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 3 &mdash; Embedding</h4>
+            <p style="font-size:13.5px; margin:0;">Model: <code>text-embedding-3-small</code> (OpenAI, 1536 dimensions). Each chunk embedded via OpenAI API. Cost: ~$0.02 per million tokens. Rationale: strong semantic retrieval quality, low cost for a ~500-document KB.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 4 &mdash; Vector Store</h4>
+            <p style="font-size:13.5px; margin:0;">Platform: Pinecone (or FAISS for local). Index: cosine similarity. Metadata filters enabled for <code>doc_type</code>, <code>year</code>, <code>course_relevance</code>. Namespace per course module for scoped retrieval.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 5 &mdash; Query Processing &amp; Retrieval</h4>
+            <p style="font-size:13.5px; margin:0;">Student query embedded with same model. Top-k=5 chunks retrieved by cosine similarity. Optional: hybrid search (dense + BM25 keyword). Re-ranking via cross-encoder for precision. Metadata filter applied if query targets a specific module.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 6 &mdash; Context Augmentation</h4>
+            <p style="font-size:13.5px; margin:0;">Retrieved chunks concatenated into context window. Format: <code>[Source: Lewis et al. 2020, chunk 3] &lt;text&gt;</code>. System prompt instructs model to cite sources. Total context budget: 4,000 tokens (5 chunks &times; ~500 tokens + system prompt + query).</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 7 &mdash; Generation</h4>
+            <p style="font-size:13.5px; margin:0;">LLM: <code>gpt-4o</code> via Azure OpenAI. Temperature: 0.2 (factual task). Max tokens: 600. Model instructed to answer from context only and flag if KB is insufficient.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 8 &mdash; Output &amp; Evaluation</h4>
+            <p style="font-size:13.5px; margin:0;">Response includes citations to source chunks. Evaluation: (a) <strong>Faithfulness</strong> &mdash; does the answer match the retrieved passages (no hallucination)? (b) <strong>Answer Relevance</strong> &mdash; does the answer address the query? (c) <strong>Context Precision</strong> &mdash; were the right chunks retrieved? Tools: RAGAS framework or manual spot-check.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 5 (Criterion 2, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) Your 8-stage pipeline with specific tool choices, (b) a simple flow diagram (optional but recommended &mdash; can be ASCII or described), (c) evaluation methodology with at least 2 metrics. Aim for 1.5&ndash;2 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 2</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 6: Prompts & RAG Enhancements -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-header-text">
+          <h2>Prompts &amp; RAG Enhancements</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 3</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Provide your actual <strong>system prompt</strong> (verbatim, in a code block) &mdash; it must be professor-context-specific, not generic.</li>
+          <li>Include 1&ndash;2 <strong>few-shot examples</strong> showing the exact input/output format you expect from the model.</li>
+          <li>Describe at least 2 <strong>RAG optimization strategies</strong> you'd apply (e.g., query rewriting, re-ranking, chunk overlap tuning, HyDE).</li>
+          <li>Graders reward specificity: "I used a system prompt that instructs the model to cite sources and refuse to answer outside the KB" is concrete. "I used a good system prompt" is not.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>System Prompt (Reference Version)</summary>
+        <div class="detail-body">
+          <div class="code-block"><span class="comment"># System Prompt: DBA Gen AI Professor Assistant</span>
+
+You are a knowledgeable academic assistant for a DBA-level course on Generative AI and Pre-Trained Models (GGU Course 8919).
+
+<span class="keyword">Your role:</span>
+- Answer student questions using ONLY the retrieved context passages provided below.
+- Always cite the source document and chunk for every factual claim (format: [Source: Author, Year]).
+- If the retrieved context does not contain enough information to answer the question, say: "I don't have sufficient information in the course knowledge base to answer this accurately. Please consult your professor directly."
+- Do not hallucinate references, authors, or paper titles.
+- Maintain an academic, clear, and concise tone appropriate for doctoral-level students.
+
+<span class="keyword">Format:</span>
+- Use markdown headers for multi-part answers.
+- For technical questions, provide a brief definition, then depth.
+- Keep answers under 500 words unless the question requires a step-by-step explanation.
+
+<span class="keyword">Context passages will be injected below by the system.</span></div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Few-Shot Examples (2 pairs)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Few-Shot Example 1</div>
+            <strong>Student Query:</strong> "What is the difference between BM25 and dense retrieval?"<br><br>
+            <strong>Expected Response:</strong> "BM25 is a sparse, keyword-based retrieval method that scores documents by term frequency and inverse document frequency [Source: Jurafsky &amp; Martin, 2024, Ch.7, chunk 8]. Dense retrieval, by contrast, uses neural embeddings to capture semantic similarity even when exact keywords don't match [Source: Lewis et al., 2020, chunk 4]. In practice, hybrid approaches combining both often outperform either method alone."
+          </div>
+          <div class="example-block" style="margin-top:10px;">
+            <div class="ex-label">Few-Shot Example 2</div>
+            <strong>Student Query:</strong> "When is Assignment 2 due?"<br><br>
+            <strong>Expected Response:</strong> "According to the course syllabus, Assignment 2 is due on [date] at 11:59 PM [Source: GGU Course 8919 Syllabus, chunk 2]. Please check the upGrad portal for any updates, as this AI assistant reflects the syllabus at the time of KB indexing."
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>RAG Optimization Strategies</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Strategy 1: Query Rewriting</h4>
+            <p style="font-size:13.5px; margin:0;">Before embedding a student query, use a lightweight LLM call to rewrite it into a clearer retrieval-optimized form. Example: "What's HyDE?" &rarr; "Explain Hypothetical Document Embeddings (HyDE) and how they improve RAG retrieval." This prevents retrieval failures from terse or ambiguous student phrasing.</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 2: Cross-Encoder Re-Ranking</h4>
+            <p style="font-size:13.5px; margin:0;">Retrieve top-20 chunks by cosine similarity, then re-rank using a cross-encoder (e.g., <code>ms-marco-MiniLM-L-6-v2</code>) that jointly considers query + chunk. Return top-5 after re-ranking. This significantly improves precision for nuanced academic queries.</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 3: Metadata Pre-Filtering</h4>
+            <p style="font-size:13.5px; margin:0;">Route queries through a classifier to detect intent: "assignment question" vs. "technical concept" vs. "paper recommendation." Apply metadata filters accordingly (e.g., restrict to <code>doc_type=syllabus</code> for assignment queries). Reduces noise in retrieved context.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 6 (Criterion 3, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) Your verbatim system prompt in a code block, (b) 2 few-shot examples showing exact input/output format, (c) 2&ndash;3 RAG optimization strategies with rationale. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 3</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 7: Limitations & Risks -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-header-text">
+          <h2>Limitations &amp; Risks</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 4</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Cover <strong>4 risk categories</strong>: TCO/cost, latency, quality/hallucination, and domain-specific risks.</li>
+          <li>Each limitation needs a paired <strong>mitigation strategy</strong> &mdash; not just a problem list.</li>
+          <li>Domain-specific risks for an academic context: copyright of papers, student data privacy (FERPA), risk of students over-relying on the assistant and not developing critical thinking.</li>
+          <li>Graders penalize vague risks ("hallucination is a problem"). Be specific: what would hallucinate, and what is the academic consequence?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Risk Matrix &mdash; Reference Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Risk Category</th><th>Specific Risk</th><th>Severity</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Cost (TCO)</strong></td>
+                <td>OpenAI API costs scale with student volume; 1,000 queries/day at ~$0.01/query = $300/month</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>Cache frequent queries (Redis); use smaller embedding model for re-index; set per-student rate limits</td>
+              </tr>
+              <tr>
+                <td><strong>Latency</strong></td>
+                <td>Retrieval + re-ranking + generation pipeline adds 2&ndash;5 seconds vs. instant FAQ lookup</td>
+                <td style="color:var(--olive);">Low&ndash;Medium</td>
+                <td>Stream generation tokens; pre-retrieve for common queries; async re-ranking</td>
+              </tr>
+              <tr>
+                <td><strong>Hallucination</strong></td>
+                <td>LLM fabricates a non-existent paper citation (e.g., "Smith, 2022 showed that...") answering a student's research question</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Strict system prompt: "cite only from retrieved context"; enable source display so students can verify; human professor spot-check quarterly</td>
+              </tr>
+              <tr>
+                <td><strong>KB Staleness</strong></td>
+                <td>New papers publish weekly; KB becomes outdated within 1&ndash;2 months without re-indexing</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>Weekly automated ingestion pipeline for arXiv + ACL Anthology feeds; version-stamp KB with index date</td>
+              </tr>
+              <tr>
+                <td><strong>Copyright</strong></td>
+                <td>Indexing copyrighted textbooks (Jurafsky &amp; Martin) and returning verbatim passages may violate publisher rights</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Use only open-access papers; for textbooks, limit chunk retrieval to 200-word excerpts; consult university legal counsel before deployment</td>
+              </tr>
+              <tr>
+                <td><strong>Student Over-Reliance</strong></td>
+                <td>Students may use the assistant to bypass critical thinking, harming learning outcomes</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>System prompt instructs assistant to ask Socratic follow-up questions; disable direct assignment-answer mode; professor retains all grading authority</td>
+              </tr>
+              <tr>
+                <td><strong>Data Privacy</strong></td>
+                <td>Student Q&amp;A logs may contain identifiable information (FERPA-relevant)</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Anonymize all student data before KB ingestion; no student-specific query logging without consent; host on institution-approved Azure tenant</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 7 (Criterion 4, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) Your limitations table with 5&ndash;7 rows covering TCO, latency, quality, and domain-specific risks, (b) 2&ndash;3 paragraph narrative on the most critical risk and how you'd address it. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 4</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 8: Hands-On Tryout -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-header-text">
+          <h2>Hands-On Tryout</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 5</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>This criterion is worth 20% and is the most commonly underweighted. Even a basic ChatGPT conversation counts &mdash; do not skip it.</li>
+          <li>Show <strong>at least 3 interactions</strong>: one successful retrieval, one failure case, and one showing your system prompt in action.</li>
+          <li>Include screenshots or pasted conversation logs. Annotate them: explain what worked, what didn't, and what you'd improve.</li>
+          <li>If you use Azure OpenAI rather than ChatGPT, note the endpoint and model used.</li>
+        </ul>
+      </div>
+
+      <div class="callout warning">Do not attempt a full production RAG deployment for this assignment. A simple ChatGPT session where you paste your system prompt + relevant paper excerpts as context is fully sufficient. The point is to demonstrate the interaction pattern, not engineering perfection.</div>
+
+      <details class="arena-details" open>
+        <summary>Suggested Tryout Protocol</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Step 1: Prepare your mini-KB context</h4>
+            <p style="font-size:13.5px; margin:0;">Copy 2&ndash;3 passages from your sample documents (150&ndash;200 words each). This simulates what your retriever would return.</p>
+          </div>
+          <div class="card">
+            <h4>Step 2: Open ChatGPT or Azure OpenAI</h4>
+            <p style="font-size:13.5px; margin:0;">Start a new conversation. Paste your system prompt first, then paste the context passages, then pose your student queries.</p>
+          </div>
+          <div class="card">
+            <h4>Step 3: Run 3 test interactions</h4>
+            <ul style="font-size:13.5px;">
+              <li><strong>Test A:</strong> A query your KB handles well (e.g., "What is RAG?"). Shows success case.</li>
+              <li><strong>Test B:</strong> A query outside your KB scope (e.g., "What is the stock price of Microsoft?"). Shows graceful failure &mdash; model should say "not in KB."</li>
+              <li><strong>Test C:</strong> A multi-hop question requiring 2 documents (e.g., "Compare BM25 vs. dense retrieval for our professor assistant use case"). Shows synthesis capability.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Step 4: Screenshot and annotate</h4>
+            <p style="font-size:13.5px; margin:0;">Take screenshots of all 3 conversations. In your write-up, briefly annotate each: what did the model do well? What did it get wrong? What would you fix in v2?</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 8 (Criterion 5, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as we work through each step ]<br><br>
+          <em>Suggested content: (a) Screenshots or pasted conversation logs of 3 tryout interactions, (b) 2&ndash;3 sentence annotation per interaction (what worked, what failed, what you'd improve), (c) 1-paragraph summary of overall tryout findings. This section uses up to 3 pages of your page budget &mdash; use screenshots efficiently. Aim for 1.5&ndash;3 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 5</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 9: Final Assembly & Page Budget -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-header-text">
+          <h2>Final Assembly &amp; Page Budget</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Submission checklist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Total page budget: <strong>10 pages maximum</strong> (7 pages content + 3 pages screenshots/code).</li>
+          <li>Content after page 10 is ignored by graders. Trim ruthlessly if needed.</li>
+          <li>Check that each criterion has substantive coverage before submitting &mdash; use this checklist.</li>
+        </ul>
+      </div>
+
+      <h3>Submission Checklist</h3>
+      <ul class="checklist" id="submissionChecklist">
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 1: Job Choice</strong> &mdash; Job #5 stated, DBA Gen AI Professor customization described, justification written (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q1 Answered</strong> &mdash; Mostly/Partly/etc. chosen with task decomposition justification (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q2 Table</strong> &mdash; Can/Can't table with 5+ rows specific to professor context (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 3: KB Schema</strong> &mdash; Metadata fields, chunk strategy, sample docs table (Criterion 1, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 4: Q3 Approach</strong> &mdash; Comparison table with 4 approaches, RAG justification (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 5: RAG Pipeline</strong> &mdash; 8-stage pipeline with tool names, evaluation metrics (Criterion 2, 1.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 6: System Prompt</strong> &mdash; Verbatim prompt in code block, 2 few-shot pairs (Criterion 3, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 7: Limitations</strong> &mdash; Risk table with mitigations, 5+ rows (Criterion 4, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 8: Tryout</strong> &mdash; 3 interaction logs with annotations (Criterion 5, up to 3 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Page count verified</strong> &mdash; Total does not exceed 10 pages (content + screenshots)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>All assumptions stated explicitly</strong> &mdash; Document formats, tool choices, sample queries are declared as assumptions</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Language check</strong> &mdash; Written in clear English, academic tone, no unexplained jargon</span></li>
+      </ul>
+
+      <h3>Page Budget Estimate</h3>
+      <table class="arena-table">
+        <thead><tr><th>Section</th><th>Recommended Pages</th><th>Your Target</th></tr></thead>
+        <tbody>
+          <tr><td>Job Choice &amp; Q1 + Q2</td><td>1.0</td><td></td></tr>
+          <tr><td>KB Design (C1)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Build Approach Q3</td><td>0.5</td><td></td></tr>
+          <tr><td>RAG Architecture (C2)</td><td>1.5&ndash;2.0</td><td></td></tr>
+          <tr><td>Prompts &amp; Enhancements (C3)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Limitations &amp; Risks (C4)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Hands-On Tryout (C5)</td><td>1.5&ndash;3.0</td><td></td></tr>
+          <tr style="font-weight:600;"><td>Total</td><td>7.5&ndash;11.0</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">If your draft exceeds 10 pages, trim from the architecture section first (keep diagrams, cut prose). The tryout screenshots should stay &mdash; they are evidence for Criterion 5 marks.</div>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 9 (Final Check)
+        </div>
+        <div class="your-work-placeholder">
+          [ Use the checklist above to verify each section is complete before final submission. ]<br><br>
+          <em>No new written content needed here &mdash; this is your assembly and QA checkpoint. Use the floating page budget counter (bottom-right) to track your estimated page count as you write.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ──────────────────────────────────── -->
+    <footer class="site-footer">
+      <div>Working draft &mdash; DBA Gen AI: Pre-Trained Models (GGU/upGrad Course 8919)</div>
+      <div style="margin-top:6px;">
+        <a href="assignment1.html">Assignment 1 Explainer</a>
+        <a href="#">Back to Top &uarr;</a>
+      </div>
+    </footer>
+
+  </main>
+</div><!-- /.layout -->
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FLOATING PAGE BUDGET -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="page-budget" id="pageBudget">
+  <span class="pb-count" id="pbCount">0</span>
+  <div class="pb-label">of 10 pages</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+/* ── Sidebar active state on scroll ─────────────── */
+const sections = document.querySelectorAll('.wb-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+/* ── Page Budget Counter ─────────────────────────── */
+// Estimated pages based on checkboxes ticked
+const PAGE_WEIGHTS = [0.5, 0.5, 0.5, 1.25, 0.5, 1.75, 1.25, 1.25, 2.5, 0, 0, 0];
+
+function updatePageBudget() {
+  const checkboxes = document.querySelectorAll('#submissionChecklist .check-input');
+  let total = 0;
+  checkboxes.forEach((cb, i) => {
+    if (cb.checked && PAGE_WEIGHTS[i]) total += PAGE_WEIGHTS[i];
+  });
+  total = Math.round(total * 10) / 10;
+  document.getElementById('pbCount').textContent = total.toFixed(1);
+
+  const budget = document.getElementById('pageBudget');
+  budget.classList.remove('warn', 'danger');
+  if (total >= 9) budget.classList.add('danger');
+  else if (total >= 7) budget.classList.add('warn');
+
+  // Update global progress bar
+  const done = [...checkboxes].filter(cb => cb.checked).length;
+  const sectionsDone = Math.min(9, Math.round(done * 9 / 12));
+  updateGlobalProgress(done, checkboxes.length);
+}
+
+/* ── Global Progress Bar ─────────────────────────── */
+function updateGlobalProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('globalProgressBar').style.width = pct + '%';
+
+  // Count completed sections (rough)
+  const sectDone = Math.round(done * 9 / total);
+  document.getElementById('globalProgressLabel').textContent = sectDone + ' / 9 sections';
+}
+
+/* ── Smooth scroll offset for fixed header ───────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + 20;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ── Init ────────────────────────────────────────── */
+updatePageBudget();
+</script>
+
+</body>
+</html>
