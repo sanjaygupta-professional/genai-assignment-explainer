@@ -4,93 +4,217 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Assignment 1 Explainer — Gen AI: Pre-Trained Models</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & Base ─────────────────────────────── */
+/* ── Reset ────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #f8f9fc; --surface: #ffffff; --text: #1a1a2e; --muted: #64748b;
-  --accent: #4f46e5; --accent-light: #e0e7ff; --accent-dark: #3730a3;
-  --green: #059669; --green-bg: #ecfdf5; --green-border: #a7f3d0;
-  --amber: #d97706; --amber-bg: #fffbeb; --amber-border: #fde68a;
-  --red: #dc2626; --red-bg: #fef2f2; --red-border: #fecaca;
-  --blue: #2563eb; --blue-bg: #eff6ff; --blue-border: #bfdbfe;
-  --purple: #7c3aed; --purple-bg: #f5f3ff;
-  --border: #e2e8f0; --shadow: 0 1px 3px rgba(0,0,0,.08);
-  --radius: 10px; --max-w: 900px;
+  /* DesignArena warm palette */
+  --white: #ffffff;
+  --cream: #F7F6F5;
+  --cream-dark: #F3F1EF;
+  --cream-darker: #EEEDEA;
+  --warm-gray: #D9D9D9;
+  --warm-gray-dark: #898584;
+  --border: #D9D9D9;
+
+  /* Text */
+  --text-primary: #292C33;
+  --text-secondary: #6B7280;
+  --text-muted: #6A6A6A;
+  --text-light: #F8F7F6;
+
+  /* Earthy accents */
+  --teal: #487265;
+  --teal-light: #DDEFEF;
+  --teal-border: #568788;
+  --teal-dark: #407967;
+  --sage: #A0C3C4;
+  --olive: #AAB788;
+  --gold: #D4C68B;
+  --copper: #BC976A;
+  --bronze: #CAAB84;
+  --sand: #CB9F69;
+
+  /* Layout */
+  --max-w: 780px;
+  --header-h: 55px;
 }
+
 html { scroll-behavior: smooth; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg); color: var(--text); line-height: 1.7;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: var(--white);
+  color: var(--text-primary);
+  line-height: 1.7;
   font-size: 16px;
+  -webkit-font-smoothing: antialiased;
 }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
+
+/* ── Typography ───────────────────────────────── */
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.8rem; line-height: 1.05; letter-spacing: -0.05em; }
+h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
+h3 { font-size: 1.25rem; line-height: 1.3; margin: 1.5rem 0 .5rem; }
+h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  margin: 1.25rem 0 .4rem;
+  color: var(--text-primary);
+}
+p { margin-bottom: .75rem; }
+li { margin-bottom: .35rem; }
+ul, ol { padding-left: 1.5rem; }
+a { color: var(--teal); text-decoration: underline; }
+a:hover { color: var(--teal-dark); }
 
 /* ── Layout ───────────────────────────────────── */
-.container { max-width: var(--max-w); margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
 
-/* ── Header ───────────────────────────────────── */
+/* ── Fixed Header ─────────────────────────────── */
+header.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-inner {
+  width: 100%; max-width: var(--max-w); padding: 0 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-brand {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.header-brand .logo {
+  font-family: 'Playfair Display', serif; font-size: 1.15rem;
+  font-weight: 600; color: var(--text-primary); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header-brand .byline {
+  font-size: 11px; color: var(--warm-gray-dark);
+}
+.header-nav { display: flex; align-items: center; gap: 4px; }
+.header-nav a {
+  font-size: 13px; color: var(--text-primary); text-decoration: none;
+  padding: 5px 10px; border-radius: 9999px; transition: background .2s;
+}
+.header-nav a:hover { background: var(--cream); }
+.header-nav a.active {
+  background: var(--teal-light); border: 1px solid var(--teal-border);
+}
+
+/* ── Hero ──────────────────────────────────────── */
 .hero {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
-  color: #fff; padding: 3rem 2rem; border-radius: var(--radius);
-  margin-bottom: 2.5rem; text-align: center;
+  padding: calc(var(--header-h) + 48px) 0 48px;
+  text-align: center;
 }
-.hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: .5rem; }
-.hero .subtitle { opacity: .9; font-size: 1.1rem; }
-.hero .meta { margin-top: 1rem; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; font-size: .9rem; opacity: .85; }
-.hero .meta span { background: rgba(255,255,255,.15); padding: .25rem .75rem; border-radius: 20px; }
+.hero h1 { margin-bottom: 16px; }
+.hero .subtitle {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 560px; margin: 0 auto 24px;
+}
 
-/* ── Navigation ───────────────────────────────── */
-nav.toc {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 1.25rem 1.5rem; margin-bottom: 2rem; box-shadow: var(--shadow);
+/* ── Pill Badges ──────────────────────────────── */
+.pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 20px 0;
 }
-nav.toc h2 { font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .75rem; }
-nav.toc ol { list-style: none; counter-reset: toc; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .4rem; }
-nav.toc li { counter-increment: toc; }
-nav.toc a {
-  display: block; padding: .4rem .6rem; border-radius: 6px; font-size: .95rem;
-  transition: background .15s;
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px 8px 10px; border-radius: 40px;
+  font-size: 14px; font-weight: 500;
+  background: var(--cream); border: 1px solid var(--border);
+  color: var(--text-primary); transition: all .2s;
 }
-nav.toc a::before { content: counter(toc) ". "; font-weight: 700; color: var(--accent); }
-nav.toc a:hover { background: var(--accent-light); text-decoration: none; }
+.pill .dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
 
-/* ── Sections ─────────────────────────────────── */
-section { margin-bottom: 2.5rem; }
-section > h2 {
-  font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;
-  padding-bottom: .5rem; border-bottom: 3px solid var(--accent);
-  display: flex; align-items: center; gap: .5rem;
+/* ── Prompt Box ───────────────────────────────── */
+.prompt-box {
+  max-width: 648px; margin: 0 auto 32px;
+  background: var(--cream); border: 1px solid var(--copper);
+  border-radius: 12px; padding: 20px;
+  text-align: left;
 }
-section > h2 .num {
-  background: var(--accent); color: #fff; width: 32px; height: 32px;
-  border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-  font-size: .85rem; flex-shrink: 0;
+.prompt-box .prompt-label {
+  font-size: 12px; font-weight: 500; color: var(--warm-gray-dark);
+  margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em;
 }
-h3 { font-size: 1.15rem; margin: 1.25rem 0 .5rem; color: var(--accent-dark); }
-h4 { font-size: 1rem; margin: 1rem 0 .4rem; }
-p, li { margin-bottom: .5rem; }
-ul, ol { padding-left: 1.5rem; }
+.prompt-box .prompt-text {
+  font-size: 1rem; color: var(--text-primary); line-height: 1.6;
+  font-style: italic;
+}
+.prompt-box .prompt-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 12px; font-size: 12px; color: var(--warm-gray-dark);
+}
+.prompt-box .prompt-meta .badge {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px; padding: 4px 10px; font-size: 12px; font-weight: 500;
+}
+
+/* ── Section Bands ────────────────────────────── */
+.section-warm {
+  background: var(--cream); padding: 48px 18px;
+  margin: 0 -18px;
+}
+.section-white { padding: 48px 0; }
+
+/* ── Callouts ─────────────────────────────────── */
+.callout {
+  border-radius: 10px; padding: 16px 18px; margin: 16px 0;
+  font-size: 14px; line-height: 1.6;
+  border: 1px solid;
+}
+.callout.strategy {
+  background: var(--teal-light); border-color: var(--teal-border);
+}
+.callout.strategy::before {
+  content: 'Strategy '; font-weight: 600; color: var(--teal-dark);
+}
+.callout.warning {
+  background: #faf6ef; border-color: var(--copper);
+}
+.callout.warning::before {
+  content: 'Watch Out '; font-weight: 600; color: var(--copper);
+}
+.callout.golden {
+  background: #faf8f0; border-color: var(--gold);
+}
+.callout.golden::before {
+  content: 'Golden Rule '; font-weight: 600; color: var(--sand);
+}
 
 /* ── Cards ────────────────────────────────────── */
 .card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow); margin-bottom: 1rem;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
 }
+.card:hover { border-color: var(--teal-border); }
+.card h4 { margin-top: 0; }
 
-/* ── Flowchart (CSS) ──────────────────────────── */
+/* ── Flow Steps ───────────────────────────────── */
 .flow {
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: .25rem; margin: 1.5rem 0;
 }
 .flow-step {
-  background: var(--accent-light); color: var(--accent-dark); font-weight: 600;
-  padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; text-align: center;
-  border: 2px solid var(--accent); min-width: 110px;
+  background: var(--cream); color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: .5rem 1rem; border-radius: 8px; font-size: .85rem;
+  text-align: center; font-weight: 500; min-width: 110px;
 }
-.flow-arrow { color: var(--accent); font-size: 1.2rem; font-weight: 700; }
+.flow-arrow { color: var(--warm-gray-dark); font-size: 1.2rem; }
 
 /* ── Job Selector ─────────────────────────────── */
 .jobs-grid {
@@ -98,185 +222,299 @@ ul, ol { padding-left: 1.5rem; }
   gap: .75rem; margin: 1rem 0;
 }
 .job-card {
-  background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius);
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
   padding: 1rem 1.25rem; cursor: pointer; transition: all .2s;
   position: relative;
 }
-.job-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79,70,229,.15); }
-.job-card.active { border-color: var(--accent); background: var(--accent-light); }
+.job-card:hover { border-color: var(--teal-border); transform: translateY(-2px); }
+.job-card.active { border-color: var(--teal-border); background: var(--teal-light); }
 .job-card .job-num {
-  position: absolute; top: .75rem; right: .75rem; background: var(--accent);
-  color: #fff; width: 24px; height: 24px; border-radius: 50%; font-size: .75rem;
-  display: flex; align-items: center; justify-content: center; font-weight: 700;
+  position: absolute; top: .75rem; right: .75rem;
+  width: 24px; height: 24px; border-radius: 50%; font-size: .75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--text-primary);
 }
 .job-card h4 { margin: 0 0 .3rem; font-size: 1rem; padding-right: 2rem; }
-.job-card .task { font-size: .85rem; color: var(--muted); }
+.job-card .task { font-size: .85rem; color: var(--text-secondary); }
+
+/* Job number badge colors cycling through earthy palette */
+.job-num-1 { background: var(--sage); }
+.job-num-2 { background: var(--olive); }
+.job-num-3 { background: var(--gold); }
+.job-num-4 { background: var(--copper); color: var(--white) !important; }
+.job-num-5 { background: var(--bronze); }
+.job-num-6 { background: var(--sage); }
+.job-num-7 { background: var(--olive); }
+.job-num-8 { background: var(--gold); }
+.job-num-9 { background: var(--copper); color: var(--white) !important; }
+.job-num-10 { background: var(--bronze); }
+
+/* ── Job Detail Panel ─────────────────────────── */
 .job-detail {
-  display: none; background: var(--surface); border: 2px solid var(--accent);
-  border-radius: var(--radius); padding: 1.5rem; margin-top: .75rem;
+  display: none; background: var(--white); border: 1px solid var(--teal-border);
+  border-radius: 12px; padding: 1.5rem; margin-top: .75rem;
   animation: slideDown .3s ease;
 }
 .job-detail.visible { display: block; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-.complexity { display: inline-block; padding: .15rem .6rem; border-radius: 12px; font-size: .8rem; font-weight: 600; }
-.complexity.easy { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.complexity.medium { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
-.complexity.hard { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
 
-/* ── Details/Summary ──────────────────────────── */
-details {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); margin-bottom: .75rem; box-shadow: var(--shadow);
+/* ── Complexity Badges ────────────────────────── */
+.complexity {
+  display: inline-block; padding: 3px 12px; border-radius: 62px;
+  font-size: .8rem; font-weight: 600;
 }
-details > summary {
-  padding: 1rem 1.25rem; cursor: pointer; font-weight: 600;
-  list-style: none; display: flex; align-items: center; gap: .5rem;
-}
-details > summary::before {
-  content: '\25B6'; font-size: .7rem; transition: transform .2s; color: var(--accent);
-}
-details[open] > summary::before { transform: rotate(90deg); }
-details > summary::-webkit-details-marker { display: none; }
-details > .content { padding: 0 1.25rem 1.25rem; }
+.complexity.easy { background: var(--sage); color: var(--text-primary); }
+.complexity.medium { background: var(--gold); color: var(--text-primary); }
+.complexity.hard { background: var(--copper); color: var(--white); }
 
-/* ── Callouts ─────────────────────────────────── */
-.callout {
-  border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
-  border-left: 4px solid; font-size: .95rem;
-}
-.callout.tip { background: var(--green-bg); border-color: var(--green); }
-.callout.tip::before { content: 'Pro Tip: '; font-weight: 700; color: var(--green); }
-.callout.warn { background: var(--amber-bg); border-color: var(--amber); }
-.callout.warn::before { content: 'Warning: '; font-weight: 700; color: var(--amber); }
-.callout.danger { background: var(--red-bg); border-color: var(--red); }
-.callout.danger::before { content: 'Common Mistake: '; font-weight: 700; color: var(--red); }
-.callout.info { background: var(--blue-bg); border-color: var(--blue); }
-.callout.info::before { content: 'Key Insight: '; font-weight: 700; color: var(--blue); }
-
-/* ── Rubric Table ─────────────────────────────── */
-.rubric-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
-.rubric-table th, .rubric-table td { padding: .75rem; text-align: left; border: 1px solid var(--border); }
-.rubric-table thead th { background: var(--accent); color: #fff; font-weight: 600; }
-.rubric-table .good { background: var(--green-bg); }
-.rubric-table .sat { background: var(--amber-bg); }
-.rubric-table .poor { background: var(--red-bg); }
-.rubric-table .zero { background: #f1f5f9; }
-
-/* ── RAG Diagram (SVG) ───────────────────────── */
-.rag-diagram {
-  width: 100%; max-width: 800px; margin: 1.5rem auto; display: block;
+/* ── Marks Badge ──────────────────────────────── */
+.marks {
+  display: inline-block; background: var(--gold); color: var(--text-primary);
+  padding: 3px 12px; border-radius: 62px; font-size: .8rem; font-weight: 600;
 }
 
-/* ── Checklist ────────────────────────────────── */
-.checklist { list-style: none; padding: 0; }
-.checklist li { padding: .5rem 0 .5rem 2rem; position: relative; border-bottom: 1px solid var(--border); }
-.checklist li::before {
-  content: ''; position: absolute; left: 0; top: .65rem;
-  width: 18px; height: 18px; border: 2px solid var(--accent); border-radius: 4px;
+/* ── Arena Details / Summary ──────────────────── */
+details.arena-details {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 10px; background: var(--white);
+  transition: border-color .2s;
 }
-.checklist li.checked::before {
-  background: var(--accent); border-color: var(--accent);
+details.arena-details:hover { border-color: var(--teal-border); }
+details.arena-details[open] { border-color: var(--teal-border); }
+details.arena-details > summary {
+  padding: 14px 18px; cursor: pointer; font-weight: 500;
+  font-size: 15px; list-style: none;
+  display: flex; align-items: center; gap: 8px;
 }
-.checklist li.checked::after {
-  content: '\2713'; position: absolute; left: 3px; top: .45rem;
-  color: #fff; font-size: .85rem; font-weight: 700;
+details.arena-details > summary::before {
+  content: '\25B6'; font-size: .65rem; color: var(--teal);
+  transition: transform .2s;
 }
+details.arena-details[open] > summary::before { transform: rotate(90deg); }
+details.arena-details > summary::-webkit-details-marker { display: none; }
+details.arena-details > .detail-body { padding: 0 18px 18px; }
 
-/* ── Step Badges ──────────────────────────────── */
+/* ── Step Badge (inline) ──────────────────────── */
 .step-badge {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
-  color: #fff; font-weight: 700; font-size: .85rem; margin-right: .5rem;
-  flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--text-primary); color: var(--text-light);
+  font-family: 'Playfair Display', serif;
+  font-weight: 600; font-size: .85rem; flex-shrink: 0;
 }
 
-/* ── Code blocks ──────────────────────────────── */
+/* ── Table ────────────────────────────────────── */
+.arena-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+}
+.arena-table th {
+  text-align: left; padding: 10px 12px; font-weight: 500;
+  color: var(--text-secondary); font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.arena-table td {
+  padding: 10px 12px; border-bottom: 1px solid var(--cream-darker);
+  vertical-align: top;
+}
+.arena-table tr:last-child td { border-bottom: none; }
+.arena-table .row-good { background: #f0f7f4; }
+.arena-table .row-sat { background: #faf6ef; }
+.arena-table .row-poor { background: #faf0ee; }
+
+/* ── Bar Chart ────────────────────────────────── */
+.bar-chart {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 8px; height: 200px; margin: 24px 0 8px; padding: 0 12px;
+}
+.bar-col {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex: 1; max-width: 120px;
+}
+.bar {
+  width: 100%; border-radius: 6px 6px 0 0;
+}
+.bar-label {
+  font-size: 11px; color: var(--text-secondary); text-align: center;
+  line-height: 1.3;
+}
+.bar-value {
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+}
+
+/* ── Example Block ────────────────────────────── */
+.example-block {
+  background: var(--cream); border-radius: 10px;
+  padding: 16px 18px; margin: 12px 0; font-size: 14px;
+}
+.example-block .ex-label {
+  font-size: 12px; font-weight: 600; color: var(--teal-dark);
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
+}
+
+/* ── Code Block ───────────────────────────────── */
 .code-block {
-  background: #1e293b; color: #e2e8f0; padding: 1rem 1.25rem;
-  border-radius: 8px; font-family: 'Fira Code', 'Consolas', monospace;
-  font-size: .85rem; overflow-x: auto; line-height: 1.5; margin: .75rem 0;
-  white-space: pre-wrap; word-break: break-word;
+  background: var(--text-primary); color: var(--cream);
+  padding: 16px 18px; border-radius: 10px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px; line-height: 1.6; overflow-x: auto;
+  margin: 12px 0; white-space: pre-wrap; word-break: break-word;
 }
-.code-block .comment { color: #94a3b8; }
-.code-block .keyword { color: #c084fc; }
-.code-block .string { color: #86efac; }
+.code-block .comment { color: var(--warm-gray-dark); }
+.code-block .keyword { color: var(--sage); }
+.code-block .string { color: var(--olive); }
 
-/* ── Marks badge ──────────────────────────────── */
-.marks {
-  display: inline-block; background: var(--accent); color: #fff;
-  padding: .1rem .5rem; border-radius: 10px; font-size: .8rem; font-weight: 700;
+/* ── Checklist ────────────────────────────────── */
+.checklist { list-style: none; padding: 0; margin: 16px 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; font-size: 14px;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.checklist li:last-child { border-bottom: none; }
+.check-box {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;
+  border: 2px solid var(--warm-gray); border-radius: 4px;
 }
 
-/* ── Example blocks ───────────────────────────── */
-.example {
-  background: var(--purple-bg); border: 1px solid #ddd6fe; border-radius: 8px;
-  padding: 1rem 1.25rem; margin: .75rem 0;
+/* ── RAG Diagram ──────────────────────────────── */
+.rag-diagram {
+  width: 100%; max-width: 780px; margin: 1.5rem auto; display: block;
 }
-.example::before { content: 'Example: '; font-weight: 700; color: var(--purple); }
+
+/* ── CTA Button ───────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text-primary); color: var(--text-light);
+  border: none; border-radius: 50px; padding: 14px 28px;
+  font-size: 16px; font-weight: 400; font-family: 'Inter', sans-serif;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s;
+}
+.btn-primary:hover { background: #3a3d44; color: var(--text-light); text-decoration: none; }
+
+/* ── Section Title with number ────────────────── */
+.section-title {
+  display: flex; align-items: center; gap: 12px; margin-bottom: .75rem;
+}
+.section-num {
+  flex-shrink: 0; width: 36px; height: 36px;
+  background: var(--text-primary); color: var(--text-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+}
+
+/* ── Footer ───────────────────────────────────── */
+footer.site-footer {
+  padding: 32px 0 24px;
+  text-align: center; font-size: 14px; color: var(--text-muted);
+  border-top: 1px solid var(--cream-darker);
+  margin-top: 24px;
+}
+footer.site-footer a {
+  color: var(--text-muted); text-decoration: none; margin: 0 8px;
+}
+footer.site-footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  .jobs-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+  .arena-table { font-size: 13px; }
+  .arena-table th, .arena-table td { padding: 8px; }
+  .bar-chart { height: 150px; gap: 4px; }
+  .header-nav a { font-size: 12px; padding: 4px 7px; }
+}
 
 /* ── Print ────────────────────────────────────── */
 @media print {
-  body { font-size: 11pt; }
-  .hero { background: #4f46e5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  nav.toc { break-after: avoid; }
-  details { break-inside: avoid; }
-  details[open] > .content { display: block !important; }
-  .job-card:hover { transform: none; box-shadow: none; }
-}
-@media (max-width: 600px) {
-  .hero h1 { font-size: 1.5rem; }
-  .flow { flex-direction: column; }
-  .flow-arrow { transform: rotate(90deg); }
-  .jobs-grid { grid-template-columns: 1fr; }
-  .rubric-table { font-size: .8rem; }
-  .rubric-table th, .rubric-table td { padding: .5rem; }
+  header.site-header { display: none; }
+  .hero { padding-top: 24px; }
+  details.arena-details[open] > .detail-body { display: block !important; }
+  .job-card:hover { transform: none; }
 }
 </style>
 </head>
 <body>
 
 <!-- ════════════════════════════════════════════════ -->
-<!-- HERO -->
+<!-- HEADER -->
 <!-- ════════════════════════════════════════════════ -->
-<div class="container">
-
-<header class="hero">
-  <h1>Assignment 1 Explainer</h1>
-  <div class="subtitle">Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919)</div>
-  <div class="meta">
-    <span>25 Marks Total</span>
-    <span>7 + 3 Pages Max</span>
-    <span>5 Criteria &times; 5 Marks</span>
-    <span>RAG-Based Solution</span>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">Assignment 1</a>
+      <span class="byline">GenAI Pre-Trained Models</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#overview">Overview</a>
+      <a href="#jobs">Jobs</a>
+      <a href="#questions">Questions</a>
+      <a href="#rubric" class="active">Rubric</a>
+      <a href="#guide">Guide</a>
+      <a href="#rag-primer">RAG</a>
+      <a href="#maximizer">Maximizer</a>
+    </nav>
   </div>
 </header>
 
-<!-- ════════════════════════════════════════════════ -->
-<!-- TABLE OF CONTENTS -->
-<!-- ════════════════════════════════════════════════ -->
-<nav class="toc">
-  <h2>Quick Navigation</h2>
-  <ol>
-    <li><a href="#overview">Assignment Overview</a></li>
-    <li><a href="#jobs">The 10 Jobs &mdash; Interactive Selector</a></li>
-    <li><a href="#questions">The 5 Questions You Must Answer</a></li>
-    <li><a href="#rubric">Rubric Deep-Dive</a></li>
-    <li><a href="#guide">Step-by-Step Solution Guide</a></li>
-    <li><a href="#rag-primer">RAG Architecture Primer</a></li>
-    <li><a href="#maximizer">Scoring Maximizer Checklist</a></li>
-  </ol>
-</nav>
+<div class="container">
 
 <!-- ════════════════════════════════════════════════ -->
-<!-- 1. OVERVIEW -->
+<!-- HERO -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="overview">
-  <h2><span class="num">1</span> Assignment Overview</h2>
+<section class="hero" id="overview">
+  <h1>Assignment 1<br>Explainer</h1>
+  <p class="subtitle">Design a RAG-based GenAI solution for a real-world job. From knowledge base to working demo &mdash; this is your architecture challenge.</p>
 
-  <p>This assignment asks you to <strong>conceptually design a RAG-based GenAI solution</strong> for one of 10 real-world jobs. You're not building production software &mdash; you're demonstrating that you understand how to architect a GenAI system that uses domain-specific knowledge to help new employees do their job better.</p>
+  <div class="pills">
+    <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 Marks</span>
+    <span class="pill"><span class="dot" style="background:var(--gold)"></span> 7 + 3 Pages</span>
+    <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 Criteria</span>
+    <span class="pill"><span class="dot" style="background:var(--copper)"></span> RAG Solution</span>
+    <span class="pill"><span class="dot" style="background:var(--bronze)"></span> Individual</span>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-label">The Assignment in One Sentence</div>
+    <div class="prompt-text">&ldquo;Pick one of 10 jobs, design its Knowledge Base, architect a RAG pipeline, identify limitations, and try it out on ChatGPT or Azure OpenAI.&rdquo;</div>
+    <div class="prompt-meta">
+      <span>GGU DBA &mdash; upGrad Course 8919</span>
+      <span class="badge">Individual</span>
+    </div>
+  </div>
+
+  <a href="#guide" class="btn-primary">View the Guide &darr;</a>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- SCORE DISTRIBUTION BAR CHART -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="section-warm">
+  <h2>Score Distribution</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 24px;">Five criteria, each worth <strong>5 marks</strong> (20% of your grade). The chart below shows where your marks live &mdash; equal weight means no criterion is optional.</p>
+
+  <div class="bar-chart" id="barChart">
+    <!-- Rendered by JS -->
+  </div>
+  <div style="text-align:center; font-size: 12px; color: var(--warm-gray-dark); margin-top: 4px;">5 marks each &mdash; 25 total</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 1. OVERVIEW (The Big Picture) -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="section-white">
+  <div class="section-title">
+    <span class="section-num">1</span>
+    <h2 style="margin:0;">Assignment Overview</h2>
+  </div>
+
+  <p>This assignment asks you to <strong>conceptually design a RAG-based GenAI solution</strong> for one of 10 real-world jobs. You&rsquo;re not building production software &mdash; you&rsquo;re demonstrating that you understand how to architect a GenAI system that uses domain-specific knowledge to help new employees do their job better.</p>
 
   <div class="card">
-    <h3>The Big Picture in 30 Seconds</h3>
+    <h4>The Big Picture in 30 Seconds</h4>
     <div class="flow">
       <div class="flow-step">Pick 1 of 10 Jobs</div>
       <div class="flow-arrow">&rarr;</div>
@@ -296,45 +534,41 @@ details > .content { padding: 0 1.25rem 1.25rem; }
   <ul>
     <li><strong>Length:</strong> 1&ndash;7 A4 pages of written content + up to 3 pages of screenshots/code. <em>Content after page 10 is ignored.</em></li>
     <li><strong>Style:</strong> &ldquo;A lucid note&rdquo; &mdash; clear, structured prose (not slides or bullet dumps).</li>
-    <li><strong>Assumptions:</strong> You're free to make reasonable assumptions about KB document formats, sample queries, tool choices, etc. State them explicitly.</li>
+    <li><strong>Assumptions:</strong> You&rsquo;re free to make reasonable assumptions about KB document formats, sample queries, tool choices, etc. State them explicitly.</li>
     <li><strong>Language:</strong> English.</li>
   </ul>
 
-  <h3>Score Distribution</h3>
-  <p>Five criteria, each worth <span class="marks">5 marks</span> (20% of total 25):</p>
-  <ol>
-    <li>Detailing of KB and Sample Query format</li>
-    <li>Overall GenAI solution design</li>
-    <li>Prompts and RAG effectiveness enhancement</li>
-    <li>Identification of solution limitations</li>
-    <li>Efforts to try out the solution (Azure OpenAI / ChatGPT / other platform)</li>
-  </ol>
-
-  <div class="callout info">The 5th criterion &mdash; actually trying your solution &mdash; is worth the same 20% as the architecture design. Don't treat it as optional! Even a basic ChatGPT conversation demonstrating your approach counts. This is the most commonly underweighted criterion.</div>
+  <div class="callout strategy">The 5th criterion &mdash; actually trying your solution &mdash; is worth the same 20% as the architecture design. Don&rsquo;t treat it as optional! Even a basic ChatGPT conversation demonstrating your approach counts. This is the most commonly underweighted criterion.</div>
 </section>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- 2. THE 10 JOBS -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="jobs">
-  <h2><span class="num">2</span> The 10 Jobs &mdash; Interactive Selector</h2>
+<div class="section-warm" id="jobs">
+  <div class="section-title">
+    <span class="section-num">2</span>
+    <h2 style="margin:0;">The 10 Jobs &mdash; Interactive Selector</h2>
+  </div>
   <p>Click any job to see its KB details, sample query, complexity rating, and strategic hints. Pick the one that plays to your strengths.</p>
 
   <div class="jobs-grid" id="jobsGrid"></div>
   <div id="jobDetail" class="job-detail"></div>
 
-  <div class="callout tip">Choose a job where the KB is <strong>text-heavy and structured</strong> &mdash; that's where RAG shines. Jobs like Legal Assistant (#1), Insurance Underwriter (#4), and HR Executive (#7) have naturally structured document corpora. Avoid jobs where the task is primarily creative/visual (like Graphic Designer) unless you can articulate a clear retrieval story.</div>
-</section>
+  <div class="callout strategy" style="margin-top:16px;">Choose a job where the KB is <strong>text-heavy and structured</strong> &mdash; that&rsquo;s where RAG shines. Jobs like Legal Assistant (#1), Insurance Underwriter (#4), and HR Executive (#7) have naturally structured document corpora. Avoid jobs where the task is primarily creative/visual (like Graphic Designer) unless you can articulate a clear retrieval story.</div>
+</div>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- 3. THE 5 QUESTIONS -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="questions">
-  <h2><span class="num">3</span> The 5 Questions You Must Answer</h2>
+<section class="section-white" id="questions">
+  <div class="section-title">
+    <span class="section-num">3</span>
+    <h2 style="margin:0;">The 5 Questions You Must Answer</h2>
+  </div>
 
-  <details open>
+  <details class="arena-details" open>
     <summary>Q1: How much can GenAI help? (Fully / Mostly / Partly / Hardly)</summary>
-    <div class="content">
+    <div class="detail-body">
       <p>You must pick one: <strong>(a) Fully 100%</strong>, <strong>(b) Mostly 80%+</strong>, <strong>(c) Partly 40%+</strong>, or <strong>(d) Hardly &lt;20%</strong>.</p>
 
       <h4>How to Justify Your Choice</h4>
@@ -344,19 +578,20 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>Be specific:</strong> &ldquo;GenAI can retrieve similar cases and suggest search terms (70% of the work), but a human must verify legal applicability and make the final case selection (30%).&rdquo;</li>
       </ul>
 
-      <div class="callout warn">Don't pick &ldquo;Fully&rdquo; unless you can truly defend 100% automation. Most jobs need human oversight. &ldquo;Mostly&rdquo; is the safe sweet spot for most choices &mdash; it shows you understand GenAI's power while acknowledging real-world limits.</div>
+      <div class="callout warning">Don&rsquo;t pick &ldquo;Fully&rdquo; unless you can truly defend 100% automation. Most jobs need human oversight. &ldquo;Mostly&rdquo; is the safe sweet spot for most choices &mdash; it shows you understand GenAI&rsquo;s power while acknowledging real-world limits.</div>
 
-      <div class="example">
-        <strong>Legal Assistant &mdash; Finding similar cases:</strong> &ldquo;Mostly (80%+). GenAI with RAG can search through past search logs, identify patterns in successful queries, suggest relevant search terms, and even rank case similarity. However, a human must verify legal relevance, check for jurisdictional applicability, and validate that returned cases are currently good law.&rdquo;
+      <div class="example-block">
+        <div class="ex-label">Example &mdash; Legal Assistant</div>
+        <strong>Finding similar cases:</strong> &ldquo;Mostly (80%+). GenAI with RAG can search through past search logs, identify patterns in successful queries, suggest relevant search terms, and even rank case similarity. However, a human must verify legal relevance, check for jurisdictional applicability, and validate that returned cases are currently good law.&rdquo;
       </div>
     </div>
   </details>
 
-  <details>
+  <details class="arena-details">
     <summary>Q2: What can GenAI do vs NOT do for this task?</summary>
-    <div class="content">
+    <div class="detail-body">
       <p>Create a clear two-column analysis:</p>
-      <table class="rubric-table">
+      <table class="arena-table">
         <thead><tr><th style="width:50%">GenAI CAN Do</th><th>GenAI CANNOT Do</th></tr></thead>
         <tbody>
           <tr>
@@ -378,16 +613,16 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         </tbody>
       </table>
 
-      <div class="callout tip">The strongest answers connect each &ldquo;CANNOT&rdquo; item to a specific mitigation strategy. For example: &ldquo;GenAI cannot guarantee accuracy &rarr; we add a confidence score and human-in-the-loop review for responses below 0.8 threshold.&rdquo;</div>
+      <div class="callout strategy">The strongest answers connect each &ldquo;CANNOT&rdquo; item to a specific mitigation strategy. For example: &ldquo;GenAI cannot guarantee accuracy &rarr; we add a confidence score and human-in-the-loop review for responses below 0.8 threshold.&rdquo;</div>
     </div>
   </details>
 
-  <details>
+  <details class="arena-details">
     <summary>Q3: Build approach &mdash; From scratch, fine-tuning, prompting, or RAG?</summary>
-    <div class="content">
-      <p>The assignment strongly hints at <strong>RAG</strong> as the expected answer &mdash; it's in the title and problem statement. But you should still justify <em>why</em> RAG over the alternatives:</p>
+    <div class="detail-body">
+      <p>The assignment strongly hints at <strong>RAG</strong> as the expected answer &mdash; it&rsquo;s in the title and problem statement. But you should still justify <em>why</em> RAG over the alternatives:</p>
 
-      <table class="rubric-table">
+      <table class="arena-table">
         <thead><tr><th>Approach</th><th>When It Works</th><th>Why Not Here</th></tr></thead>
         <tbody>
           <tr>
@@ -398,14 +633,14 @@ details > .content { padding: 0 1.25rem 1.25rem; }
           <tr>
             <td><strong>Fine-tuning</strong></td>
             <td>Narrow domain style, consistent output format needed</td>
-            <td>KB updates require retraining; doesn't scale well with evolving knowledge</td>
+            <td>KB updates require retraining; doesn&rsquo;t scale well with evolving knowledge</td>
           </tr>
           <tr>
             <td><strong>Prompting only</strong></td>
             <td>General knowledge tasks, no proprietary data needed</td>
-            <td>Can't access KB; limited by context window; no domain-specific knowledge</td>
+            <td>Can&rsquo;t access KB; limited by context window; no domain-specific knowledge</td>
           </tr>
-          <tr class="good">
+          <tr class="row-good">
             <td><strong>RAG</strong></td>
             <td>Domain-specific KB, needs current data, explainability important</td>
             <td><em>This is the answer</em> &mdash; KB is the centerpiece of the solution</td>
@@ -413,29 +648,29 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         </tbody>
       </table>
 
-      <div class="callout info">Even though RAG is expected, mention that you might <strong>combine approaches</strong>: RAG for retrieval + prompt engineering for response quality + potential fine-tuning for domain-specific language. This shows sophistication.</div>
+      <div class="callout strategy">Even though RAG is expected, mention that you might <strong>combine approaches</strong>: RAG for retrieval + prompt engineering for response quality + potential fine-tuning for domain-specific language. This shows sophistication.</div>
     </div>
   </details>
 
-  <details>
+  <details class="arena-details">
     <summary>Q4: Conceptual RAG architecture design</summary>
-    <div class="content">
+    <div class="detail-body">
       <p>This is the core of your assignment &mdash; see <a href="#rag-primer">Section 6: RAG Architecture Primer</a> for the full visual guide. Your design should cover:</p>
       <ol>
         <li><strong>Document ingestion:</strong> How KB documents are chunked, embedded, and indexed</li>
         <li><strong>Query pipeline:</strong> How user queries flow through embedding &rarr; retrieval &rarr; context injection &rarr; LLM generation</li>
         <li><strong>Tool choices:</strong> Specific embedding models, vector DBs, LLMs, orchestration frameworks</li>
         <li><strong>Prompt design:</strong> System prompts, few-shot examples, output format instructions</li>
-        <li><strong>Evaluation method:</strong> How you'd measure if the solution actually works</li>
+        <li><strong>Evaluation method:</strong> How you&rsquo;d measure if the solution actually works</li>
       </ol>
 
-      <div class="callout danger">The rubric for Criterion 2 explicitly says: &ldquo;the method of estimating the success of the approach is also clearly stated.&rdquo; Many students describe the architecture but forget to explain how they'd <em>evaluate</em> it. Include metrics like retrieval precision, answer relevance scores, or user satisfaction ratings.</div>
+      <div class="callout golden">The rubric for Criterion 2 explicitly says: &ldquo;the method of estimating the success of the approach is also clearly stated.&rdquo; Many students describe the architecture but forget to explain how they&rsquo;d <em>evaluate</em> it. Include metrics like retrieval precision, answer relevance scores, or user satisfaction ratings.</div>
     </div>
   </details>
 
-  <details>
+  <details class="arena-details">
     <summary>Q5: Limitations and risks</summary>
-    <div class="content">
+    <div class="detail-body">
       <p>The assignment specifically mentions TCO and response time. Cover these categories:</p>
       <ul>
         <li><strong>Cost (TCO):</strong> Embedding computation, vector DB hosting, LLM API costs per query, KB maintenance</li>
@@ -445,7 +680,7 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>Domain-specific risks:</strong> Whatever is specific to your chosen job (e.g., legal liability for Legal Assistant)</li>
       </ul>
 
-      <div class="callout tip">Don't just list risks &mdash; <strong>propose mitigations</strong> for each. &ldquo;Hallucination risk &rarr; mitigated by including source citations in every response and requiring human review for high-stakes decisions.&rdquo; This turns a weakness into a strength in your answer.</div>
+      <div class="callout strategy">Don&rsquo;t just list risks &mdash; <strong>propose mitigations</strong> for each. &ldquo;Hallucination risk &rarr; mitigated by including source citations in every response and requiring human review for high-stakes decisions.&rdquo; This turns a weakness into a strength in your answer.</div>
     </div>
   </details>
 </section>
@@ -453,25 +688,28 @@ details > .content { padding: 0 1.25rem 1.25rem; }
 <!-- ════════════════════════════════════════════════ -->
 <!-- 4. RUBRIC DEEP-DIVE -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="rubric">
-  <h2><span class="num">4</span> Rubric Deep-Dive</h2>
-  <p>Each criterion is scored out of 5. Here's what the graders are looking for &mdash; and what separates a 5 from a 3.</p>
+<div class="section-warm" id="rubric">
+  <div class="section-title">
+    <span class="section-num">4</span>
+    <h2 style="margin:0;">Rubric Deep-Dive</h2>
+  </div>
+  <p>Each criterion is scored out of 5. Here&rsquo;s what the graders are looking for &mdash; and what separates a 5 from a 3.</p>
 
   <!-- Criterion 1 -->
-  <details>
+  <details class="arena-details">
     <summary><span class="marks">5 marks</span> &nbsp; Criterion 1: Detailing of KB and Sample Query Format</summary>
-    <div class="content">
-      <table class="rubric-table">
-        <thead><tr><th style="width:15%">Score</th><th>What It Looks Like</th></tr></thead>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">Score</th><th>What It Looks Like</th></tr></thead>
         <tbody>
-          <tr class="good"><td><strong>Good (5-4)</strong></td><td>Clear description of KB document structure (fields, format, metadata), multiple realistic sample queries of varying complexity, explains how documents are organized and why</td></tr>
-          <tr class="sat"><td><strong>Satisfactory (3-2)</strong></td><td>General background is presented but KB specifics are vague &mdash; no document schema, only one generic query</td></tr>
-          <tr class="poor"><td><strong>Needs Improvement (1)</strong></td><td>Neither KB nor query specifics are clearly stated</td></tr>
-          <tr class="zero"><td><strong>Did not address (0)</strong></td><td>Section is missing entirely</td></tr>
+          <tr class="row-good"><td><strong>Good (5-4)</strong></td><td>Clear description of KB document structure (fields, format, metadata), multiple realistic sample queries of varying complexity, explains how documents are organized and why</td></tr>
+          <tr class="row-sat"><td><strong>Satisfactory (3-2)</strong></td><td>General background is presented but KB specifics are vague &mdash; no document schema, only one generic query</td></tr>
+          <tr class="row-poor"><td><strong>Needs Improvement (1)</strong></td><td>Neither KB nor query specifics are clearly stated</td></tr>
+          <tr><td><strong>Did not address (0)</strong></td><td>Section is missing entirely</td></tr>
         </tbody>
       </table>
 
-      <h4>What a "5" Answer Includes</h4>
+      <h4>What a &ldquo;5&rdquo; Answer Includes</h4>
       <ul>
         <li>A <strong>document schema</strong> showing 3-5 fields (e.g., case_id, date, jurisdiction, summary, full_text, outcome, tags)</li>
         <li>A <strong>sample KB document</strong> &mdash; even 3-4 lines showing what a real entry looks like</li>
@@ -479,22 +717,23 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li>Explanation of <strong>document size, volume, and update frequency</strong></li>
       </ul>
 
-      <div class="example"><strong>Legal Assistant KB Schema:</strong><br>
-      <code>{ "case_id": "LC-2024-00431", "date": "2024-03-15", "jurisdiction": "California", "practice_area": "IP-Patent", "search_terms_used": ["patent infringement", "software claims"], "relevant_cases_found": ["Smith v. TechCorp 2019", ...], "success_rating": 4, "searcher_notes": "Key was combining patent class codes with natural language terms..." }</code>
+      <div class="example-block">
+        <div class="ex-label">Legal Assistant KB Schema</div>
+        <code>{ "case_id": "LC-2024-00431", "date": "2024-03-15", "jurisdiction": "California", "practice_area": "IP-Patent", "search_terms_used": ["patent infringement", "software claims"], "relevant_cases_found": ["Smith v. TechCorp 2019", ...], "success_rating": 4, "searcher_notes": "Key was combining patent class codes with natural language terms..." }</code>
       </div>
     </div>
   </details>
 
   <!-- Criterion 2 -->
-  <details>
+  <details class="arena-details">
     <summary><span class="marks">5 marks</span> &nbsp; Criterion 2: Overall GenAI Solution Design</summary>
-    <div class="content">
-      <table class="rubric-table">
-        <thead><tr><th style="width:15%">Score</th><th>What It Looks Like</th></tr></thead>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">Score</th><th>What It Looks Like</th></tr></thead>
         <tbody>
-          <tr class="good"><td><strong>Good (5-4)</strong></td><td>Approach clearly described AND method of estimating success is clearly stated</td></tr>
-          <tr class="sat"><td><strong>Satisfactory (3-2)</strong></td><td>Either the approach OR the evaluation method is unclear</td></tr>
-          <tr class="poor"><td><strong>Needs Improvement (1)</strong></td><td>Neither the approach nor evaluation is described clearly</td></tr>
+          <tr class="row-good"><td><strong>Good (5-4)</strong></td><td>Approach clearly described AND method of estimating success is clearly stated</td></tr>
+          <tr class="row-sat"><td><strong>Satisfactory (3-2)</strong></td><td>Either the approach OR the evaluation method is unclear</td></tr>
+          <tr class="row-poor"><td><strong>Needs Improvement (1)</strong></td><td>Neither the approach nor evaluation is described clearly</td></tr>
         </tbody>
       </table>
 
@@ -506,20 +745,20 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>End-to-end:</strong> User satisfaction ratings, task completion time comparison (with vs without GenAI)</li>
       </ul>
 
-      <div class="callout danger">Writing a beautiful architecture diagram but no evaluation plan is a guaranteed 3 instead of a 5. Always include: &ldquo;We would evaluate this solution by...&rdquo;</div>
+      <div class="callout golden">Writing a beautiful architecture diagram but no evaluation plan is a guaranteed 3 instead of a 5. Always include: &ldquo;We would evaluate this solution by&hellip;&rdquo;</div>
     </div>
   </details>
 
   <!-- Criterion 3 -->
-  <details>
+  <details class="arena-details">
     <summary><span class="marks">5 marks</span> &nbsp; Criterion 3: Prompts and RAG Effectiveness Enhancement</summary>
-    <div class="content">
-      <table class="rubric-table">
-        <thead><tr><th style="width:15%">Score</th><th>What It Looks Like</th></tr></thead>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">Score</th><th>What It Looks Like</th></tr></thead>
         <tbody>
-          <tr class="good"><td><strong>Good (5-4)</strong></td><td>Technically correct solution with effective prompt design and RAG optimization strategies</td></tr>
-          <tr class="sat"><td><strong>Satisfactory (3-2)</strong></td><td>Some gaps in the technical evaluation</td></tr>
-          <tr class="poor"><td><strong>Needs Improvement (1)</strong></td><td>The solution is not technically correct</td></tr>
+          <tr class="row-good"><td><strong>Good (5-4)</strong></td><td>Technically correct solution with effective prompt design and RAG optimization strategies</td></tr>
+          <tr class="row-sat"><td><strong>Satisfactory (3-2)</strong></td><td>Some gaps in the technical evaluation</td></tr>
+          <tr class="row-poor"><td><strong>Needs Improvement (1)</strong></td><td>The solution is not technically correct</td></tr>
         </tbody>
       </table>
 
@@ -527,25 +766,26 @@ details > .content { padding: 0 1.25rem 1.25rem; }
       <ul>
         <li><strong>Prompts:</strong> Show actual system prompts with role definition, instructions, and output format. Include at least one few-shot example.</li>
         <li><strong>RAG enhancements:</strong> Mention at least 2-3 strategies: hybrid search (keyword + semantic), re-ranking, query expansion, metadata filtering, chunk overlap strategy.</li>
-        <li><strong>Correct pipeline:</strong> The technical flow makes sense &mdash; you're not embedding queries with one model and documents with another incompatible one.</li>
+        <li><strong>Correct pipeline:</strong> The technical flow makes sense &mdash; you&rsquo;re not embedding queries with one model and documents with another incompatible one.</li>
       </ul>
 
-      <div class="example"><strong>System Prompt for Legal Assistant RAG:</strong><br>
-      <code>You are a legal research assistant helping new paralegals find relevant past cases. Use ONLY the provided context from our case log database. For each suggestion, cite the specific case log entry. If the context doesn't contain relevant information, say so &mdash; do NOT fabricate case references. Format: bullet list with case ID, relevance explanation, and suggested search terms.</code>
+      <div class="example-block">
+        <div class="ex-label">System Prompt for Legal Assistant RAG</div>
+        <code>You are a legal research assistant helping new paralegals find relevant past cases. Use ONLY the provided context from our case log database. For each suggestion, cite the specific case log entry. If the context doesn&rsquo;t contain relevant information, say so &mdash; do NOT fabricate case references. Format: bullet list with case ID, relevance explanation, and suggested search terms.</code>
       </div>
     </div>
   </details>
 
   <!-- Criterion 4 -->
-  <details>
+  <details class="arena-details">
     <summary><span class="marks">5 marks</span> &nbsp; Criterion 4: Identification of Solution Limitations</summary>
-    <div class="content">
-      <table class="rubric-table">
-        <thead><tr><th style="width:15%">Score</th><th>What It Looks Like</th></tr></thead>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">Score</th><th>What It Looks Like</th></tr></thead>
         <tbody>
-          <tr class="good"><td><strong>Good (5-4)</strong></td><td>Clearly stated limitations with specifics &mdash; TCO estimates, latency numbers, concrete risk scenarios</td></tr>
-          <tr class="sat"><td><strong>Satisfactory (3-2)</strong></td><td>Generic limitations mentioned without specifics</td></tr>
-          <tr class="poor"><td><strong>Needs Improvement (1)</strong></td><td>Basic level &mdash; one or two vague limitations</td></tr>
+          <tr class="row-good"><td><strong>Good (5-4)</strong></td><td>Clearly stated limitations with specifics &mdash; TCO estimates, latency numbers, concrete risk scenarios</td></tr>
+          <tr class="row-sat"><td><strong>Satisfactory (3-2)</strong></td><td>Generic limitations mentioned without specifics</td></tr>
+          <tr class="row-poor"><td><strong>Needs Improvement (1)</strong></td><td>Basic level &mdash; one or two vague limitations</td></tr>
         </tbody>
       </table>
 
@@ -556,20 +796,20 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>Domain risks:</strong> &ldquo;Historical negotiation transcripts may reflect outdated market rates, requiring quarterly KB refresh.&rdquo;</li>
       </ul>
 
-      <div class="callout tip">Frame limitations as &ldquo;Limitation &rarr; Mitigation.&rdquo; This shows maturity. The grader sees you understand the problem space deeply, not just that you can list concerns.</div>
+      <div class="callout strategy">Frame limitations as &ldquo;Limitation &rarr; Mitigation.&rdquo; This shows maturity. The grader sees you understand the problem space deeply, not just that you can list concerns.</div>
     </div>
   </details>
 
   <!-- Criterion 5 -->
-  <details>
+  <details class="arena-details">
     <summary><span class="marks">5 marks</span> &nbsp; Criterion 5: Efforts to Try Out the Solution</summary>
-    <div class="content">
-      <table class="rubric-table">
-        <thead><tr><th style="width:15%">Score</th><th>What It Looks Like</th></tr></thead>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">Score</th><th>What It Looks Like</th></tr></thead>
         <tbody>
-          <tr class="good"><td><strong>Good (5-4)</strong></td><td>Significant effort &mdash; working demo, multiple test queries, screenshots showing RAG in action</td></tr>
-          <tr class="sat"><td><strong>Satisfactory (3-2)</strong></td><td>Medium effort &mdash; basic ChatGPT conversation or single screenshot</td></tr>
-          <tr class="poor"><td><strong>Needs Improvement (1)</strong></td><td>Basic &mdash; mentions trying it but no evidence</td></tr>
+          <tr class="row-good"><td><strong>Good (5-4)</strong></td><td>Significant effort &mdash; working demo, multiple test queries, screenshots showing RAG in action</td></tr>
+          <tr class="row-sat"><td><strong>Satisfactory (3-2)</strong></td><td>Medium effort &mdash; basic ChatGPT conversation or single screenshot</td></tr>
+          <tr class="row-poor"><td><strong>Needs Improvement (1)</strong></td><td>Basic &mdash; mentions trying it but no evidence</td></tr>
         </tbody>
       </table>
 
@@ -581,43 +821,46 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>Option C (Minimum):</strong> Use Azure OpenAI playground or Colab notebook. Show at least one query-response pair.</li>
       </ul>
 
-      <div class="callout warn">Do NOT leave this for the last page. Budget at least 2 of your 3 screenshot pages for this section. It's easy marks if you actually try it.</div>
+      <div class="callout warning">Do NOT leave this for the last page. Budget at least 2 of your 3 screenshot pages for this section. It&rsquo;s easy marks if you actually try it.</div>
     </div>
   </details>
-</section>
+</div>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- 5. STEP-BY-STEP GUIDE -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="guide">
-  <h2><span class="num">5</span> Step-by-Step Solution Guide</h2>
+<section class="section-white" id="guide">
+  <div class="section-title">
+    <span class="section-num">5</span>
+    <h2 style="margin:0;">Step-by-Step Solution Guide</h2>
+  </div>
 
-  <details open>
-    <summary><span class="step-badge">1</span> Choose Your Job Wisely</summary>
-    <div class="content">
+  <details class="arena-details" open>
+    <summary><span class="step-badge">1</span> &nbsp; Choose Your Job Wisely</summary>
+    <div class="detail-body">
       <p>Not all jobs are equally easy to design a RAG solution for. Prioritize jobs where:</p>
       <ul>
         <li>The KB is <strong>text-based</strong> (transcripts, logs, documents &mdash; not videos or images)</li>
         <li>The task involves <strong>information retrieval and synthesis</strong> (not creative generation)</li>
-        <li>There's a clear <strong>expert-to-novice knowledge transfer</strong> story</li>
+        <li>There&rsquo;s a clear <strong>expert-to-novice knowledge transfer</strong> story</li>
       </ul>
 
       <h4>Recommended Picks (Easiest to Design RAG For)</h4>
-      <table class="rubric-table">
-        <thead><tr><th>Job</th><th>Why It's Good for RAG</th><th>Difficulty</th></tr></thead>
+      <table class="arena-table">
+        <thead><tr><th>Job</th><th>Why It&rsquo;s Good for RAG</th><th>Difficulty</th></tr></thead>
         <tbody>
-          <tr class="good"><td>Legal Assistant (#1)</td><td>Text-heavy logs, clear retrieval task, well-defined success criteria</td><td><span class="complexity easy">Easy</span></td></tr>
-          <tr class="good"><td>Insurance Underwriter (#4)</td><td>Structured claims data, decision patterns, obvious KB schema</td><td><span class="complexity easy">Easy</span></td></tr>
-          <tr class="good"><td>HR Executive (#7)</td><td>Negotiation transcripts, pattern matching, practical sample queries</td><td><span class="complexity medium">Medium</span></td></tr>
-          <tr class="sat"><td>Bank Executive (#2)</td><td>Conversation transcripts, FAQ-style retrieval</td><td><span class="complexity easy">Easy</span></td></tr>
+          <tr class="row-good"><td>Legal Assistant (#1)</td><td>Text-heavy logs, clear retrieval task, well-defined success criteria</td><td><span class="complexity easy">Easy</span></td></tr>
+          <tr class="row-good"><td>Insurance Underwriter (#4)</td><td>Structured claims data, decision patterns, obvious KB schema</td><td><span class="complexity easy">Easy</span></td></tr>
+          <tr class="row-good"><td>HR Executive (#7)</td><td>Negotiation transcripts, pattern matching, practical sample queries</td><td><span class="complexity medium">Medium</span></td></tr>
+          <tr class="row-sat"><td>Bank Executive (#2)</td><td>Conversation transcripts, FAQ-style retrieval</td><td><span class="complexity easy">Easy</span></td></tr>
         </tbody>
       </table>
     </div>
   </details>
 
-  <details>
-    <summary><span class="step-badge">2</span> Design Your Knowledge Base</summary>
-    <div class="content">
+  <details class="arena-details">
+    <summary><span class="step-badge">2</span> &nbsp; Design Your Knowledge Base</summary>
+    <div class="detail-body">
       <p>This is Criterion 1 (20%). Your KB design should be specific and believable:</p>
 
       <h4>KB Design Template</h4>
@@ -646,16 +889,17 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         <li><strong>Comparative:</strong> &ldquo;How does this case differ from [reference case]?&rdquo;</li>
       </ul>
 
-      <div class="callout tip">Include one query that's <em>hard</em> for the system &mdash; and acknowledge why. This shows depth: &ldquo;Query 5 requires cross-referencing multiple documents and temporal reasoning, which pushes the limits of single-retrieval RAG.&rdquo;</div>
+      <div class="callout strategy">Include one query that&rsquo;s <em>hard</em> for the system &mdash; and acknowledge why. This shows depth: &ldquo;Query 5 requires cross-referencing multiple documents and temporal reasoning, which pushes the limits of single-retrieval RAG.&rdquo;</div>
     </div>
   </details>
 
-  <details>
-    <summary><span class="step-badge">3</span> Design Sample Queries &amp; Expected Responses</summary>
-    <div class="content">
-      <p>For each query, sketch what a <strong>good response</strong> looks like. This shows the grader you've thought through the end-to-end experience.</p>
+  <details class="arena-details">
+    <summary><span class="step-badge">3</span> &nbsp; Design Sample Queries &amp; Expected Responses</summary>
+    <div class="detail-body">
+      <p>For each query, sketch what a <strong>good response</strong> looks like. This shows the grader you&rsquo;ve thought through the end-to-end experience.</p>
 
-      <div class="example"><strong>Insurance Underwriter &mdash; Query &amp; Expected Response:</strong><br><br>
+      <div class="example-block">
+        <div class="ex-label">Insurance Underwriter &mdash; Query &amp; Expected Response</div>
         <strong>Query:</strong> &ldquo;What parts of claims like this one should be rejected?&rdquo;<br><br>
         <strong>Expected Response:</strong> &ldquo;Based on 23 similar claims in our KB (property damage, commercial, California jurisdiction):<br>
         1. <strong>Commonly rejected:</strong> Pre-existing damage claims (rejected in 78% of similar cases) &mdash; see claims #UC-2023-0891, #UC-2023-1204<br>
@@ -666,13 +910,13 @@ details > .content { padding: 0 1.25rem 1.25rem; }
     </div>
   </details>
 
-  <details>
-    <summary><span class="step-badge">4</span> Architect the RAG Pipeline</summary>
-    <div class="content">
-      <p>See the full visual in <a href="#rag-primer">Section 6</a>. Here's your component checklist:</p>
+  <details class="arena-details">
+    <summary><span class="step-badge">4</span> &nbsp; Architect the RAG Pipeline</summary>
+    <div class="detail-body">
+      <p>See the full visual in <a href="#rag-primer">Section 6</a>. Here&rsquo;s your component checklist:</p>
 
       <h4>Component Selection Guide</h4>
-      <table class="rubric-table">
+      <table class="arena-table">
         <thead><tr><th>Component</th><th>Recommended Choices</th><th>Why</th></tr></thead>
         <tbody>
           <tr><td><strong>Embedding Model</strong></td><td>OpenAI text-embedding-3-small, or Cohere embed-v3</td><td>Good balance of quality and cost</td></tr>
@@ -683,34 +927,34 @@ details > .content { padding: 0 1.25rem 1.25rem; }
         </tbody>
       </table>
 
-      <div class="callout info">The assignment says to &ldquo;make unambiguous choices for all tools and components.&rdquo; Don't hedge with &ldquo;we could use Pinecone OR Weaviate.&rdquo; Pick one and justify it: &ldquo;We chose Pinecone for its managed serverless deployment, eliminating operational overhead for a small team.&rdquo;</div>
+      <div class="callout strategy">The assignment says to &ldquo;make unambiguous choices for all tools and components.&rdquo; Don&rsquo;t hedge with &ldquo;we could use Pinecone OR Weaviate.&rdquo; Pick one and justify it: &ldquo;We chose Pinecone for its managed serverless deployment, eliminating operational overhead for a small team.&rdquo;</div>
     </div>
   </details>
 
-  <details>
-    <summary><span class="step-badge">5</span> Address Limitations Honestly</summary>
-    <div class="content">
+  <details class="arena-details">
+    <summary><span class="step-badge">5</span> &nbsp; Address Limitations Honestly</summary>
+    <div class="detail-body">
       <p>Structure your limitations section as a table with four columns:</p>
 
-      <table class="rubric-table">
+      <table class="arena-table">
         <thead><tr><th>Category</th><th>Limitation</th><th>Impact</th><th>Mitigation</th></tr></thead>
         <tbody>
           <tr><td>Cost</td><td>LLM API costs scale with usage</td><td>At 500 queries/day: ~$150-200/month</td><td>Use GPT-4o-mini for routine queries; GPT-4o for complex ones</td></tr>
           <tr><td>Latency</td><td>Multi-step pipeline adds delay</td><td>2-4 seconds per response</td><td>Cache frequent queries; pre-compute embeddings</td></tr>
           <tr><td>Quality</td><td>Hallucination risk</td><td>May generate plausible but false claims</td><td>Require source citations; confidence thresholds; human review</td></tr>
-          <tr><td>Data</td><td>KB staleness</td><td>Outdated info if KB isn't refreshed</td><td>Automated ingestion pipeline; freshness metadata in retrieval</td></tr>
+          <tr><td>Data</td><td>KB staleness</td><td>Outdated info if KB isn&rsquo;t refreshed</td><td>Automated ingestion pipeline; freshness metadata in retrieval</td></tr>
           <tr><td>Security</td><td>Sensitive data in KB</td><td>Potential data leak through LLM</td><td>Access controls; on-premise deployment; data anonymization</td></tr>
         </tbody>
       </table>
     </div>
   </details>
 
-  <details>
-    <summary><span class="step-badge">6</span> Build a Proof-of-Concept</summary>
-    <div class="content">
+  <details class="arena-details">
+    <summary><span class="step-badge">6</span> &nbsp; Build a Proof-of-Concept</summary>
+    <div class="detail-body">
       <p>This is Criterion 5 (20%). Here are three approaches ordered by impressiveness:</p>
 
-      <h4>Option A: LangChain/LlamaIndex Demo (Best &mdash; targets "Significant" rating)</h4>
+      <h4>Option A: LangChain/LlamaIndex Demo (Best &mdash; targets &ldquo;Significant&rdquo; rating)</h4>
       <div class="code-block"><span class="comment"># Minimal LangChain RAG in ~20 lines</span>
 <span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> JSONLoader
 <span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
@@ -736,7 +980,7 @@ qa_chain = RetrievalQA.from_chain_type(
 result = qa_chain.invoke(<span class="string">"What parts of claims like this should be rejected?"</span>)
 print(result)</div>
 
-      <h4>Option B: ChatGPT Conversation (Good &mdash; targets "Medium" rating)</h4>
+      <h4>Option B: ChatGPT Conversation (Good &mdash; targets &ldquo;Medium&rdquo; rating)</h4>
       <ol>
         <li>Open ChatGPT (free tier is fine)</li>
         <li>Paste your system prompt + 2-3 sample KB documents as context</li>
@@ -747,13 +991,13 @@ print(result)</div>
 
       <h4>Option C: Azure OpenAI Playground (Minimum Viable)</h4>
       <ol>
-        <li>Use Azure OpenAI Studio's &ldquo;Add your data&rdquo; feature</li>
+        <li>Use Azure OpenAI Studio&rsquo;s &ldquo;Add your data&rdquo; feature</li>
         <li>Upload a small sample of KB documents</li>
         <li>Configure the system message</li>
         <li>Screenshot the playground showing a query and response</li>
       </ol>
 
-      <div class="callout tip">Even Option B is perfectly adequate. The key is <em>showing evidence</em>. Screenshots of actual GenAI interactions with your KB content are worth more than describing what you <em>would</em> do. Budget 2 of your 3 screenshot pages for this.</div>
+      <div class="callout strategy">Even Option B is perfectly adequate. The key is <em>showing evidence</em>. Screenshots of actual GenAI interactions with your KB content are worth more than describing what you <em>would</em> do. Budget 2 of your 3 screenshot pages for this.</div>
     </div>
   </details>
 </section>
@@ -761,106 +1005,109 @@ print(result)</div>
 <!-- ════════════════════════════════════════════════ -->
 <!-- 6. RAG ARCHITECTURE PRIMER -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="rag-primer">
-  <h2><span class="num">6</span> RAG Architecture Primer</h2>
+<div class="section-warm" id="rag-primer">
+  <div class="section-title">
+    <span class="section-num">6</span>
+    <h2 style="margin:0;">RAG Architecture Primer</h2>
+  </div>
   <p>This section gives you the technical foundation to design your RAG pipeline with confidence. Use this as the basis for your architecture diagram in the assignment.</p>
 
   <h3>Document Ingestion Pipeline</h3>
 
-  <!-- SVG: Ingestion Pipeline -->
+  <!-- SVG: Ingestion Pipeline — earthy palette -->
   <svg class="rag-diagram" viewBox="0 0 800 160" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="#4f46e5"/>
+        <polygon points="0 0, 10 3.5, 0 7" fill="#487265"/>
       </marker>
     </defs>
-    <rect x="10" y="40" width="130" height="70" rx="10" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-    <text x="75" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#3730a3">KB Documents</text>
-    <text x="75" y="90" text-anchor="middle" font-size="11" fill="#64748b">JSON / PDF / Text</text>
+    <rect x="10" y="40" width="130" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="75" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">KB Documents</text>
+    <text x="75" y="90" text-anchor="middle" font-size="11" fill="#6B7280">JSON / PDF / Text</text>
 
-    <rect x="190" y="40" width="120" height="70" rx="10" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-    <text x="250" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#3730a3">Chunking</text>
-    <text x="250" y="90" text-anchor="middle" font-size="11" fill="#64748b">500-1000 tokens</text>
+    <rect x="190" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="250" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Chunking</text>
+    <text x="250" y="90" text-anchor="middle" font-size="11" fill="#6B7280">500-1000 tokens</text>
 
-    <rect x="360" y="40" width="120" height="70" rx="10" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-    <text x="420" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#3730a3">Embedding</text>
-    <text x="420" y="90" text-anchor="middle" font-size="11" fill="#64748b">text-embedding-3</text>
+    <rect x="360" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="420" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Embedding</text>
+    <text x="420" y="90" text-anchor="middle" font-size="11" fill="#6B7280">text-embedding-3</text>
 
-    <rect x="530" y="40" width="120" height="70" rx="10" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-    <text x="590" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#3730a3">Indexing</text>
-    <text x="590" y="90" text-anchor="middle" font-size="11" fill="#64748b">Metadata + vectors</text>
+    <rect x="530" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="590" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Indexing</text>
+    <text x="590" y="90" text-anchor="middle" font-size="11" fill="#6B7280">Metadata + vectors</text>
 
-    <rect x="700" y="40" width="90" height="70" rx="10" fill="#4f46e5" stroke="#3730a3" stroke-width="2"/>
-    <text x="745" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Vector DB</text>
-    <text x="745" y="90" text-anchor="middle" font-size="11" fill="#c7d2fe">Pinecone</text>
+    <rect x="700" y="40" width="90" height="70" rx="10" fill="#487265" stroke="#407967" stroke-width="2"/>
+    <text x="745" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#F8F7F6">Vector DB</text>
+    <text x="745" y="90" text-anchor="middle" font-size="11" fill="#DDEFEF">Pinecone</text>
 
-    <line x1="140" y1="75" x2="188" y2="75" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow1)"/>
-    <line x1="310" y1="75" x2="358" y2="75" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow1)"/>
-    <line x1="480" y1="75" x2="528" y2="75" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow1)"/>
-    <line x1="650" y1="75" x2="698" y2="75" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="140" y1="75" x2="188" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="310" y1="75" x2="358" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="480" y1="75" x2="528" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="650" y1="75" x2="698" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
 
-    <text x="400" y="145" text-anchor="middle" font-size="12" fill="#64748b" font-style="italic">Document Ingestion Pipeline (one-time + incremental updates)</text>
+    <text x="400" y="145" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Document Ingestion Pipeline (one-time + incremental updates)</text>
   </svg>
 
   <h4>Key Decisions for Ingestion</h4>
   <ul>
     <li><strong>Chunking strategy:</strong> Recursive character splitting preserves paragraph boundaries. Use 500-1000 tokens per chunk with 100-token overlap to avoid losing context at boundaries.</li>
     <li><strong>Metadata:</strong> Store document-level metadata (date, category, author) alongside each chunk for filtered retrieval.</li>
-    <li><strong>Embedding model:</strong> OpenAI's <code>text-embedding-3-small</code> (1536 dimensions) offers strong quality at $0.02/million tokens.</li>
+    <li><strong>Embedding model:</strong> OpenAI&rsquo;s <code>text-embedding-3-small</code> (1536 dimensions) offers strong quality at $0.02/million tokens.</li>
   </ul>
 
   <h3>Query Pipeline</h3>
 
-  <!-- SVG: Query Pipeline -->
+  <!-- SVG: Query Pipeline — earthy palette -->
   <svg class="rag-diagram" viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+        <polygon points="0 0, 10 3.5, 0 7" fill="#BC976A"/>
       </marker>
       <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+        <polygon points="0 0, 10 3.5, 0 7" fill="#AAB788"/>
       </marker>
     </defs>
 
-    <rect x="10" y="30" width="140" height="60" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
-    <text x="80" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">User Query</text>
-    <text x="80" y="72" text-anchor="middle" font-size="10" fill="#64748b">"Find related cases..."</text>
+    <rect x="10" y="30" width="140" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="80" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">User Query</text>
+    <text x="80" y="72" text-anchor="middle" font-size="10" fill="#6B7280">"Find related cases..."</text>
 
-    <rect x="200" y="30" width="120" height="60" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
-    <text x="260" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Embed Query</text>
-    <text x="260" y="72" text-anchor="middle" font-size="10" fill="#64748b">Same model as KB</text>
+    <rect x="200" y="30" width="120" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="260" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Embed Query</text>
+    <text x="260" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Same model as KB</text>
 
-    <rect x="370" y="30" width="130" height="60" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
-    <text x="435" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Similarity Search</text>
-    <text x="435" y="72" text-anchor="middle" font-size="10" fill="#64748b">Top-k retrieval (k=5)</text>
+    <rect x="370" y="30" width="130" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="435" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Similarity Search</text>
+    <text x="435" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Top-k retrieval (k=5)</text>
 
-    <rect x="550" y="30" width="110" height="60" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
-    <text x="605" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">Re-Rank</text>
-    <text x="605" y="72" text-anchor="middle" font-size="10" fill="#64748b">Cross-encoder</text>
+    <rect x="550" y="30" width="110" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="605" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Re-Rank</text>
+    <text x="605" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Cross-encoder</text>
 
-    <line x1="150" y1="60" x2="198" y2="60" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow2)"/>
-    <line x1="320" y1="60" x2="368" y2="60" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow2)"/>
-    <line x1="500" y1="60" x2="548" y2="60" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="150" y1="60" x2="198" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="320" y1="60" x2="368" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="500" y1="60" x2="548" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
 
-    <line x1="605" y1="90" x2="605" y2="140" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="605" y1="90" x2="605" y2="140" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
 
-    <rect x="500" y="145" width="210" height="60" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
-    <text x="605" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">Context Assembly</text>
-    <text x="605" y="187" text-anchor="middle" font-size="10" fill="#64748b">System prompt + retrieved chunks</text>
+    <rect x="500" y="145" width="210" height="60" rx="10" fill="#F7F6F5" stroke="#AAB788" stroke-width="2"/>
+    <text x="605" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Context Assembly</text>
+    <text x="605" y="187" text-anchor="middle" font-size="10" fill="#6B7280">System prompt + retrieved chunks</text>
 
-    <rect x="240" y="145" width="210" height="60" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
-    <text x="345" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">LLM Generation</text>
-    <text x="345" y="187" text-anchor="middle" font-size="10" fill="#64748b">GPT-4o-mini / GPT-4o</text>
+    <rect x="240" y="145" width="210" height="60" rx="10" fill="#F7F6F5" stroke="#AAB788" stroke-width="2"/>
+    <text x="345" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">LLM Generation</text>
+    <text x="345" y="187" text-anchor="middle" font-size="10" fill="#6B7280">GPT-4o-mini / GPT-4o</text>
 
-    <rect x="10" y="145" width="180" height="60" rx="10" fill="#059669" stroke="#047857" stroke-width="2"/>
-    <text x="100" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Response + Citations</text>
-    <text x="100" y="187" text-anchor="middle" font-size="10" fill="#a7f3d0">Grounded in KB evidence</text>
+    <rect x="10" y="145" width="180" height="60" rx="10" fill="#487265" stroke="#407967" stroke-width="2"/>
+    <text x="100" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#F8F7F6">Response + Citations</text>
+    <text x="100" y="187" text-anchor="middle" font-size="10" fill="#DDEFEF">Grounded in KB evidence</text>
 
-    <line x1="500" y1="175" x2="452" y2="175" stroke="#059669" stroke-width="2" marker-end="url(#arrow3)"/>
-    <line x1="240" y1="175" x2="192" y2="175" stroke="#059669" stroke-width="2" marker-end="url(#arrow3)"/>
+    <line x1="500" y1="175" x2="452" y2="175" stroke="#AAB788" stroke-width="2" marker-end="url(#arrow3)"/>
+    <line x1="240" y1="175" x2="192" y2="175" stroke="#AAB788" stroke-width="2" marker-end="url(#arrow3)"/>
 
-    <text x="400" y="240" text-anchor="middle" font-size="12" fill="#7c3aed" font-style="italic">Query Pipeline (every user interaction)</text>
-    <text x="400" y="258" text-anchor="middle" font-size="11" fill="#64748b">Purple = retrieval phase | Green = generation phase</text>
+    <text x="400" y="240" text-anchor="middle" font-size="12" fill="#BC976A" font-style="italic">Query Pipeline (every user interaction)</text>
+    <text x="400" y="258" text-anchor="middle" font-size="11" fill="#6B7280">Copper = retrieval phase | Olive = generation phase</text>
   </svg>
 
   <h3>RAG Enhancement Strategies</h3>
@@ -872,7 +1119,7 @@ print(result)</div>
   </div>
   <div class="card">
     <h4>2. Query Expansion</h4>
-    <p>Use the LLM to expand the user's query before retrieval: &ldquo;Find related cases&rdquo; &rarr; &ldquo;Find related cases involving patent infringement, software claims, prior art challenges.&rdquo;</p>
+    <p>Use the LLM to expand the user&rsquo;s query before retrieval: &ldquo;Find related cases&rdquo; &rarr; &ldquo;Find related cases involving patent infringement, software claims, prior art challenges.&rdquo;</p>
   </div>
   <div class="card">
     <h4>3. Re-Ranking</h4>
@@ -906,79 +1153,110 @@ at [company type]. Your role is to [specific task].
 - [Domain-specific guardrails, e.g., "Do not provide legal advice"]
 - [Escalation criteria, e.g., "For queries involving amounts over $X, recommend supervisor review"]</div>
 
-  <div class="callout tip">Include your actual system prompt in the assignment &mdash; it's tangible evidence of prompt engineering skill. Even a simple, well-structured prompt scores higher than vague descriptions of &ldquo;we would use appropriate prompting.&rdquo;</div>
-</section>
+  <div class="callout strategy">Include your actual system prompt in the assignment &mdash; it&rsquo;s tangible evidence of prompt engineering skill. Even a simple, well-structured prompt scores higher than vague descriptions of &ldquo;we would use appropriate prompting.&rdquo;</div>
+</div>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- 7. SCORING MAXIMIZER -->
 <!-- ════════════════════════════════════════════════ -->
-<section id="maximizer">
-  <h2><span class="num">7</span> Scoring Maximizer Checklist</h2>
+<section class="section-white" id="maximizer">
+  <div class="section-title">
+    <span class="section-num">7</span>
+    <h2 style="margin:0;">Scoring Maximizer Checklist</h2>
+  </div>
   <p>Use this checklist before submitting. Each item maps to what the rubric rewards.</p>
 
-  <h3>Criterion 1: KB &amp; Sample Queries <span class="marks">5 marks</span></h3>
-  <ul class="checklist">
-    <li>Defined a clear document schema with 4+ fields</li>
-    <li>Included a sample KB document (even a short JSON/table example)</li>
-    <li>Stated KB volume, average document size, and update frequency</li>
-    <li>Provided 3+ diverse sample queries (simple, analytical, procedural)</li>
-    <li>Explained why this KB format serves the chosen task</li>
-  </ul>
+  <details class="arena-details" open>
+    <summary>Criterion 1: KB &amp; Sample Queries <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 marks</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Defined a clear document schema with 4+ fields</li>
+        <li><span class="check-box"></span> Included a sample KB document (even a short JSON/table example)</li>
+        <li><span class="check-box"></span> Stated KB volume, average document size, and update frequency</li>
+        <li><span class="check-box"></span> Provided 3+ diverse sample queries (simple, analytical, procedural)</li>
+        <li><span class="check-box"></span> Explained why this KB format serves the chosen task</li>
+      </ul>
+    </div>
+  </details>
 
-  <h3>Criterion 2: Overall Solution Design <span class="marks">5 marks</span></h3>
-  <ul class="checklist">
-    <li>Drew or described the full RAG pipeline (ingestion + query)</li>
-    <li>Named specific tools for every component (embedding model, vector DB, LLM, framework)</li>
-    <li>Justified why RAG over alternatives (from scratch, fine-tuning, prompting)</li>
-    <li>Described an evaluation methodology with specific metrics</li>
-    <li>Explained how the system would be tested/validated</li>
-  </ul>
+  <details class="arena-details">
+    <summary>Criterion 2: Overall Solution Design <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 marks</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Drew or described the full RAG pipeline (ingestion + query)</li>
+        <li><span class="check-box"></span> Named specific tools for every component (embedding model, vector DB, LLM, framework)</li>
+        <li><span class="check-box"></span> Justified why RAG over alternatives (from scratch, fine-tuning, prompting)</li>
+        <li><span class="check-box"></span> Described an evaluation methodology with specific metrics</li>
+        <li><span class="check-box"></span> Explained how the system would be tested/validated</li>
+      </ul>
+    </div>
+  </details>
 
-  <h3>Criterion 3: Prompts &amp; RAG Enhancement <span class="marks">5 marks</span></h3>
-  <ul class="checklist">
-    <li>Included the actual system prompt (not just &ldquo;we would write a prompt&rdquo;)</li>
-    <li>Described 2+ RAG enhancement strategies (hybrid search, re-ranking, query expansion, etc.)</li>
-    <li>Explained chunking strategy with reasoning for chunk size</li>
-    <li>Technical flow is internally consistent (same embedding model for docs and queries)</li>
-    <li>Mentioned few-shot examples or output formatting in the prompt</li>
-  </ul>
+  <details class="arena-details">
+    <summary>Criterion 3: Prompts &amp; RAG Enhancement <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 marks</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Included the actual system prompt (not just &ldquo;we would write a prompt&rdquo;)</li>
+        <li><span class="check-box"></span> Described 2+ RAG enhancement strategies (hybrid search, re-ranking, query expansion, etc.)</li>
+        <li><span class="check-box"></span> Explained chunking strategy with reasoning for chunk size</li>
+        <li><span class="check-box"></span> Technical flow is internally consistent (same embedding model for docs and queries)</li>
+        <li><span class="check-box"></span> Mentioned few-shot examples or output formatting in the prompt</li>
+      </ul>
+    </div>
+  </details>
 
-  <h3>Criterion 4: Limitations <span class="marks">5 marks</span></h3>
-  <ul class="checklist">
-    <li>Identified 4+ specific limitations across different categories</li>
-    <li>Included TCO estimate (even approximate &mdash; &ldquo;$100-300/month for 500 daily queries&rdquo;)</li>
-    <li>Included response time estimate (&ldquo;2-4 seconds end-to-end&rdquo;)</li>
-    <li>Mentioned domain-specific risks for the chosen job</li>
-    <li>Proposed mitigations for each limitation</li>
-  </ul>
+  <details class="arena-details">
+    <summary>Criterion 4: Limitations <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 marks</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Identified 4+ specific limitations across different categories</li>
+        <li><span class="check-box"></span> Included TCO estimate (even approximate &mdash; &ldquo;$100-300/month for 500 daily queries&rdquo;)</li>
+        <li><span class="check-box"></span> Included response time estimate (&ldquo;2-4 seconds end-to-end&rdquo;)</li>
+        <li><span class="check-box"></span> Mentioned domain-specific risks for the chosen job</li>
+        <li><span class="check-box"></span> Proposed mitigations for each limitation</li>
+      </ul>
+    </div>
+  </details>
 
-  <h3>Criterion 5: Try It Out <span class="marks">5 marks</span></h3>
-  <ul class="checklist">
-    <li>Actually ran the solution on a platform (ChatGPT, Azure OpenAI, Colab, LangChain)</li>
-    <li>Tested with at least 2-3 of your sample queries</li>
-    <li>Included screenshots showing the interaction</li>
-    <li>Annotated screenshots explaining what the RAG system does at each step</li>
-    <li>Used 2+ of the 3 available screenshot pages for this section</li>
-  </ul>
+  <details class="arena-details">
+    <summary>Criterion 5: Try It Out <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 marks</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Actually ran the solution on a platform (ChatGPT, Azure OpenAI, Colab, LangChain)</li>
+        <li><span class="check-box"></span> Tested with at least 2-3 of your sample queries</li>
+        <li><span class="check-box"></span> Included screenshots showing the interaction</li>
+        <li><span class="check-box"></span> Annotated screenshots explaining what the RAG system does at each step</li>
+        <li><span class="check-box"></span> Used 2+ of the 3 available screenshot pages for this section</li>
+      </ul>
+    </div>
+  </details>
 
-  <h3>General Quality</h3>
-  <ul class="checklist">
-    <li>Stayed within the 7+3 page limit</li>
-    <li>Used clear section headings matching the rubric criteria</li>
-    <li>Stated all assumptions explicitly</li>
-    <li>Proofread for technical accuracy (correct model names, framework APIs)</li>
-    <li>Included a brief intro paragraph establishing which job you chose and why</li>
-  </ul>
+  <details class="arena-details">
+    <summary>General Quality</summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Stayed within the 7+3 page limit</li>
+        <li><span class="check-box"></span> Used clear section headings matching the rubric criteria</li>
+        <li><span class="check-box"></span> Stated all assumptions explicitly</li>
+        <li><span class="check-box"></span> Proofread for technical accuracy (correct model names, framework APIs)</li>
+        <li><span class="check-box"></span> Included a brief intro paragraph establishing which job you chose and why</li>
+      </ul>
+    </div>
+  </details>
 
-  <div class="callout info">Structure your assignment with section headings that <strong>mirror the 5 rubric criteria</strong>. This makes it easy for the grader to find each required element and award marks. Don't make them hunt for it.</div>
+  <div class="callout golden" style="margin-top: 24px;">Structure your assignment with section headings that <strong>mirror the 5 rubric criteria</strong>. This makes it easy for the grader to find each required element and award marks. Don&rsquo;t make them hunt for it.</div>
 </section>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- FOOTER -->
 <!-- ════════════════════════════════════════════════ -->
-<footer style="text-align: center; padding: 2rem 0 1rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); margin-top: 2rem;">
-  Assignment 1 Explainer &mdash; Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919)<br>
-  Built as a study guide. Not affiliated with GGU or upGrad.
+<footer class="site-footer">
+  <a href="#overview">Top</a> |
+  <a href="#jobs">Jobs</a> |
+  <a href="#rubric">Rubric</a> |
+  <a href="#rag-primer">RAG</a> |
+  <a href="#maximizer">Maximizer</a>
+  <div style="margin-top:12px; font-size:12px;">Assignment 1 Explainer &mdash; Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919)<br>Study guide &mdash; not affiliated with GGU or upGrad.</div>
 </footer>
 
 </div><!-- /container -->
@@ -990,6 +1268,40 @@ at [company type]. Your role is to [specific task].
 (function() {
   "use strict";
 
+  // ── Bar Chart ──────────────────────────────────
+  var scoreData = [
+    { label: "KB & Queries", points: 5, color: "#A0C3C4" },
+    { label: "Solution Design", points: 5, color: "#AAB788" },
+    { label: "RAG Enhancement", points: 5, color: "#D4C68B" },
+    { label: "Limitations", points: 5, color: "#BC976A" },
+    { label: "Try It Out", points: 5, color: "#CAAB84" }
+  ];
+
+  var chartEl = document.getElementById("barChart");
+  scoreData.forEach(function(c) {
+    var col = document.createElement("div");
+    col.className = "bar-col";
+
+    var val = document.createElement("div");
+    val.className = "bar-value";
+    val.appendChild(document.createTextNode(c.points + " pts"));
+
+    var bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.backgroundColor = c.color;
+    bar.style.height = "140px";
+
+    var lbl = document.createElement("div");
+    lbl.className = "bar-label";
+    lbl.appendChild(document.createTextNode(c.label));
+
+    col.appendChild(val);
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    chartEl.appendChild(col);
+  });
+
+  // ── Job Data ───────────────────────────────────
   var jobs = [
     {
       num: 1, title: "Legal Assistant",
@@ -1093,20 +1405,21 @@ at [company type]. Your role is to [specific task].
     }
   ];
 
-  // Safely create text node
+  // Earthy badge colors cycling for job numbers
+  var badgeColors = ["#A0C3C4", "#AAB788", "#D4C68B", "#BC976A", "#CAAB84"];
+
   function txt(str) {
     return document.createTextNode(str);
   }
 
-  // Create element with optional class and text
   function el(tag, className, textContent) {
     var e = document.createElement(tag);
-    if (className) e.className = className;
-    if (textContent) e.appendChild(txt(textContent));
+    if (className) { e.className = className; }
+    if (textContent) { e.appendChild(txt(textContent)); }
     return e;
   }
 
-  // Render job cards
+  // ── Render Job Cards ───────────────────────────
   var grid = document.getElementById("jobsGrid");
   var detailDiv = document.getElementById("jobDetail");
 
@@ -1115,7 +1428,7 @@ at [company type]. Your role is to [specific task].
     card.className = "job-card";
     card.setAttribute("data-num", j.num);
 
-    var numSpan = el("span", "job-num", String(j.num));
+    var numSpan = el("span", "job-num job-num-" + j.num, String(j.num));
     var h4 = el("h4", "", j.title);
     var taskDiv = el("div", "task", j.task);
 
@@ -1128,23 +1441,23 @@ at [company type]. Your role is to [specific task].
   });
 
   function selectJob(j) {
-    // Toggle active card
+    // Update active state on cards
     var cards = document.querySelectorAll(".job-card");
     for (var i = 0; i < cards.length; i++) {
       cards[i].classList.remove("active");
     }
-    var active = document.querySelector('.job-card[data-num="' + j.num + '"]');
-    if (active) active.classList.add("active");
+    var activeCard = document.querySelector('.job-card[data-num="' + j.num + '"]');
+    if (activeCard) { activeCard.classList.add("active"); }
 
-    // Clear and rebuild detail view using safe DOM methods
+    // Clear detail panel
     while (detailDiv.firstChild) {
       detailDiv.removeChild(detailDiv.firstChild);
     }
     detailDiv.className = "job-detail visible";
 
     // Title
-    var title = el("h3", "", j.num + ". " + j.title + ": " + j.task);
-    detailDiv.appendChild(title);
+    var titleEl = el("h3", "", j.num + ". " + j.title + ": " + j.task);
+    detailDiv.appendChild(titleEl);
 
     // KB
     var kbP = document.createElement("p");
@@ -1185,14 +1498,14 @@ at [company type]. Your role is to [specific task].
     var hintP = el("p", "", j.kbHints);
     detailDiv.appendChild(hintP);
 
-    // Gotcha callout
-    var callout = el("div", "callout warn", j.gotcha);
+    // Gotcha callout using warning style
+    var callout = el("div", "callout warning", j.gotcha);
     callout.style.marginTop = ".75rem";
     detailDiv.appendChild(callout);
 
-    // Scroll into view
     detailDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
+
 })();
 </script>
 
