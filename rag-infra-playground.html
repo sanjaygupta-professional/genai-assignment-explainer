@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Infrastructure Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            grid-template-rows: 1fr auto;
+            height: 100vh;
+            gap: 0;
+        }
+
+        .controls {
+            grid-row: 1 / 3;
+            background: #16213e;
+            padding: 24px;
+            overflow-y: auto;
+            border-right: 2px solid #0f3460;
+        }
+
+        .diagram-container {
+            grid-column: 2;
+            grid-row: 1;
+            background: #1a1a2e;
+            padding: 32px;
+            overflow: auto;
+            position: relative;
+        }
+
+        .prompt-container {
+            grid-column: 2;
+            grid-row: 2;
+            background: #16213e;
+            padding: 24px;
+            border-top: 2px solid #0f3460;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            color: #64b5f6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .preset-card {
+            background: #0f3460;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .preset-card:hover {
+            border-color: #64b5f6;
+            transform: translateY(-2px);
+        }
+
+        .preset-card.active {
+            border-color: #42a5f5;
+            background: #1565c0;
+        }
+
+        .preset-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .preset-desc {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #b0b0b0;
+            position: relative;
+        }
+
+        .tooltip {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #0f3460;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 11px;
+            margin-left: 6px;
+            cursor: help;
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 24px;
+            top: -8px;
+            background: #0f3460;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            width: 220px;
+            z-index: 1000;
+            border: 1px solid #64b5f6;
+            line-height: 1.4;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            background: #0f3460;
+            border: 1px solid #0f3460;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        select:hover, select:focus {
+            border-color: #64b5f6;
+            outline: none;
+        }
+
+        .diagram {
+            position: relative;
+            min-height: 600px;
+            margin-bottom: 24px;
+        }
+
+        .cost-total {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #0f3460;
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 2px solid #64b5f6;
+        }
+
+        .cost-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .cost-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #64b5f6;
+        }
+
+        .provider-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .provider-vercel { background: #000; }
+        .provider-github { background: #6e5494; }
+        .provider-oci { background: #c74634; }
+        .provider-external { background: #3b82f6; }
+        .provider-selfhosted { background: #22c55e; }
+
+        .service-box {
+            position: absolute;
+            background: #16213e;
+            border: 2px solid #0f3460;
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 160px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .service-icon {
+            font-size: 24px;
+        }
+
+        .service-name {
+            font-weight: 600;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .service-role {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .service-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .service-cost {
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            color: #64b5f6;
+        }
+
+        .provider-group {
+            position: absolute;
+            border: 2px dashed #0f3460;
+            border-radius: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .provider-group-label {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        .connection {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .connection-line {
+            position: absolute;
+            background: #64b5f6;
+            opacity: 0.4;
+        }
+
+        .connection-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .connection-label {
+            position: absolute;
+            font-size: 10px;
+            opacity: 0.6;
+            background: #1a1a2e;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .prompt-output {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.7;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .prompt-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64b5f6;
+        }
+
+        .copy-btn {
+            background: #0f3460;
+            border: 1px solid #64b5f6;
+            color: #64b5f6;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #1565c0;
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+            border-color: #22c55e;
+            color: #fff;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                height: auto;
+            }
+
+            .controls {
+                grid-row: 1;
+                max-height: 400px;
+            }
+
+            .diagram-container {
+                grid-column: 1;
+                grid-row: 2;
+                min-height: 600px;
+            }
+
+            .prompt-container {
+                grid-column: 1;
+                grid-row: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>🏗️ RAG Infrastructure</h1>
+
+            <h2>Presets</h2>
+            <div class="presets">
+                <div class="preset-card" data-preset="minimal">
+                    <div class="preset-title">Minimal (Free)</div>
+                    <div class="preset-desc">Free tier everything</div>
+                </div>
+                <div class="preset-card" data-preset="oci">
+                    <div class="preset-title">All OCI</div>
+                    <div class="preset-desc">Self-hosted on Oracle Cloud</div>
+                </div>
+                <div class="preset-card" data-preset="hybrid">
+                    <div class="preset-title">Production Hybrid</div>
+                    <div class="preset-desc">Vercel + OCI + managed services</div>
+                </div>
+                <div class="preset-card" data-preset="budget">
+                    <div class="preset-title">Student Budget</div>
+                    <div class="preset-desc">Mix of free + cheap paid</div>
+                </div>
+            </div>
+
+            <h2>1. Frontend & UI</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    Frontend Host
+                    <span class="tooltip" data-tip="Where your web interface is deployed and served to users">?</span>
+                </label>
+                <select id="frontendHost">
+                    <option value="vercel">Vercel</option>
+                    <option value="github">GitHub Pages</option>
+                    <option value="oci-compute">OCI Compute</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Framework
+                    <span class="tooltip" data-tip="JavaScript framework for building your UI">?</span>
+                </label>
+                <select id="framework">
+                    <option value="nextjs">Next.js</option>
+                    <option value="react">React SPA</option>
+                    <option value="html">Plain HTML</option>
+                </select>
+            </div>
+
+            <h2>2. Backend / API Layer</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    Backend Host
+                    <span class="tooltip" data-tip="Where your API endpoints and business logic run">?</span>
+                </label>
+                <select id="backendHost">
+                    <option value="vercel-serverless">Vercel Serverless Functions</option>
+                    <option value="oci-compute">OCI Compute (VM)</option>
+                    <option value="railway">Railway</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    API Framework
+                    <span class="tooltip" data-tip="Framework for handling HTTP requests and routing">?</span>
+                </label>
+                <select id="apiFramework">
+                    <option value="nextjs-api">Next.js API Routes</option>
+                    <option value="express">Express.js</option>
+                    <option value="fastapi">FastAPI (Python)</option>
+                </select>
+            </div>
+
+            <h2>3. LangChain Orchestration</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    LangChain Runtime
+                    <span class="tooltip" data-tip="Where LangChain code executes - can be co-located with backend or separate">?</span>
+                </label>
+                <select id="langchainRuntime">
+                    <option value="backend">Same as Backend</option>
+                    <option value="oci-vm">Separate OCI VM</option>
+                    <option value="langserve">LangServe on Railway</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Chain Type
+                    <span class="tooltip" data-tip="LangChain pattern for retrieval and generation">?</span>
+                </label>
+                <select id="chainType">
+                    <option value="retrievalqa">RetrievalQA</option>
+                    <option value="conversational">ConversationalRetrievalChain</option>
+                    <option value="custom-lcel">Custom LCEL Chain</option>
+                </select>
+            </div>
+
+            <h2>4. Vector Database</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    Vector DB
+                    <span class="tooltip" data-tip="Storage and search for document embeddings">?</span>
+                </label>
+                <select id="vectorDb">
+                    <option value="pinecone">Pinecone (managed)</option>
+                    <option value="weaviate">Weaviate Cloud</option>
+                    <option value="chroma">Chroma (self-hosted on OCI)</option>
+                    <option value="pgvector">pgvector on OCI PostgreSQL</option>
+                    <option value="qdrant">Qdrant Cloud</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Embedding Model
+                    <span class="tooltip" data-tip="Converts text to vector embeddings">?</span>
+                </label>
+                <select id="embeddingModel">
+                    <option value="openai-embed">OpenAI text-embedding-3-small</option>
+                    <option value="cohere">Cohere embed-v3</option>
+                    <option value="hf-selfhosted">HuggingFace (self-hosted on OCI)</option>
+                </select>
+            </div>
+
+            <h2>5. LLM Provider</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    LLM
+                    <span class="tooltip" data-tip="Large language model for generating answers">?</span>
+                </label>
+                <select id="llm">
+                    <option value="openai-gpt4o">OpenAI GPT-4o-mini</option>
+                    <option value="anthropic">Anthropic Claude Sonnet</option>
+                    <option value="gemini">Google Gemini Flash</option>
+                    <option value="ollama">Self-hosted on OCI (Ollama)</option>
+                </select>
+            </div>
+
+            <h2>6. Document Storage & Ingestion</h2>
+            <div class="control-group">
+                <label class="control-label">
+                    Source Documents
+                    <span class="tooltip" data-tip="Where your original documents are stored">?</span>
+                </label>
+                <select id="docStorage">
+                    <option value="github-repo">GitHub Repo</option>
+                    <option value="oci-object">OCI Object Storage</option>
+                    <option value="oci-filesystem">Local filesystem on OCI VM</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Ingestion Pipeline
+                    <span class="tooltip" data-tip="How documents are processed and loaded into vector DB">?</span>
+                </label>
+                <select id="ingestion">
+                    <option value="batch-script">LangChain + batch script</option>
+                    <option value="serverless-trigger">Serverless function trigger</option>
+                    <option value="manual-ui">Manual upload UI</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <div class="provider-legend">
+                <div class="legend-item">
+                    <div class="legend-dot provider-vercel"></div>
+                    <span>Vercel</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot provider-github"></div>
+                    <span>GitHub</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot provider-oci"></div>
+                    <span>OCI</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot provider-external"></div>
+                    <span>External API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot provider-selfhosted"></div>
+                    <span>Self-hosted</span>
+                </div>
+            </div>
+
+            <div class="diagram" id="diagram">
+                <div class="cost-total">
+                    <div class="cost-label">Est. Monthly Cost</div>
+                    <div class="cost-value" id="totalCost">$0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-container">
+            <div class="prompt-header">
+                <div class="prompt-title">📋 Prompt Output</div>
+                <button class="copy-btn" id="copyBtn">Copy Prompt</button>
+            </div>
+            <div class="prompt-output" id="promptOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        const state = {
+            frontendHost: 'vercel',
+            framework: 'nextjs',
+            backendHost: 'vercel-serverless',
+            apiFramework: 'nextjs-api',
+            langchainRuntime: 'backend',
+            chainType: 'retrievalqa',
+            vectorDb: 'pinecone',
+            embeddingModel: 'openai-embed',
+            llm: 'openai-gpt4o',
+            docStorage: 'github-repo',
+            ingestion: 'batch-script'
+        };
+
+        // Service metadata
+        const services = {
+            frontend: {
+                vercel: { name: 'Vercel', icon: '▲', provider: 'vercel', cost: 0 },
+                github: { name: 'GitHub Pages', icon: '🐙', provider: 'github', cost: 0 },
+                'oci-compute': { name: 'OCI Compute', icon: '☁️', provider: 'oci', cost: 15 }
+            },
+            backend: {
+                'vercel-serverless': { name: 'Vercel Functions', icon: '⚡', provider: 'vercel', cost: 0 },
+                'oci-compute': { name: 'OCI VM', icon: '🖥️', provider: 'oci', cost: 15 },
+                railway: { name: 'Railway', icon: '🚂', provider: 'external', cost: 5 }
+            },
+            langchain: {
+                backend: { name: 'LangChain', icon: '🦜', provider: 'same', cost: 0 },
+                'oci-vm': { name: 'LangChain', icon: '🦜', provider: 'oci', cost: 10 },
+                langserve: { name: 'LangServe', icon: '🦜', provider: 'external', cost: 5 }
+            },
+            vectorDb: {
+                pinecone: { name: 'Pinecone', icon: '🌲', provider: 'external', cost: 0 },
+                weaviate: { name: 'Weaviate Cloud', icon: '🔷', provider: 'external', cost: 25 },
+                chroma: { name: 'Chroma', icon: '🎨', provider: 'selfhosted', cost: 5 },
+                pgvector: { name: 'pgvector', icon: '🐘', provider: 'oci', cost: 10 },
+                qdrant: { name: 'Qdrant Cloud', icon: '◉', provider: 'external', cost: 0 }
+            },
+            embedding: {
+                'openai-embed': { name: 'OpenAI Embeddings', icon: '🔤', provider: 'external', cost: 2 },
+                cohere: { name: 'Cohere Embed', icon: '🔤', provider: 'external', cost: 3 },
+                'hf-selfhosted': { name: 'HuggingFace', icon: '🤗', provider: 'selfhosted', cost: 5 }
+            },
+            llm: {
+                'openai-gpt4o': { name: 'GPT-4o-mini', icon: '🤖', provider: 'external', cost: 10 },
+                anthropic: { name: 'Claude Sonnet', icon: '🧠', provider: 'external', cost: 15 },
+                gemini: { name: 'Gemini Flash', icon: '✨', provider: 'external', cost: 8 },
+                ollama: { name: 'Ollama', icon: '🦙', provider: 'selfhosted', cost: 5 }
+            },
+            storage: {
+                'github-repo': { name: 'GitHub Repo', icon: '📁', provider: 'github', cost: 0 },
+                'oci-object': { name: 'OCI Object Storage', icon: '💾', provider: 'oci', cost: 2 },
+                'oci-filesystem': { name: 'OCI Filesystem', icon: '💿', provider: 'oci', cost: 0 }
+            }
+        };
+
+        // Presets
+        const presets = {
+            minimal: {
+                frontendHost: 'vercel',
+                framework: 'nextjs',
+                backendHost: 'vercel-serverless',
+                apiFramework: 'nextjs-api',
+                langchainRuntime: 'backend',
+                chainType: 'retrievalqa',
+                vectorDb: 'pinecone',
+                embeddingModel: 'openai-embed',
+                llm: 'openai-gpt4o',
+                docStorage: 'github-repo',
+                ingestion: 'batch-script'
+            },
+            oci: {
+                frontendHost: 'oci-compute',
+                framework: 'nextjs',
+                backendHost: 'oci-compute',
+                apiFramework: 'fastapi',
+                langchainRuntime: 'backend',
+                chainType: 'retrievalqa',
+                vectorDb: 'pgvector',
+                embeddingModel: 'hf-selfhosted',
+                llm: 'ollama',
+                docStorage: 'oci-filesystem',
+                ingestion: 'batch-script'
+            },
+            hybrid: {
+                frontendHost: 'vercel',
+                framework: 'nextjs',
+                backendHost: 'oci-compute',
+                apiFramework: 'fastapi',
+                langchainRuntime: 'backend',
+                chainType: 'conversational',
+                vectorDb: 'pinecone',
+                embeddingModel: 'openai-embed',
+                llm: 'anthropic',
+                docStorage: 'oci-object',
+                ingestion: 'serverless-trigger'
+            },
+            budget: {
+                frontendHost: 'vercel',
+                framework: 'nextjs',
+                backendHost: 'vercel-serverless',
+                apiFramework: 'nextjs-api',
+                langchainRuntime: 'backend',
+                chainType: 'retrievalqa',
+                vectorDb: 'chroma',
+                embeddingModel: 'openai-embed',
+                llm: 'openai-gpt4o',
+                docStorage: 'github-repo',
+                ingestion: 'batch-script'
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup event listeners
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', (e) => {
+                    state[e.target.id] = e.target.value;
+                    render();
+                });
+            });
+
+            document.querySelectorAll('.preset-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const presetName = card.dataset.preset;
+                    Object.assign(state, presets[presetName]);
+                    syncControls();
+                    render();
+
+                    // Visual feedback
+                    document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    setTimeout(() => card.classList.remove('active'), 300);
+                });
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', copyPrompt);
+
+            render();
+        });
+
+        function syncControls() {
+            Object.keys(state).forEach(key => {
+                const select = document.getElementById(key);
+                if (select) select.value = state[key];
+            });
+        }
+
+        function render() {
+            renderDiagram();
+            renderPrompt();
+        }
+
+        function renderDiagram() {
+            const diagram = document.getElementById('diagram');
+
+            // Clear existing (except cost total)
+            const costTotal = diagram.querySelector('.cost-total');
+            diagram.innerHTML = '';
+            diagram.appendChild(costTotal);
+
+            // Layout positions
+            const layout = {
+                user: { x: 100, y: 50 },
+                frontend: { x: 300, y: 50 },
+                backend: { x: 500, y: 50 },
+                langchain: { x: 400, y: 200 },
+                vectorDb: { x: 200, y: 200 },
+                llm: { x: 600, y: 200 },
+                embedding: { x: 100, y: 350 },
+                storage: { x: 300, y: 350 },
+                ingestion: { x: 500, y: 350 }
+            };
+
+            let totalCost = 0;
+
+            // Draw provider groups
+            const groups = {};
+            const frontendService = services.frontend[state.frontendHost];
+            const backendService = services.backend[state.backendHost];
+
+            if (frontendService.provider === backendService.provider &&
+                frontendService.provider !== 'external' &&
+                frontendService.provider !== 'selfhosted') {
+                drawProviderGroup(diagram,
+                    Math.min(layout.frontend.x, layout.backend.x) - 30,
+                    layout.frontend.y - 30,
+                    Math.abs(layout.frontend.x - layout.backend.x) + 200,
+                    120,
+                    frontendService.provider
+                );
+            }
+
+            // User box (special)
+            drawServiceBox(diagram, 'user', { name: 'User', icon: '👤', provider: 'none', cost: 0 },
+                'User', layout.user.x, layout.user.y);
+
+            // Frontend
+            const frontend = services.frontend[state.frontendHost];
+            drawServiceBox(diagram, 'frontend', frontend, 'Frontend', layout.frontend.x, layout.frontend.y);
+            totalCost += frontend.cost;
+
+            // Backend
+            const backend = services.backend[state.backendHost];
+            drawServiceBox(diagram, 'backend', backend, 'Backend/API', layout.backend.x, layout.backend.y);
+            totalCost += backend.cost;
+
+            // LangChain
+            const langchainService = state.langchainRuntime === 'backend' ?
+                { ...services.langchain[state.langchainRuntime], provider: backend.provider } :
+                services.langchain[state.langchainRuntime];
+            drawServiceBox(diagram, 'langchain', langchainService, 'LangChain', layout.langchain.x, layout.langchain.y);
+            totalCost += langchainService.cost;
+
+            // Vector DB
+            const vectorDb = services.vectorDb[state.vectorDb];
+            drawServiceBox(diagram, 'vectordb', vectorDb, 'Vector DB', layout.vectorDb.x, layout.vectorDb.y);
+            totalCost += vectorDb.cost;
+
+            // LLM
+            const llm = services.llm[state.llm];
+            drawServiceBox(diagram, 'llm', llm, 'LLM', layout.llm.x, layout.llm.y);
+            totalCost += llm.cost;
+
+            // Embedding
+            const embedding = services.embedding[state.embeddingModel];
+            drawServiceBox(diagram, 'embedding', embedding, 'Embeddings', layout.embedding.x, layout.embedding.y);
+            totalCost += embedding.cost;
+
+            // Storage
+            const storage = services.storage[state.docStorage];
+            drawServiceBox(diagram, 'storage', storage, 'Document Store', layout.storage.x, layout.storage.y);
+            totalCost += storage.cost;
+
+            // Ingestion
+            const ingestionService = {
+                name: 'Ingestion Pipeline',
+                icon: '⚙️',
+                provider: 'selfhosted',
+                cost: 0
+            };
+            drawServiceBox(diagram, 'ingestion', ingestionService, 'Ingestion', layout.ingestion.x, layout.ingestion.y);
+
+            // Draw connections
+            drawConnection(diagram, layout.user, layout.frontend, 'HTTP');
+            drawConnection(diagram, layout.frontend, layout.backend, 'API');
+            drawConnection(diagram, layout.backend, layout.langchain, 'calls');
+            drawConnection(diagram, layout.langchain, layout.vectorDb, 'search');
+            drawConnection(diagram, layout.langchain, layout.llm, 'generate');
+            drawConnection(diagram, layout.langchain, layout.embedding, 'embed query');
+            drawConnection(diagram, layout.storage, layout.ingestion, 'read');
+            drawConnection(diagram, layout.ingestion, layout.embedding, 'embed docs');
+            drawConnection(diagram, layout.ingestion, layout.vectorDb, 'upsert');
+
+            // Update total cost
+            document.getElementById('totalCost').textContent =
+                totalCost === 0 ? '$0' : `$${totalCost}-${Math.round(totalCost * 1.5)}`;
+        }
+
+        function drawProviderGroup(container, x, y, width, height, provider) {
+            const group = document.createElement('div');
+            group.className = 'provider-group';
+            group.style.left = x + 'px';
+            group.style.top = y + 'px';
+            group.style.width = width + 'px';
+            group.style.height = height + 'px';
+            group.style.borderColor = getProviderColor(provider);
+
+            const label = document.createElement('div');
+            label.className = 'provider-group-label';
+            label.textContent = provider.toUpperCase();
+            group.appendChild(label);
+
+            container.appendChild(group);
+        }
+
+        function drawServiceBox(container, id, service, role, x, y) {
+            const box = document.createElement('div');
+            box.className = 'service-box';
+            box.id = 'box-' + id;
+            box.style.left = x + 'px';
+            box.style.top = y + 'px';
+
+            const header = document.createElement('div');
+            header.className = 'service-header';
+
+            const icon = document.createElement('div');
+            icon.className = 'service-icon';
+            icon.textContent = service.icon;
+
+            const name = document.createElement('div');
+            name.className = 'service-name';
+            name.textContent = service.name;
+
+            header.appendChild(icon);
+            header.appendChild(name);
+
+            const roleLabel = document.createElement('div');
+            roleLabel.className = 'service-role';
+            roleLabel.textContent = role;
+
+            const badge = document.createElement('div');
+            badge.className = 'service-badge';
+            badge.style.background = getProviderColor(service.provider);
+            badge.textContent = service.provider === 'same' ? 'co-located' : service.provider;
+
+            const cost = document.createElement('div');
+            cost.className = 'service-cost';
+            cost.textContent = service.cost === 0 ? 'Free' : `~$${service.cost}/mo`;
+
+            box.appendChild(header);
+            box.appendChild(roleLabel);
+            box.appendChild(badge);
+            box.appendChild(cost);
+
+            container.appendChild(box);
+        }
+
+        function drawConnection(container, from, to, label) {
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const angle = Math.atan2(dy, dx);
+            const length = Math.sqrt(dx * dx + dy * dy);
+
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            line.style.left = (from.x + 80) + 'px';
+            line.style.top = (from.y + 40) + 'px';
+            line.style.width = length + 'px';
+            line.style.height = '2px';
+            line.style.transform = `rotate(${angle}rad)`;
+            line.style.transformOrigin = '0 0';
+
+            const arrow = document.createElement('div');
+            arrow.className = 'connection-arrow';
+            arrow.style.left = (to.x + 75) + 'px';
+            arrow.style.top = (to.y + 35) + 'px';
+            arrow.style.borderWidth = '5px 0 5px 8px';
+            arrow.style.borderColor = 'transparent transparent transparent #64b5f6';
+            arrow.style.opacity = '0.4';
+
+            const labelEl = document.createElement('div');
+            labelEl.className = 'connection-label';
+            labelEl.textContent = label;
+            labelEl.style.left = (from.x + to.x) / 2 + 'px';
+            labelEl.style.top = (from.y + to.y) / 2 + 'px';
+
+            container.appendChild(line);
+            container.appendChild(arrow);
+            container.appendChild(labelEl);
+        }
+
+        function getProviderColor(provider) {
+            const colors = {
+                vercel: '#000',
+                github: '#6e5494',
+                oci: '#c74634',
+                external: '#3b82f6',
+                selfhosted: '#22c55e',
+                same: '#64b5f6',
+                none: '#666'
+            };
+            return colors[provider] || '#666';
+        }
+
+        function renderPrompt() {
+            const output = document.getElementById('promptOutput');
+
+            const frontend = services.frontend[state.frontendHost];
+            const backend = services.backend[state.backendHost];
+            const langchainService = services.langchain[state.langchainRuntime];
+            const vectorDb = services.vectorDb[state.vectorDb];
+            const embedding = services.embedding[state.embeddingModel];
+            const llm = services.llm[state.llm];
+            const storage = services.storage[state.docStorage];
+
+            const frameworkNames = {
+                nextjs: 'Next.js',
+                react: 'React SPA',
+                html: 'Plain HTML'
+            };
+
+            const apiNames = {
+                'nextjs-api': 'Next.js API Routes',
+                express: 'Express.js',
+                fastapi: 'FastAPI (Python)'
+            };
+
+            const chainNames = {
+                retrievalqa: 'RetrievalQA',
+                conversational: 'ConversationalRetrievalChain',
+                'custom-lcel': 'Custom LCEL Chain'
+            };
+
+            const ingestionNames = {
+                'batch-script': 'LangChain Document Loaders with a batch script',
+                'serverless-trigger': 'Serverless function trigger on document upload',
+                'manual-ui': 'Manual upload UI with live processing'
+            };
+
+            let totalCost = frontend.cost + backend.cost + langchainService.cost +
+                           vectorDb.cost + embedding.cost + llm.cost + storage.cost;
+
+            const costRange = totalCost === 0 ? '$0 (all free tiers)' :
+                            `$${totalCost}-${Math.round(totalCost * 1.5)}`;
+
+            const prompt = `I'm building a RAG application for a DBA Gen AI assignment using LangChain. Here's my infrastructure:
+
+Frontend: ${frameworkNames[state.framework]} deployed on ${frontend.name} ${frontend.cost === 0 ? '(free tier)' : ''}
+Backend: ${backend.name} with ${apiNames[state.apiFramework]}
+Orchestration: LangChain ${chainNames[state.chainType]} ${state.langchainRuntime === 'backend' ? 'running in the backend' : 'on ' + langchainService.name}
+Vector DB: ${vectorDb.name} ${vectorDb.cost === 0 ? '(free tier)' : ''}
+Embeddings: ${embedding.name}
+LLM: ${llm.name} ${llm.provider === 'external' ? 'via API' : '(self-hosted)'}
+Document Store: ${storage.name}
+Ingestion: ${ingestionNames[state.ingestion]}
+
+Estimated monthly cost: ${costRange}
+
+Please help me implement this architecture step by step, including setup instructions, code examples, and any configuration files needed.`;
+
+            output.textContent = prompt;
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy Prompt';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
