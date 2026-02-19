@@ -3,8 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAG Infrastructure Playground</title>
+    <title>RAG Infrastructure Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --white: #ffffff;
+            --cream: #F7F6F5;
+            --cream-dark: #F3F1EF;
+            --cream-darker: #EEEDEA;
+            --warm-gray: #D9D9D9;
+            --warm-gray-dark: #898584;
+            --border: #D9D9D9;
+            --text-primary: #292C33;
+            --text-secondary: #6B7280;
+            --text-muted: #6A6A6A;
+            --text-light: #F8F7F6;
+            --teal: #487265;
+            --teal-light: #DDEFEF;
+            --teal-border: #568788;
+            --teal-dark: #407967;
+            --sage: #A0C3C4;
+            --olive: #AAB788;
+            --gold: #D4C68B;
+            --copper: #BC976A;
+            --bronze: #CAAB84;
+            --sand: #CB9F69;
+            --header-h: 55px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,63 +40,85 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #1a1a2e;
-            color: #e0e0e0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--white);
+            color: var(--text-primary);
             overflow-x: hidden;
         }
 
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-h);
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 1000;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-nav a {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            border-color: var(--teal-border);
+            background: var(--cream);
+        }
+
+        /* Main Container */
         .container {
+            margin-top: var(--header-h);
             display: grid;
             grid-template-columns: 400px 1fr;
             grid-template-rows: 1fr auto;
-            height: 100vh;
+            height: calc(100vh - var(--header-h));
             gap: 0;
         }
 
+        /* Controls Panel */
         .controls {
             grid-row: 1 / 3;
-            background: #16213e;
+            background: var(--cream);
             padding: 24px;
             overflow-y: auto;
-            border-right: 2px solid #0f3460;
-        }
-
-        .diagram-container {
-            grid-column: 2;
-            grid-row: 1;
-            background: #1a1a2e;
-            padding: 32px;
-            overflow: auto;
-            position: relative;
-        }
-
-        .prompt-container {
-            grid-column: 2;
-            grid-row: 2;
-            background: #16213e;
-            padding: 24px;
-            border-top: 2px solid #0f3460;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 24px;
-            color: #fff;
+            border-right: 1px solid var(--border);
         }
 
         h2 {
-            font-size: 16px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
             margin-top: 24px;
             margin-bottom: 12px;
-            color: #64b5f6;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--teal);
             font-weight: 600;
         }
 
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        /* Presets */
         .presets {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -77,23 +127,23 @@
         }
 
         .preset-card {
-            background: #0f3460;
+            background: var(--white);
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 1px solid var(--border);
             transition: all 0.2s ease;
             text-align: center;
         }
 
         .preset-card:hover {
-            border-color: #64b5f6;
-            transform: translateY(-2px);
+            border-color: var(--teal-border);
         }
 
         .preset-card.active {
-            border-color: #42a5f5;
-            background: #1565c0;
+            background: var(--teal);
+            color: var(--text-light);
+            border-color: var(--teal);
         }
 
         .preset-title {
@@ -107,6 +157,7 @@
             opacity: 0.7;
         }
 
+        /* Control Groups */
         .control-group {
             margin-bottom: 20px;
         }
@@ -116,15 +167,16 @@
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 8px;
-            color: #b0b0b0;
+            color: var(--text-secondary);
             position: relative;
         }
 
+        /* Tooltip */
         .tooltip {
             display: inline-block;
             width: 16px;
             height: 16px;
-            background: #0f3460;
+            background: var(--cream-darker);
             border-radius: 50%;
             text-align: center;
             line-height: 16px;
@@ -132,6 +184,7 @@
             margin-left: 6px;
             cursor: help;
             position: relative;
+            color: var(--text-muted);
         }
 
         .tooltip:hover::after {
@@ -139,61 +192,48 @@
             position: absolute;
             left: 24px;
             top: -8px;
-            background: #0f3460;
+            background: var(--white);
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 10px;
             font-size: 12px;
             width: 220px;
             z-index: 1000;
-            border: 1px solid #64b5f6;
+            border: 1px solid var(--border);
             line-height: 1.4;
+            color: var(--text-primary);
         }
 
+        /* Select Dropdowns */
         select {
             width: 100%;
             padding: 10px;
-            background: #0f3460;
-            border: 1px solid #0f3460;
-            border-radius: 6px;
-            color: #e0e0e0;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
             font-size: 14px;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
 
-        select:hover, select:focus {
-            border-color: #64b5f6;
+        select:hover,
+        select:focus {
+            border-color: var(--teal-border);
             outline: none;
         }
 
-        .diagram {
+        /* Diagram Container */
+        .diagram-container {
+            grid-column: 2;
+            grid-row: 1;
+            background: var(--white);
+            padding: 32px;
+            overflow: auto;
             position: relative;
-            min-height: 600px;
-            margin-bottom: 24px;
         }
 
-        .cost-total {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #0f3460;
-            padding: 16px 24px;
-            border-radius: 8px;
-            border: 2px solid #64b5f6;
-        }
-
-        .cost-label {
-            font-size: 12px;
-            opacity: 0.7;
-            margin-bottom: 4px;
-        }
-
-        .cost-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #64b5f6;
-        }
-
+        /* Provider Legend */
         .provider-legend {
             display: flex;
             gap: 16px;
@@ -206,29 +246,59 @@
             align-items: center;
             gap: 8px;
             font-size: 12px;
+            padding: 6px 14px;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            color: var(--text-primary);
         }
 
         .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
         }
 
-        .provider-vercel { background: #000; }
-        .provider-github { background: #6e5494; }
-        .provider-oci { background: #c74634; }
-        .provider-external { background: #3b82f6; }
-        .provider-selfhosted { background: #22c55e; }
+        /* Diagram */
+        .diagram {
+            position: relative;
+            min-height: 600px;
+            margin-bottom: 24px;
+        }
 
+        /* Cost Total */
+        .cost-total {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--cream);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--copper);
+        }
+
+        .cost-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .cost-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--teal);
+        }
+
+        /* Service Box */
         .service-box {
             position: absolute;
-            background: #16213e;
-            border: 2px solid #0f3460;
+            background: var(--cream);
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 16px;
             min-width: 160px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .service-header {
@@ -246,32 +316,35 @@
             font-weight: 600;
             font-size: 14px;
             flex: 1;
+            color: var(--text-primary);
         }
 
         .service-role {
             font-size: 11px;
-            opacity: 0.7;
+            color: var(--text-secondary);
             margin-bottom: 8px;
         }
 
         .service-badge {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 12px;
+            border-radius: 40px;
             font-size: 10px;
             font-weight: 600;
             margin-bottom: 8px;
+            color: var(--text-light);
         }
 
         .service-cost {
             font-size: 11px;
-            font-family: 'Courier New', monospace;
-            color: #64b5f6;
+            font-family: 'Inter', sans-serif;
+            color: var(--teal);
         }
 
+        /* Provider Group */
         .provider-group {
             position: absolute;
-            border: 2px dashed #0f3460;
+            border: 1px dashed var(--border);
             border-radius: 16px;
             pointer-events: none;
             transition: all 0.3s ease;
@@ -286,6 +359,7 @@
             opacity: 0.5;
         }
 
+        /* Connections */
         .connection {
             position: absolute;
             pointer-events: none;
@@ -293,8 +367,8 @@
 
         .connection-line {
             position: absolute;
-            background: #64b5f6;
-            opacity: 0.4;
+            background: var(--warm-gray);
+            opacity: 0.6;
         }
 
         .connection-arrow {
@@ -307,17 +381,22 @@
         .connection-label {
             position: absolute;
             font-size: 10px;
-            opacity: 0.6;
-            background: #1a1a2e;
+            color: var(--text-muted);
+            background: var(--white);
             padding: 2px 6px;
-            border-radius: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--cream-darker);
         }
 
-        .prompt-output {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.7;
-            font-size: 14px;
-            white-space: pre-wrap;
+        /* Prompt Container */
+        .prompt-container {
+            grid-column: 2;
+            grid-row: 2;
+            background: var(--cream);
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .prompt-header {
@@ -328,34 +407,42 @@
         }
 
         .prompt-title {
-            font-size: 14px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
             font-weight: 600;
-            color: #64b5f6;
+            color: var(--text-primary);
         }
 
         .copy-btn {
-            background: #0f3460;
-            border: 1px solid #64b5f6;
-            color: #64b5f6;
-            padding: 8px 16px;
-            border-radius: 6px;
+            background: var(--teal);
+            border: none;
+            color: var(--text-light);
+            padding: 8px 20px;
+            border-radius: 40px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
             transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         .copy-btn:hover {
-            background: #1565c0;
-            transform: translateY(-1px);
+            background: var(--teal-dark);
         }
 
         .copy-btn.copied {
-            background: #22c55e;
-            border-color: #22c55e;
-            color: #fff;
+            background: var(--olive);
         }
 
+        .prompt-output {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            font-size: 14px;
+            white-space: pre-wrap;
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
         @media (max-width: 1200px) {
             .container {
                 grid-template-columns: 1fr;
@@ -379,13 +466,57 @@
                 grid-row: 3;
             }
         }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .header-title {
+                font-size: 1rem;
+            }
+
+            .header-nav a {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+
+            .controls {
+                padding: 16px;
+            }
+
+            .diagram-container {
+                padding: 16px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+
+            .preset-card {
+                padding: 10px;
+            }
+
+            .preset-title {
+                font-size: 12px;
+            }
+
+            .preset-desc {
+                font-size: 10px;
+            }
+        }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-title">RAG Infrastructure Explorer</div>
+        <nav class="header-nav">
+            <a href="index.html">Back to Home</a>
+        </nav>
+    </header>
+
     <div class="container">
         <div class="controls">
-            <h1>🏗️ RAG Infrastructure</h1>
-
             <h2>Presets</h2>
             <div class="presets">
                 <div class="preset-card" data-preset="minimal">
@@ -546,23 +677,23 @@
         <div class="diagram-container">
             <div class="provider-legend">
                 <div class="legend-item">
-                    <div class="legend-dot provider-vercel"></div>
+                    <div class="legend-dot" style="background: #292C33;"></div>
                     <span>Vercel</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-dot provider-github"></div>
+                    <div class="legend-dot" style="background: #487265;"></div>
                     <span>GitHub</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-dot provider-oci"></div>
+                    <div class="legend-dot" style="background: #BC976A;"></div>
                     <span>OCI</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-dot provider-external"></div>
+                    <div class="legend-dot" style="background: #A0C3C4;"></div>
                     <span>External API</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-dot provider-selfhosted"></div>
+                    <div class="legend-dot" style="background: #AAB788;"></div>
                     <span>Self-hosted</span>
                 </div>
             </div>
@@ -577,7 +708,7 @@
 
         <div class="prompt-container">
             <div class="prompt-header">
-                <div class="prompt-title">📋 Prompt Output</div>
+                <div class="prompt-title">Prompt Output</div>
                 <button class="copy-btn" id="copyBtn">Copy Prompt</button>
             </div>
             <div class="prompt-output" id="promptOutput"></div>
@@ -585,66 +716,11 @@
     </div>
 
     <script>
-        // State management
-        const state = {
-            frontendHost: 'vercel',
-            framework: 'nextjs',
-            backendHost: 'vercel-serverless',
-            apiFramework: 'nextjs-api',
-            langchainRuntime: 'backend',
-            chainType: 'retrievalqa',
-            vectorDb: 'pinecone',
-            embeddingModel: 'openai-embed',
-            llm: 'openai-gpt4o',
-            docStorage: 'github-repo',
-            ingestion: 'batch-script'
-        };
+        (function() {
+            "use strict";
 
-        // Service metadata
-        const services = {
-            frontend: {
-                vercel: { name: 'Vercel', icon: '▲', provider: 'vercel', cost: 0 },
-                github: { name: 'GitHub Pages', icon: '🐙', provider: 'github', cost: 0 },
-                'oci-compute': { name: 'OCI Compute', icon: '☁️', provider: 'oci', cost: 15 }
-            },
-            backend: {
-                'vercel-serverless': { name: 'Vercel Functions', icon: '⚡', provider: 'vercel', cost: 0 },
-                'oci-compute': { name: 'OCI VM', icon: '🖥️', provider: 'oci', cost: 15 },
-                railway: { name: 'Railway', icon: '🚂', provider: 'external', cost: 5 }
-            },
-            langchain: {
-                backend: { name: 'LangChain', icon: '🦜', provider: 'same', cost: 0 },
-                'oci-vm': { name: 'LangChain', icon: '🦜', provider: 'oci', cost: 10 },
-                langserve: { name: 'LangServe', icon: '🦜', provider: 'external', cost: 5 }
-            },
-            vectorDb: {
-                pinecone: { name: 'Pinecone', icon: '🌲', provider: 'external', cost: 0 },
-                weaviate: { name: 'Weaviate Cloud', icon: '🔷', provider: 'external', cost: 25 },
-                chroma: { name: 'Chroma', icon: '🎨', provider: 'selfhosted', cost: 5 },
-                pgvector: { name: 'pgvector', icon: '🐘', provider: 'oci', cost: 10 },
-                qdrant: { name: 'Qdrant Cloud', icon: '◉', provider: 'external', cost: 0 }
-            },
-            embedding: {
-                'openai-embed': { name: 'OpenAI Embeddings', icon: '🔤', provider: 'external', cost: 2 },
-                cohere: { name: 'Cohere Embed', icon: '🔤', provider: 'external', cost: 3 },
-                'hf-selfhosted': { name: 'HuggingFace', icon: '🤗', provider: 'selfhosted', cost: 5 }
-            },
-            llm: {
-                'openai-gpt4o': { name: 'GPT-4o-mini', icon: '🤖', provider: 'external', cost: 10 },
-                anthropic: { name: 'Claude Sonnet', icon: '🧠', provider: 'external', cost: 15 },
-                gemini: { name: 'Gemini Flash', icon: '✨', provider: 'external', cost: 8 },
-                ollama: { name: 'Ollama', icon: '🦙', provider: 'selfhosted', cost: 5 }
-            },
-            storage: {
-                'github-repo': { name: 'GitHub Repo', icon: '📁', provider: 'github', cost: 0 },
-                'oci-object': { name: 'OCI Object Storage', icon: '💾', provider: 'oci', cost: 2 },
-                'oci-filesystem': { name: 'OCI Filesystem', icon: '💿', provider: 'oci', cost: 0 }
-            }
-        };
-
-        // Presets
-        const presets = {
-            minimal: {
+            // State management
+            var state = {
                 frontendHost: 'vercel',
                 framework: 'nextjs',
                 backendHost: 'vercel-serverless',
@@ -656,372 +732,442 @@
                 llm: 'openai-gpt4o',
                 docStorage: 'github-repo',
                 ingestion: 'batch-script'
-            },
-            oci: {
-                frontendHost: 'oci-compute',
-                framework: 'nextjs',
-                backendHost: 'oci-compute',
-                apiFramework: 'fastapi',
-                langchainRuntime: 'backend',
-                chainType: 'retrievalqa',
-                vectorDb: 'pgvector',
-                embeddingModel: 'hf-selfhosted',
-                llm: 'ollama',
-                docStorage: 'oci-filesystem',
-                ingestion: 'batch-script'
-            },
-            hybrid: {
-                frontendHost: 'vercel',
-                framework: 'nextjs',
-                backendHost: 'oci-compute',
-                apiFramework: 'fastapi',
-                langchainRuntime: 'backend',
-                chainType: 'conversational',
-                vectorDb: 'pinecone',
-                embeddingModel: 'openai-embed',
-                llm: 'anthropic',
-                docStorage: 'oci-object',
-                ingestion: 'serverless-trigger'
-            },
-            budget: {
-                frontendHost: 'vercel',
-                framework: 'nextjs',
-                backendHost: 'vercel-serverless',
-                apiFramework: 'nextjs-api',
-                langchainRuntime: 'backend',
-                chainType: 'retrievalqa',
-                vectorDb: 'chroma',
-                embeddingModel: 'openai-embed',
-                llm: 'openai-gpt4o',
-                docStorage: 'github-repo',
-                ingestion: 'batch-script'
+            };
+
+            // Service metadata
+            var services = {
+                frontend: {
+                    vercel: { name: 'Vercel', icon: '▲', provider: 'vercel', cost: 0 },
+                    github: { name: 'GitHub Pages', icon: '🐙', provider: 'github', cost: 0 },
+                    'oci-compute': { name: 'OCI Compute', icon: '☁️', provider: 'oci', cost: 15 }
+                },
+                backend: {
+                    'vercel-serverless': { name: 'Vercel Functions', icon: '⚡', provider: 'vercel', cost: 0 },
+                    'oci-compute': { name: 'OCI VM', icon: '🖥️', provider: 'oci', cost: 15 },
+                    railway: { name: 'Railway', icon: '🚂', provider: 'external', cost: 5 }
+                },
+                langchain: {
+                    backend: { name: 'LangChain', icon: '🦜', provider: 'same', cost: 0 },
+                    'oci-vm': { name: 'LangChain', icon: '🦜', provider: 'oci', cost: 10 },
+                    langserve: { name: 'LangServe', icon: '🦜', provider: 'external', cost: 5 }
+                },
+                vectorDb: {
+                    pinecone: { name: 'Pinecone', icon: '🌲', provider: 'external', cost: 0 },
+                    weaviate: { name: 'Weaviate Cloud', icon: '🔷', provider: 'external', cost: 25 },
+                    chroma: { name: 'Chroma', icon: '🎨', provider: 'selfhosted', cost: 5 },
+                    pgvector: { name: 'pgvector', icon: '🐘', provider: 'oci', cost: 10 },
+                    qdrant: { name: 'Qdrant Cloud', icon: '◉', provider: 'external', cost: 0 }
+                },
+                embedding: {
+                    'openai-embed': { name: 'OpenAI Embeddings', icon: '🔤', provider: 'external', cost: 2 },
+                    cohere: { name: 'Cohere Embed', icon: '🔤', provider: 'external', cost: 3 },
+                    'hf-selfhosted': { name: 'HuggingFace', icon: '🤗', provider: 'selfhosted', cost: 5 }
+                },
+                llm: {
+                    'openai-gpt4o': { name: 'GPT-4o-mini', icon: '🤖', provider: 'external', cost: 10 },
+                    anthropic: { name: 'Claude Sonnet', icon: '🧠', provider: 'external', cost: 15 },
+                    gemini: { name: 'Gemini Flash', icon: '✨', provider: 'external', cost: 8 },
+                    ollama: { name: 'Ollama', icon: '🦙', provider: 'selfhosted', cost: 5 }
+                },
+                storage: {
+                    'github-repo': { name: 'GitHub Repo', icon: '📁', provider: 'github', cost: 0 },
+                    'oci-object': { name: 'OCI Object Storage', icon: '💾', provider: 'oci', cost: 2 },
+                    'oci-filesystem': { name: 'OCI Filesystem', icon: '💿', provider: 'oci', cost: 0 }
+                }
+            };
+
+            // Presets
+            var presets = {
+                minimal: {
+                    frontendHost: 'vercel',
+                    framework: 'nextjs',
+                    backendHost: 'vercel-serverless',
+                    apiFramework: 'nextjs-api',
+                    langchainRuntime: 'backend',
+                    chainType: 'retrievalqa',
+                    vectorDb: 'pinecone',
+                    embeddingModel: 'openai-embed',
+                    llm: 'openai-gpt4o',
+                    docStorage: 'github-repo',
+                    ingestion: 'batch-script'
+                },
+                oci: {
+                    frontendHost: 'oci-compute',
+                    framework: 'nextjs',
+                    backendHost: 'oci-compute',
+                    apiFramework: 'fastapi',
+                    langchainRuntime: 'backend',
+                    chainType: 'retrievalqa',
+                    vectorDb: 'pgvector',
+                    embeddingModel: 'hf-selfhosted',
+                    llm: 'ollama',
+                    docStorage: 'oci-filesystem',
+                    ingestion: 'batch-script'
+                },
+                hybrid: {
+                    frontendHost: 'vercel',
+                    framework: 'nextjs',
+                    backendHost: 'oci-compute',
+                    apiFramework: 'fastapi',
+                    langchainRuntime: 'backend',
+                    chainType: 'conversational',
+                    vectorDb: 'pinecone',
+                    embeddingModel: 'openai-embed',
+                    llm: 'anthropic',
+                    docStorage: 'oci-object',
+                    ingestion: 'serverless-trigger'
+                },
+                budget: {
+                    frontendHost: 'vercel',
+                    framework: 'nextjs',
+                    backendHost: 'vercel-serverless',
+                    apiFramework: 'nextjs-api',
+                    langchainRuntime: 'backend',
+                    chainType: 'retrievalqa',
+                    vectorDb: 'chroma',
+                    embeddingModel: 'openai-embed',
+                    llm: 'openai-gpt4o',
+                    docStorage: 'github-repo',
+                    ingestion: 'batch-script'
+                }
+            };
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function() {
+                // Setup event listeners
+                var selects = document.querySelectorAll('select');
+                for (var i = 0; i < selects.length; i++) {
+                    selects[i].addEventListener('change', function(e) {
+                        state[e.target.id] = e.target.value;
+                        render();
+                    });
+                }
+
+                var presetCards = document.querySelectorAll('.preset-card');
+                for (var j = 0; j < presetCards.length; j++) {
+                    presetCards[j].addEventListener('click', function() {
+                        var presetName = this.dataset.preset;
+                        Object.assign(state, presets[presetName]);
+                        syncControls();
+                        render();
+
+                        // Visual feedback
+                        var allCards = document.querySelectorAll('.preset-card');
+                        for (var k = 0; k < allCards.length; k++) {
+                            allCards[k].classList.remove('active');
+                        }
+                        this.classList.add('active');
+                        var that = this;
+                        setTimeout(function() {
+                            that.classList.remove('active');
+                        }, 300);
+                    });
+                }
+
+                document.getElementById('copyBtn').addEventListener('click', copyPrompt);
+
+                render();
+            });
+
+            function syncControls() {
+                var keys = Object.keys(state);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    var select = document.getElementById(key);
+                    if (select) select.value = state[key];
+                }
             }
-        };
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Setup event listeners
-            document.querySelectorAll('select').forEach(select => {
-                select.addEventListener('change', (e) => {
-                    state[e.target.id] = e.target.value;
-                    render();
-                });
-            });
-
-            document.querySelectorAll('.preset-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const presetName = card.dataset.preset;
-                    Object.assign(state, presets[presetName]);
-                    syncControls();
-                    render();
-
-                    // Visual feedback
-                    document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                    setTimeout(() => card.classList.remove('active'), 300);
-                });
-            });
-
-            document.getElementById('copyBtn').addEventListener('click', copyPrompt);
-
-            render();
-        });
-
-        function syncControls() {
-            Object.keys(state).forEach(key => {
-                const select = document.getElementById(key);
-                if (select) select.value = state[key];
-            });
-        }
-
-        function render() {
-            renderDiagram();
-            renderPrompt();
-        }
-
-        function renderDiagram() {
-            const diagram = document.getElementById('diagram');
-
-            // Clear existing (except cost total)
-            const costTotal = diagram.querySelector('.cost-total');
-            diagram.innerHTML = '';
-            diagram.appendChild(costTotal);
-
-            // Layout positions
-            const layout = {
-                user: { x: 100, y: 50 },
-                frontend: { x: 300, y: 50 },
-                backend: { x: 500, y: 50 },
-                langchain: { x: 400, y: 200 },
-                vectorDb: { x: 200, y: 200 },
-                llm: { x: 600, y: 200 },
-                embedding: { x: 100, y: 350 },
-                storage: { x: 300, y: 350 },
-                ingestion: { x: 500, y: 350 }
-            };
-
-            let totalCost = 0;
-
-            // Draw provider groups
-            const groups = {};
-            const frontendService = services.frontend[state.frontendHost];
-            const backendService = services.backend[state.backendHost];
-
-            if (frontendService.provider === backendService.provider &&
-                frontendService.provider !== 'external' &&
-                frontendService.provider !== 'selfhosted') {
-                drawProviderGroup(diagram,
-                    Math.min(layout.frontend.x, layout.backend.x) - 30,
-                    layout.frontend.y - 30,
-                    Math.abs(layout.frontend.x - layout.backend.x) + 200,
-                    120,
-                    frontendService.provider
-                );
+            function render() {
+                renderDiagram();
+                renderPrompt();
             }
 
-            // User box (special)
-            drawServiceBox(diagram, 'user', { name: 'User', icon: '👤', provider: 'none', cost: 0 },
-                'User', layout.user.x, layout.user.y);
+            function renderDiagram() {
+                var diagram = document.getElementById('diagram');
 
-            // Frontend
-            const frontend = services.frontend[state.frontendHost];
-            drawServiceBox(diagram, 'frontend', frontend, 'Frontend', layout.frontend.x, layout.frontend.y);
-            totalCost += frontend.cost;
+                // Clear existing (properly remove children)
+                var costTotal = diagram.querySelector('.cost-total');
+                while (diagram.firstChild) {
+                    diagram.removeChild(diagram.firstChild);
+                }
+                diagram.appendChild(costTotal);
 
-            // Backend
-            const backend = services.backend[state.backendHost];
-            drawServiceBox(diagram, 'backend', backend, 'Backend/API', layout.backend.x, layout.backend.y);
-            totalCost += backend.cost;
+                // Layout positions
+                var layout = {
+                    user: { x: 100, y: 50 },
+                    frontend: { x: 300, y: 50 },
+                    backend: { x: 500, y: 50 },
+                    langchain: { x: 400, y: 200 },
+                    vectorDb: { x: 200, y: 200 },
+                    llm: { x: 600, y: 200 },
+                    embedding: { x: 100, y: 350 },
+                    storage: { x: 300, y: 350 },
+                    ingestion: { x: 500, y: 350 }
+                };
 
-            // LangChain
-            const langchainService = state.langchainRuntime === 'backend' ?
-                { ...services.langchain[state.langchainRuntime], provider: backend.provider } :
-                services.langchain[state.langchainRuntime];
-            drawServiceBox(diagram, 'langchain', langchainService, 'LangChain', layout.langchain.x, layout.langchain.y);
-            totalCost += langchainService.cost;
+                var totalCost = 0;
 
-            // Vector DB
-            const vectorDb = services.vectorDb[state.vectorDb];
-            drawServiceBox(diagram, 'vectordb', vectorDb, 'Vector DB', layout.vectorDb.x, layout.vectorDb.y);
-            totalCost += vectorDb.cost;
+                // Draw provider groups
+                var frontendService = services.frontend[state.frontendHost];
+                var backendService = services.backend[state.backendHost];
 
-            // LLM
-            const llm = services.llm[state.llm];
-            drawServiceBox(diagram, 'llm', llm, 'LLM', layout.llm.x, layout.llm.y);
-            totalCost += llm.cost;
+                if (frontendService.provider === backendService.provider &&
+                    frontendService.provider !== 'external' &&
+                    frontendService.provider !== 'selfhosted') {
+                    drawProviderGroup(diagram,
+                        Math.min(layout.frontend.x, layout.backend.x) - 30,
+                        layout.frontend.y - 30,
+                        Math.abs(layout.frontend.x - layout.backend.x) + 200,
+                        120,
+                        frontendService.provider
+                    );
+                }
 
-            // Embedding
-            const embedding = services.embedding[state.embeddingModel];
-            drawServiceBox(diagram, 'embedding', embedding, 'Embeddings', layout.embedding.x, layout.embedding.y);
-            totalCost += embedding.cost;
+                // User box (special)
+                drawServiceBox(diagram, 'user', { name: 'User', icon: '👤', provider: 'none', cost: 0 },
+                    'User', layout.user.x, layout.user.y);
 
-            // Storage
-            const storage = services.storage[state.docStorage];
-            drawServiceBox(diagram, 'storage', storage, 'Document Store', layout.storage.x, layout.storage.y);
-            totalCost += storage.cost;
+                // Frontend
+                var frontend = services.frontend[state.frontendHost];
+                drawServiceBox(diagram, 'frontend', frontend, 'Frontend', layout.frontend.x, layout.frontend.y);
+                totalCost += frontend.cost;
 
-            // Ingestion
-            const ingestionService = {
-                name: 'Ingestion Pipeline',
-                icon: '⚙️',
-                provider: 'selfhosted',
-                cost: 0
-            };
-            drawServiceBox(diagram, 'ingestion', ingestionService, 'Ingestion', layout.ingestion.x, layout.ingestion.y);
+                // Backend
+                var backend = services.backend[state.backendHost];
+                drawServiceBox(diagram, 'backend', backend, 'Backend/API', layout.backend.x, layout.backend.y);
+                totalCost += backend.cost;
 
-            // Draw connections
-            drawConnection(diagram, layout.user, layout.frontend, 'HTTP');
-            drawConnection(diagram, layout.frontend, layout.backend, 'API');
-            drawConnection(diagram, layout.backend, layout.langchain, 'calls');
-            drawConnection(diagram, layout.langchain, layout.vectorDb, 'search');
-            drawConnection(diagram, layout.langchain, layout.llm, 'generate');
-            drawConnection(diagram, layout.langchain, layout.embedding, 'embed query');
-            drawConnection(diagram, layout.storage, layout.ingestion, 'read');
-            drawConnection(diagram, layout.ingestion, layout.embedding, 'embed docs');
-            drawConnection(diagram, layout.ingestion, layout.vectorDb, 'upsert');
+                // LangChain
+                var langchainService = state.langchainRuntime === 'backend' ?
+                    { name: services.langchain[state.langchainRuntime].name,
+                      icon: services.langchain[state.langchainRuntime].icon,
+                      provider: backend.provider,
+                      cost: services.langchain[state.langchainRuntime].cost } :
+                    services.langchain[state.langchainRuntime];
+                drawServiceBox(diagram, 'langchain', langchainService, 'LangChain', layout.langchain.x, layout.langchain.y);
+                totalCost += langchainService.cost;
 
-            // Update total cost
-            document.getElementById('totalCost').textContent =
-                totalCost === 0 ? '$0' : `$${totalCost}-${Math.round(totalCost * 1.5)}`;
-        }
+                // Vector DB
+                var vectorDb = services.vectorDb[state.vectorDb];
+                drawServiceBox(diagram, 'vectordb', vectorDb, 'Vector DB', layout.vectorDb.x, layout.vectorDb.y);
+                totalCost += vectorDb.cost;
 
-        function drawProviderGroup(container, x, y, width, height, provider) {
-            const group = document.createElement('div');
-            group.className = 'provider-group';
-            group.style.left = x + 'px';
-            group.style.top = y + 'px';
-            group.style.width = width + 'px';
-            group.style.height = height + 'px';
-            group.style.borderColor = getProviderColor(provider);
+                // LLM
+                var llm = services.llm[state.llm];
+                drawServiceBox(diagram, 'llm', llm, 'LLM', layout.llm.x, layout.llm.y);
+                totalCost += llm.cost;
 
-            const label = document.createElement('div');
-            label.className = 'provider-group-label';
-            label.textContent = provider.toUpperCase();
-            group.appendChild(label);
+                // Embedding
+                var embedding = services.embedding[state.embeddingModel];
+                drawServiceBox(diagram, 'embedding', embedding, 'Embeddings', layout.embedding.x, layout.embedding.y);
+                totalCost += embedding.cost;
 
-            container.appendChild(group);
-        }
+                // Storage
+                var storage = services.storage[state.docStorage];
+                drawServiceBox(diagram, 'storage', storage, 'Document Store', layout.storage.x, layout.storage.y);
+                totalCost += storage.cost;
 
-        function drawServiceBox(container, id, service, role, x, y) {
-            const box = document.createElement('div');
-            box.className = 'service-box';
-            box.id = 'box-' + id;
-            box.style.left = x + 'px';
-            box.style.top = y + 'px';
+                // Ingestion
+                var ingestionService = {
+                    name: 'Ingestion Pipeline',
+                    icon: '⚙️',
+                    provider: 'selfhosted',
+                    cost: 0
+                };
+                drawServiceBox(diagram, 'ingestion', ingestionService, 'Ingestion', layout.ingestion.x, layout.ingestion.y);
 
-            const header = document.createElement('div');
-            header.className = 'service-header';
+                // Draw connections
+                drawConnection(diagram, layout.user, layout.frontend, 'HTTP');
+                drawConnection(diagram, layout.frontend, layout.backend, 'API');
+                drawConnection(diagram, layout.backend, layout.langchain, 'calls');
+                drawConnection(diagram, layout.langchain, layout.vectorDb, 'search');
+                drawConnection(diagram, layout.langchain, layout.llm, 'generate');
+                drawConnection(diagram, layout.langchain, layout.embedding, 'embed query');
+                drawConnection(diagram, layout.storage, layout.ingestion, 'read');
+                drawConnection(diagram, layout.ingestion, layout.embedding, 'embed docs');
+                drawConnection(diagram, layout.ingestion, layout.vectorDb, 'upsert');
 
-            const icon = document.createElement('div');
-            icon.className = 'service-icon';
-            icon.textContent = service.icon;
+                // Update total cost
+                document.getElementById('totalCost').textContent =
+                    totalCost === 0 ? '$0' : '$' + totalCost + '-' + Math.round(totalCost * 1.5);
+            }
 
-            const name = document.createElement('div');
-            name.className = 'service-name';
-            name.textContent = service.name;
+            function drawProviderGroup(container, x, y, width, height, provider) {
+                var group = document.createElement('div');
+                group.className = 'provider-group';
+                group.style.left = x + 'px';
+                group.style.top = y + 'px';
+                group.style.width = width + 'px';
+                group.style.height = height + 'px';
+                group.style.borderColor = getProviderColor(provider);
 
-            header.appendChild(icon);
-            header.appendChild(name);
+                var label = document.createElement('div');
+                label.className = 'provider-group-label';
+                label.textContent = provider.toUpperCase();
+                group.appendChild(label);
 
-            const roleLabel = document.createElement('div');
-            roleLabel.className = 'service-role';
-            roleLabel.textContent = role;
+                container.appendChild(group);
+            }
 
-            const badge = document.createElement('div');
-            badge.className = 'service-badge';
-            badge.style.background = getProviderColor(service.provider);
-            badge.textContent = service.provider === 'same' ? 'co-located' : service.provider;
+            function drawServiceBox(container, id, service, role, x, y) {
+                var box = document.createElement('div');
+                box.className = 'service-box';
+                box.id = 'box-' + id;
+                box.style.left = x + 'px';
+                box.style.top = y + 'px';
 
-            const cost = document.createElement('div');
-            cost.className = 'service-cost';
-            cost.textContent = service.cost === 0 ? 'Free' : `~$${service.cost}/mo`;
+                var header = document.createElement('div');
+                header.className = 'service-header';
 
-            box.appendChild(header);
-            box.appendChild(roleLabel);
-            box.appendChild(badge);
-            box.appendChild(cost);
+                var icon = document.createElement('div');
+                icon.className = 'service-icon';
+                icon.textContent = service.icon;
 
-            container.appendChild(box);
-        }
+                var name = document.createElement('div');
+                name.className = 'service-name';
+                name.textContent = service.name;
 
-        function drawConnection(container, from, to, label) {
-            const dx = to.x - from.x;
-            const dy = to.y - from.y;
-            const angle = Math.atan2(dy, dx);
-            const length = Math.sqrt(dx * dx + dy * dy);
+                header.appendChild(icon);
+                header.appendChild(name);
 
-            const line = document.createElement('div');
-            line.className = 'connection-line';
-            line.style.left = (from.x + 80) + 'px';
-            line.style.top = (from.y + 40) + 'px';
-            line.style.width = length + 'px';
-            line.style.height = '2px';
-            line.style.transform = `rotate(${angle}rad)`;
-            line.style.transformOrigin = '0 0';
+                var roleLabel = document.createElement('div');
+                roleLabel.className = 'service-role';
+                roleLabel.textContent = role;
 
-            const arrow = document.createElement('div');
-            arrow.className = 'connection-arrow';
-            arrow.style.left = (to.x + 75) + 'px';
-            arrow.style.top = (to.y + 35) + 'px';
-            arrow.style.borderWidth = '5px 0 5px 8px';
-            arrow.style.borderColor = 'transparent transparent transparent #64b5f6';
-            arrow.style.opacity = '0.4';
+                var badge = document.createElement('div');
+                badge.className = 'service-badge';
+                badge.style.background = getProviderColor(service.provider);
+                badge.textContent = service.provider === 'same' ? 'co-located' : service.provider;
 
-            const labelEl = document.createElement('div');
-            labelEl.className = 'connection-label';
-            labelEl.textContent = label;
-            labelEl.style.left = (from.x + to.x) / 2 + 'px';
-            labelEl.style.top = (from.y + to.y) / 2 + 'px';
+                var cost = document.createElement('div');
+                cost.className = 'service-cost';
+                cost.textContent = service.cost === 0 ? 'Free' : '~$' + service.cost + '/mo';
 
-            container.appendChild(line);
-            container.appendChild(arrow);
-            container.appendChild(labelEl);
-        }
+                box.appendChild(header);
+                box.appendChild(roleLabel);
+                box.appendChild(badge);
+                box.appendChild(cost);
 
-        function getProviderColor(provider) {
-            const colors = {
-                vercel: '#000',
-                github: '#6e5494',
-                oci: '#c74634',
-                external: '#3b82f6',
-                selfhosted: '#22c55e',
-                same: '#64b5f6',
-                none: '#666'
-            };
-            return colors[provider] || '#666';
-        }
+                container.appendChild(box);
+            }
 
-        function renderPrompt() {
-            const output = document.getElementById('promptOutput');
+            function drawConnection(container, from, to, label) {
+                var dx = to.x - from.x;
+                var dy = to.y - from.y;
+                var angle = Math.atan2(dy, dx);
+                var length = Math.sqrt(dx * dx + dy * dy);
 
-            const frontend = services.frontend[state.frontendHost];
-            const backend = services.backend[state.backendHost];
-            const langchainService = services.langchain[state.langchainRuntime];
-            const vectorDb = services.vectorDb[state.vectorDb];
-            const embedding = services.embedding[state.embeddingModel];
-            const llm = services.llm[state.llm];
-            const storage = services.storage[state.docStorage];
+                var line = document.createElement('div');
+                line.className = 'connection-line';
+                line.style.left = (from.x + 80) + 'px';
+                line.style.top = (from.y + 40) + 'px';
+                line.style.width = length + 'px';
+                line.style.height = '2px';
+                line.style.transform = 'rotate(' + angle + 'rad)';
+                line.style.transformOrigin = '0 0';
 
-            const frameworkNames = {
-                nextjs: 'Next.js',
-                react: 'React SPA',
-                html: 'Plain HTML'
-            };
+                var arrow = document.createElement('div');
+                arrow.className = 'connection-arrow';
+                arrow.style.left = (to.x + 75) + 'px';
+                arrow.style.top = (to.y + 35) + 'px';
+                arrow.style.borderWidth = '5px 0 5px 8px';
+                arrow.style.borderColor = 'transparent transparent transparent ' + getComputedStyle(document.documentElement).getPropertyValue('--warm-gray');
+                arrow.style.opacity = '0.6';
 
-            const apiNames = {
-                'nextjs-api': 'Next.js API Routes',
-                express: 'Express.js',
-                fastapi: 'FastAPI (Python)'
-            };
+                var labelEl = document.createElement('div');
+                labelEl.className = 'connection-label';
+                labelEl.textContent = label;
+                labelEl.style.left = (from.x + to.x) / 2 + 'px';
+                labelEl.style.top = (from.y + to.y) / 2 + 'px';
 
-            const chainNames = {
-                retrievalqa: 'RetrievalQA',
-                conversational: 'ConversationalRetrievalChain',
-                'custom-lcel': 'Custom LCEL Chain'
-            };
+                container.appendChild(line);
+                container.appendChild(arrow);
+                container.appendChild(labelEl);
+            }
 
-            const ingestionNames = {
-                'batch-script': 'LangChain Document Loaders with a batch script',
-                'serverless-trigger': 'Serverless function trigger on document upload',
-                'manual-ui': 'Manual upload UI with live processing'
-            };
+            function getProviderColor(provider) {
+                var colors = {
+                    vercel: '#292C33',
+                    github: '#487265',
+                    oci: '#BC976A',
+                    external: '#A0C3C4',
+                    selfhosted: '#AAB788',
+                    same: '#568788',
+                    none: '#D9D9D9'
+                };
+                return colors[provider] || '#D9D9D9';
+            }
 
-            let totalCost = frontend.cost + backend.cost + langchainService.cost +
-                           vectorDb.cost + embedding.cost + llm.cost + storage.cost;
+            function renderPrompt() {
+                var output = document.getElementById('promptOutput');
 
-            const costRange = totalCost === 0 ? '$0 (all free tiers)' :
-                            `$${totalCost}-${Math.round(totalCost * 1.5)}`;
+                var frontend = services.frontend[state.frontendHost];
+                var backend = services.backend[state.backendHost];
+                var langchainService = services.langchain[state.langchainRuntime];
+                var vectorDb = services.vectorDb[state.vectorDb];
+                var embedding = services.embedding[state.embeddingModel];
+                var llm = services.llm[state.llm];
+                var storage = services.storage[state.docStorage];
 
-            const prompt = `I'm building a RAG application for a DBA Gen AI assignment using LangChain. Here's my infrastructure:
+                var frameworkNames = {
+                    nextjs: 'Next.js',
+                    react: 'React SPA',
+                    html: 'Plain HTML'
+                };
 
-Frontend: ${frameworkNames[state.framework]} deployed on ${frontend.name} ${frontend.cost === 0 ? '(free tier)' : ''}
-Backend: ${backend.name} with ${apiNames[state.apiFramework]}
-Orchestration: LangChain ${chainNames[state.chainType]} ${state.langchainRuntime === 'backend' ? 'running in the backend' : 'on ' + langchainService.name}
-Vector DB: ${vectorDb.name} ${vectorDb.cost === 0 ? '(free tier)' : ''}
-Embeddings: ${embedding.name}
-LLM: ${llm.name} ${llm.provider === 'external' ? 'via API' : '(self-hosted)'}
-Document Store: ${storage.name}
-Ingestion: ${ingestionNames[state.ingestion]}
+                var apiNames = {
+                    'nextjs-api': 'Next.js API Routes',
+                    express: 'Express.js',
+                    fastapi: 'FastAPI (Python)'
+                };
 
-Estimated monthly cost: ${costRange}
+                var chainNames = {
+                    retrievalqa: 'RetrievalQA',
+                    conversational: 'ConversationalRetrievalChain',
+                    'custom-lcel': 'Custom LCEL Chain'
+                };
 
-Please help me implement this architecture step by step, including setup instructions, code examples, and any configuration files needed.`;
+                var ingestionNames = {
+                    'batch-script': 'LangChain Document Loaders with a batch script',
+                    'serverless-trigger': 'Serverless function trigger on document upload',
+                    'manual-ui': 'Manual upload UI with live processing'
+                };
 
-            output.textContent = prompt;
-        }
+                var totalCost = frontend.cost + backend.cost + langchainService.cost +
+                               vectorDb.cost + embedding.cost + llm.cost + storage.cost;
 
-        function copyPrompt() {
-            const promptText = document.getElementById('promptOutput').textContent;
-            navigator.clipboard.writeText(promptText).then(() => {
-                const btn = document.getElementById('copyBtn');
-                btn.textContent = 'Copied!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = 'Copy Prompt';
-                    btn.classList.remove('copied');
-                }, 2000);
-            });
-        }
+                var costRange = totalCost === 0 ? '$0 (all free tiers)' :
+                                '$' + totalCost + '-' + Math.round(totalCost * 1.5);
+
+                var prompt = "I'm building a RAG application for a DBA Gen AI assignment using LangChain. Here's my infrastructure:\n\n" +
+                    'Frontend: ' + frameworkNames[state.framework] + ' deployed on ' + frontend.name + ' ' + (frontend.cost === 0 ? '(free tier)' : '') + '\n' +
+                    'Backend: ' + backend.name + ' with ' + apiNames[state.apiFramework] + '\n' +
+                    'Orchestration: LangChain ' + chainNames[state.chainType] + ' ' + (state.langchainRuntime === 'backend' ? 'running in the backend' : 'on ' + langchainService.name) + '\n' +
+                    'Vector DB: ' + vectorDb.name + ' ' + (vectorDb.cost === 0 ? '(free tier)' : '') + '\n' +
+                    'Embeddings: ' + embedding.name + '\n' +
+                    'LLM: ' + llm.name + ' ' + (llm.provider === 'external' ? 'via API' : '(self-hosted)') + '\n' +
+                    'Document Store: ' + storage.name + '\n' +
+                    'Ingestion: ' + ingestionNames[state.ingestion] + '\n\n' +
+                    'Estimated monthly cost: ' + costRange + '\n\n' +
+                    'Please help me implement this architecture step by step, including setup instructions, code examples, and any configuration files needed.';
+
+                output.textContent = prompt;
+            }
+
+            function copyPrompt() {
+                var promptText = document.getElementById('promptOutput').textContent;
+                navigator.clipboard.writeText(promptText).then(function() {
+                    var btn = document.getElementById('copyBtn');
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(function() {
+                        btn.textContent = 'Copy Prompt';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        })();
     </script>
 </body>
 </html>
