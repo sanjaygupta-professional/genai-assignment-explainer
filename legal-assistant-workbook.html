@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 1 Workbook — Legal Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="workbook-shared.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FIXED HEADER -->
+<!-- ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">Assignment 1 Workbook</a>
+      <span class="byline">Legal Assistant &bull; Job #1</span>
+    </div>
+    <div class="header-actions">
+      <a href="assignment1.html">&#8592; Back to Explainer</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress Bar ──────────────────────────────── -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="globalProgressBar"></div>
+</div>
+<div class="progress-label" id="globalProgressLabel">0 / 9 sections</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ── Sidebar ──────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="#s1" data-sec="1"><span class="sn-badge">1</span>Job Choice<span class="section-check"></span></a></li>
+      <li><a href="#s2" data-sec="2"><span class="sn-badge">2</span>GenAI Capability<span class="section-check"></span></a></li>
+      <li><a href="#s3" data-sec="3"><span class="sn-badge">3</span>Knowledge Base<span class="section-check"></span></a></li>
+      <li><a href="#s4" data-sec="4"><span class="sn-badge">4</span>Build Approach<span class="section-check"></span></a></li>
+      <li><a href="#s5" data-sec="5"><span class="sn-badge">5</span>RAG Architecture<span class="section-check"></span></a></li>
+      <li><a href="#s6" data-sec="6"><span class="sn-badge">6</span>Prompts &amp; Enhancements<span class="section-check"></span></a></li>
+      <li><a href="#s7" data-sec="7"><span class="sn-badge">7</span>Limitations &amp; Risks<span class="section-check"></span></a></li>
+      <li><a href="#s8" data-sec="8"><span class="sn-badge">8</span>Hands-On Tryout<span class="section-check"></span></a></li>
+      <li><a href="#s9" data-sec="9"><span class="sn-badge">9</span>Final Assembly<span class="section-check"></span></a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label" style="margin-top:4px;">Marks</div>
+    <div style="padding: 0 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.7;">
+      <div>C1 KB Design &mdash; <strong>5</strong></div>
+      <div>C2 RAG Architecture &mdash; <strong>5</strong></div>
+      <div>C3 Prompts &mdash; <strong>5</strong></div>
+      <div>C4 Limitations &mdash; <strong>5</strong></div>
+      <div>C5 Tryout &mdash; <strong>5</strong></div>
+      <div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--cream-darker); font-weight:600; color:var(--text-primary);">Total &mdash; 25</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ── Hero Strip ──────────────────────────────── -->
+    <div class="hero-strip">
+      <h1>Legal Assistant<br><span style="font-size:1.5rem; color:var(--text-secondary);">Assignment 1 Working Notebook</span></h1>
+      <p class="subtitle">Your working document for designing a RAG-based GenAI legal search assistant. Fill in each section as you work through the assignment.</p>
+      <div class="hero-pills">
+        <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 Marks</span>
+        <span class="pill"><span class="dot" style="background:var(--gold)"></span> 10 Pages Max</span>
+        <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 Criteria</span>
+        <span class="pill"><span class="dot" style="background:var(--bronze)"></span> Job #1 Customized</span>
+        <span class="pill"><span class="dot" style="background:var(--teal)"></span> RAG Pipeline</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 1: Job Choice & Justification -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-header-text">
+          <h2>Job Choice &amp; Justification</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Not directly graded &mdash; sets up all criteria</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        A Legal Assistant helps lawyers find connected or similar past cases for new filings. The KB consists of logs from past search sessions &mdash; what was searched, what was found, and how useful the results were. This is fundamentally a <strong>search strategy assistance</strong> task, not a legal reasoning task. The RAG system helps surface proven search patterns from experienced searchers.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Your customization must be plausible and specific &mdash; "Legal Assistant" needs a concrete task description tied to case search, not just a job title.</li>
+          <li>Explicitly state <em>which</em> Job # from the assignment you chose and why case search logs make RAG more compelling.</li>
+          <li>Graders reward clarity here: a crisp one-paragraph justification signals a student who understands the assignment structure.</li>
+        </ul>
+      </div>
+
+      <div class="callout strategy">Job #1 is "Legal Assistant" &mdash; finding related cases from past search session logs. This is a natural RAG fit: the KB is text-heavy, well-structured (case_type, jurisdiction, search_terms), and the task is retrieving proven search patterns rather than providing legal opinions. You can demonstrate clear retrieval-to-answer mappings.</div>
+
+      <details class="arena-details">
+        <summary>Context: What makes this job strong for RAG?</summary>
+        <div class="detail-body">
+          <p>A legal assistant's search log KB is exceptionally RAG-friendly:</p>
+          <ul>
+            <li>Structured metadata (<code>case_type</code>, <code>jurisdiction</code>, <code>search_terms_used</code>, <code>success_rating</code>)</li>
+            <li>Clear query-to-document mapping (new case &rarr; similar past search sessions)</li>
+            <li>Measurable success metrics (<code>success_rating</code> on past searches)</li>
+            <li>Pattern-matchable search strategies across case types</li>
+            <li>Rich searcher notes explaining why certain approaches worked</li>
+          </ul>
+          <p>The critical distinction: your system helps with <strong>search strategy</strong>, not legal advice. This clean boundary makes the scope manageable and the evaluation crisp.</p>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 1
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: 2&ndash;3 paragraphs. (a) Job #1 chosen, (b) task description: finding related cases from search logs, (c) why this makes RAG compelling given the structured nature of the KB and the retrieval-to-answer clarity.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 2: GenAI Capability Assessment -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-header-text">
+          <h2>GenAI Capability Assessment</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Feeds into Criteria 1&ndash;4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        The legal assistant's core task is helping lawyers find related cases &mdash; not interpreting law. Think of it as a search librarian, not a legal advisor. This scoping directly affects which sub-tasks GenAI can handle.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q1</strong> (Fully/Mostly/Partly/Hardly): Pick one level and justify it with a task decomposition &mdash; not just an assertion.</li>
+          <li><strong>Q2</strong> (Can vs. Can't table): Be specific and symmetric &mdash; every "can" should have a paired "limitation." Avoid vague entries like "GenAI can help lawyers."</li>
+          <li>The table is a key grading artifact; make it substantive (4&ndash;6 rows minimum).</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q1: How much can GenAI help a Legal Assistant?</summary>
+        <div class="detail-body">
+          <p>Choose your level and justify it by decomposing the legal assistant's tasks:</p>
+          <table class="arena-table">
+            <thead><tr><th>Sub-Task</th><th>GenAI Capability</th><th>Rationale</th></tr></thead>
+            <tbody>
+              <tr><td>Suggesting search terms for a new case type</td><td style="color:var(--teal-dark); font-weight:500;">High (85%+)</td><td>RAG retrieves past successful search terms for similar case types</td></tr>
+              <tr><td>Identifying relevant past search sessions</td><td style="color:var(--teal-dark); font-weight:500;">High (90%+)</td><td>Semantic search over search logs by case_type and jurisdiction</td></tr>
+              <tr><td>Recommending jurisdiction-specific search strategies</td><td style="color:var(--sand); font-weight:500;">Medium (65%)</td><td>Depends on KB coverage of specific jurisdictions</td></tr>
+              <tr><td>Providing legal opinions on case merits</td><td style="color:var(--copper); font-weight:500;">Low (5%)</td><td>Completely outside scope &mdash; this is legal reasoning, not search</td></tr>
+              <tr><td>Comparing search approaches across case types</td><td style="color:var(--teal-dark); font-weight:500;">High (80%)</td><td>Cross-referencing multiple search log entries</td></tr>
+            </tbody>
+          </table>
+          <div class="callout golden">For a Legal Assistant focused on case search, <strong>"Mostly (80%+)"</strong> is defensible. Most tasks are search-pattern retrieval from structured logs. Legal reasoning and advice remain human-only.</div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Q2: Can vs. Can't Table (scaffold provided)</summary>
+        <div class="detail-body">
+          <p>Your two-column analysis specific to legal search context:</p>
+          <table class="arena-table">
+            <thead><tr><th style="width:50%">GenAI <em>Can</em> Do</th><th>GenAI <em>Cannot</em> Do</th></tr></thead>
+            <tbody>
+              <tr><td>Retrieve successful search terms from past sessions for similar case types</td><td>Provide legal opinions on whether cases are actually relevant to a filing</td></tr>
+              <tr><td>Match a new case to past search sessions by case_type and jurisdiction</td><td>Assess the legal strength or weakness of a case argument</td></tr>
+              <tr><td>Surface patterns in what made past searches successful (high success_rating)</td><td>Guarantee that found cases are still good law (not overruled)</td></tr>
+              <tr><td>Suggest alternative search phrases based on searcher_notes from similar sessions</td><td>Replace the judgment of an experienced legal researcher on search strategy</td></tr>
+              <tr><td>Cross-reference search strategies across multiple jurisdictions</td><td>Maintain attorney-client privilege boundaries when processing search logs</td></tr>
+              <tr><td>Rank past search approaches by their success_rating scores</td><td>Understand the procedural context that makes certain case citations appropriate</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 2 (Q1 + Q2)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) State your Q1 choice with 2&ndash;3 sentence justification referencing the task decomposition above. (b) Your completed Can/Can't table with 5&ndash;7 rows specific to the legal search context. Aim for 0.5&ndash;1 page.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 3: Knowledge Base Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-header-text">
+          <h2>Knowledge Base Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 1</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        The KB for a legal search assistant is built from <strong>logs of past search sessions</strong> &mdash; structured records of what lawyers searched for, what they found, and how useful those results were. Think of it as an institutional memory of search expertise.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Describe the <strong>schema</strong> of your KB: document types, metadata fields, how documents are chunked and indexed.</li>
+          <li>Provide <strong>3&ndash;5 sample documents</strong> (realistic titles, sizes, formats) &mdash; for a legal assistant, these are specific search session logs, not generic documents.</li>
+          <li>Include <strong>3&ndash;5 sample queries</strong> that a lawyer would actually type, paired with which KB documents would retrieve.</li>
+          <li>Graders check: Is the KB specific enough to be believable? Would retrieval actually work on this corpus?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>KB Schema &mdash; Search Session Log Design</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Field</th><th>Type</th><th>Example Value</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>log_id</code></td><td>string</td><td>sess_2024_0342</td><td>Unique session identifier</td></tr>
+              <tr><td><code>case_type</code></td><td>enum</td><td>breach_of_contract</td><td>Filter by practice area</td></tr>
+              <tr><td><code>jurisdiction</code></td><td>string</td><td>California, 9th Circuit</td><td>Jurisdictional filtering</td></tr>
+              <tr><td><code>search_terms_used</code></td><td>string[]</td><td>["breach of contract", "software licensing", "SaaS agreement"]</td><td>Core retrieval target</td></tr>
+              <tr><td><code>cases_found</code></td><td>object[]</td><td>[{name: "Oracle v. Google", citation: "593 U.S. 1"}]</td><td>Proven results</td></tr>
+              <tr><td><code>success_rating</code></td><td>int (1&ndash;5)</td><td>4</td><td>Filter for high-quality patterns</td></tr>
+              <tr><td><code>searcher_notes</code></td><td>text</td><td>"Start broad with contract type, then narrow by industry..."</td><td>Strategy narrative</td></tr>
+              <tr><td><code>date_searched</code></td><td>date</td><td>2024-03-15</td><td>Recency filter</td></tr>
+              <tr><td><code>filing_context</code></td><td>string</td><td>motion_to_dismiss</td><td>What the search was for</td></tr>
+              <tr><td><code>chunk_text</code></td><td>text</td><td>[embedded text for semantic search]</td><td>Retrieved passage</td></tr>
+              <tr><td><code>embedding</code></td><td>float[1536]</td><td>[0.021, -0.034, ...]</td><td>Semantic search vector</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">Chunk strategy: Each search session log becomes 1&ndash;3 chunks. The <code>searcher_notes</code> field is the primary retrieval target (rich narrative). <code>cases_found</code> are indexed as structured metadata for filtering.</p>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Documents (5 realistic examples)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Doc 1 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "Breach of Contract &mdash; Software Licensing (California)"<br>
+            <strong>Format:</strong> Structured log, 2 pages, success_rating 4/5<br>
+            <strong>KB Role:</strong> Searcher found 8 relevant cases including Oracle v. Google; notes recommend starting broad with contract type then narrowing by industry
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 2 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "IP Dispute &mdash; Patent Infringement (Federal, CAFC)"<br>
+            <strong>Format:</strong> Structured log, 3 pages, success_rating 5/5<br>
+            <strong>KB Role:</strong> Comprehensive patent search strategy; highest-rated session in the corpus for IP practice area
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 3 &mdash; Jurisdiction Index</div>
+            <strong>Title:</strong> "California State Courts &mdash; Practice Area Coverage Map"<br>
+            <strong>Format:</strong> Reference document, 1 page<br>
+            <strong>KB Role:</strong> Maps which case types have strong precedent in California; used to pre-filter sessions by jurisdictional match quality
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 4 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "Employment Discrimination &mdash; Wrongful Termination (New York)"<br>
+            <strong>Format:</strong> Structured log, 2 pages, success_rating 3/5<br>
+            <strong>KB Role:</strong> Notes highlight challenges finding recent precedent; useful as a cautionary example for the jurisdiction
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 5 &mdash; Search Strategy Guide</div>
+            <strong>Title:</strong> "Best Practices for Multi-Jurisdiction Case Research"<br>
+            <strong>Format:</strong> Internal guide, 5 pages<br>
+            <strong>KB Role:</strong> General search methodology; retrieved for broad strategy questions across case types
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Queries &amp; Retrieval Targets</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Sample Query</th><th>Retrieved Doc(s)</th><th>Expected Response Type</th></tr></thead>
+            <tbody>
+              <tr><td>"Find cases similar to a breach of contract involving software licensing in California"</td><td>Session logs for CA breach of contract, Doc 1</td><td>Search terms + found cases + strategy notes</td></tr>
+              <tr><td>"What search terms work for patent infringement in federal courts?"</td><td>Doc 2 (patent search log), Doc 5 (strategy guide)</td><td>Ranked search terms with success ratings</td></tr>
+              <tr><td>"How do successful searchers approach employment discrimination cases?"</td><td>Doc 4, similar employment session logs</td><td>Pattern analysis of search strategies</td></tr>
+              <tr><td>"Which jurisdictions have the most precedent for SaaS contract disputes?"</td><td>Doc 3 (jurisdiction index), multiple session logs</td><td>Jurisdiction comparison with case counts</td></tr>
+              <tr><td>"What cases did other attorneys find when researching motion to dismiss for breach?"</td><td>Session logs filtered by filing_context=motion_to_dismiss</td><td>Citation list with strategy notes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 3 (Criterion 1, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) KB schema table with your chosen metadata fields, (b) 4&ndash;5 sample search session documents with realistic details, (c) 4&ndash;5 sample queries with retrieval mappings. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 1</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 4: Build Approach -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-header-text">
+          <h2>Build Approach &mdash; Why RAG?</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Q3 &mdash; Frames Criterion 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Case law databases update continuously as new decisions are filed. Search strategies evolve as new cases set precedent. A static model would become outdated within weeks of new rulings.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q3</strong> asks you to compare at least 3 approaches: from-scratch training, fine-tuning, pure prompting, and RAG. You must argue <em>why RAG wins</em> for your specific job.</li>
+          <li>Use concrete reasons tied to your KB &mdash; e.g., "new cases filed weekly make the tuning stale fast" is stronger than "RAG is flexible."</li>
+          <li>A comparison table earns clear marks for structure.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q3: Approach Comparison Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Approach</th><th>Feasibility for Legal KB</th><th>Key Limitation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Train from Scratch</strong></td><td style="color:var(--copper);">Not feasible</td><td>KB is ~500 search session logs. No justification for training a model from scratch on this tiny corpus.</td></tr>
+              <tr><td><strong>Fine-Tuning</strong></td><td style="color:var(--sand);">Partially feasible</td><td>Could fine-tune on search logs, but new cases filed weekly make the tuning stale fast. Re-tuning on each update is expensive and slow.</td></tr>
+              <tr><td><strong>Pure Prompting</strong></td><td style="color:var(--sand);">Partially feasible</td><td>Context window can hold a few search logs at a time, but can't scale to hundreds of sessions. Loses the ability to filter by jurisdiction or case_type.</td></tr>
+              <tr><td><strong>RAG (chosen)</strong></td><td style="color:var(--teal-dark); font-weight:600;">Optimal</td><td>Dynamically retrieves relevant search sessions at query time. New logs added by re-indexing only. Metadata filtering enables jurisdiction-specific retrieval. Full citation provenance to source sessions.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout strategy">For the legal assistant context, the killer argument for RAG is <strong>metadata-filtered retrieval</strong>: lawyers need results filtered by jurisdiction, case_type, and success_rating &mdash; capabilities that pure prompting and fine-tuning simply cannot provide. RAG's vector store metadata filters make this natural.</div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 4 (Q3)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) Your Q3 comparison table with legal-domain-specific reasoning, (b) 2&ndash;3 paragraph argument for why RAG is the right choice, citing freshness of case law, metadata filtering needs, and citation traceability. Aim for 0.5&ndash;0.75 pages.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 5: RAG Architecture Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-header-text">
+          <h2>RAG Architecture Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 2</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal search has a unique requirement: <strong>precision matters more than recall</strong>. A lawyer needs the <em>right</em> cases, not all vaguely related cases. This shapes our retrieval strategy toward hybrid search (BM25 + dense) and re-ranking.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q4</strong> requires a full RAG pipeline description: ingestion, chunking, embedding, vector store, retrieval, augmentation, generation, and output.</li>
+          <li>Name your chosen tools/models at each stage (e.g., "OpenAI text-embedding-3-small for embeddings, Pinecone for vector store").</li>
+          <li>Include your <strong>evaluation methodology</strong>: how will you measure if the RAG system is working? Mention at least 2 metrics.</li>
+          <li>A flow diagram or numbered pipeline steps earns clarity marks.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q4: Full RAG Pipeline &mdash; 8-Stage Architecture</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 1 &mdash; Document Ingestion</h4>
+            <p style="font-size:13.5px; margin:0;">Source formats: text logs (structured JSON/CSV), PDF case briefs, internal strategy guides (DOCX). Tools: custom JSON parser for session logs, <code>pypdf2</code> for PDF guides, <code>python-docx</code> for DOCX. Output: structured text with metadata.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 2 &mdash; Legal-Aware Chunking</h4>
+            <p style="font-size:13.5px; margin:0;">Strategy: session logs chunked as whole entries (1&ndash;3 chunks per session, ~300&ndash;500 tokens). Strategy guides chunked by section heading. <code>searcher_notes</code> kept as atomic chunks (never split mid-strategy). Rationale: search strategies lose meaning when split across chunks.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 3 &mdash; Embedding</h4>
+            <p style="font-size:13.5px; margin:0;">Model: <code>text-embedding-3-small</code> (OpenAI, 1536 dimensions). Each chunk embedded. Cost: ~$0.02/million tokens. Legal terminology captured well by general-purpose embeddings since search logs use natural language.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 4 &mdash; Vector Store</h4>
+            <p style="font-size:13.5px; margin:0;">Platform: Pinecone (or Chroma for local). Index: cosine similarity. Metadata filters: <code>case_type</code>, <code>jurisdiction</code>, <code>success_rating</code>, <code>filing_context</code>, <code>date_searched</code>. Namespace per practice area for scoped retrieval.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 5 &mdash; Hybrid Retrieval (BM25 + Dense)</h4>
+            <p style="font-size:13.5px; margin:0;">Query embedded with same model. Hybrid search: BM25 for exact legal terms (case names, statutes) + dense for semantic similarity. Top-k=8 from each, merged and deduplicated. Rationale: legal search terms are precise (statute numbers, case names) where keyword matching outperforms pure semantic search.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 6 &mdash; Context Augmentation</h4>
+            <p style="font-size:13.5px; margin:0;">Retrieved chunks formatted with source metadata: <code>[Source: Session sess_2024_0342, Case Type: breach_of_contract, Jurisdiction: CA, Success: 4/5]</code>. System prompt instructs model to cite session IDs. Total context budget: ~4,000 tokens.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 7 &mdash; Generation</h4>
+            <p style="font-size:13.5px; margin:0;">LLM: <code>gpt-4o</code> via Azure. Temperature: 0.2 (factual retrieval task). Max tokens: 600. Model instructed to suggest search strategies based on retrieved sessions, cite source sessions, and refuse legal advice requests.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 8 &mdash; Output &amp; Evaluation</h4>
+            <p style="font-size:13.5px; margin:0;">Response includes session citations. Evaluation: (a) <strong>Faithfulness</strong> &mdash; do suggested search terms match retrieved session logs? (b) <strong>Relevance</strong> &mdash; does the response address the specific case type and jurisdiction? (c) <strong>Usefulness</strong> &mdash; would a lawyer find the suggested search strategy actionable? Tools: manual evaluation with practicing attorneys + automated RAGAS metrics.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 5 (Criterion 2, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) Your 8-stage pipeline with specific tool choices, (b) a simple flow diagram (optional but recommended), (c) evaluation methodology with at least 2 metrics. Aim for 1.5&ndash;2 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 2</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 6: Prompts & RAG Enhancements -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-header-text">
+          <h2>Prompts &amp; RAG Enhancements</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 3</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        The system prompt must draw a sharp line: you help with <strong>search strategy</strong>, not <strong>legal advice</strong>. This distinction is both an ethical guardrail and a practical scope limiter that keeps the RAG system focused.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Provide your actual <strong>system prompt</strong> (verbatim, in a code block) &mdash; it must be legal-search-specific, not generic.</li>
+          <li>Include 1&ndash;2 <strong>few-shot examples</strong> showing the exact input/output format &mdash; one success case and one legal advice refusal.</li>
+          <li>Describe at least 2 <strong>RAG optimization strategies</strong> tied to the legal domain (e.g., jurisdiction pre-filtering, success-weighted re-ranking).</li>
+          <li>Graders reward specificity: the legal advice boundary must be explicitly enforced in the prompt, not assumed.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>System Prompt (Reference Version)</summary>
+        <div class="detail-body">
+          <div class="code-block"><span class="comment"># System Prompt: Legal Case Search Assistant</span>
+
+You are a legal research search assistant that helps lawyers find related cases by leveraging past search session logs.
+
+<span class="keyword">Your role:</span>
+- Help lawyers develop search strategies for finding related cases, based on ONLY the retrieved search session logs provided below.
+- Always cite the source session ID for every recommendation (format: [Source: Session sess_XXXX_XXXX]).
+- Suggest search terms, case names, and search strategies that were successful in similar past searches.
+- If the retrieved context does not contain relevant search sessions, say: "I don't have matching search session logs for this case type/jurisdiction. Consider consulting your firm's research librarian."
+
+<span class="keyword">Critical boundary:</span>
+- You are a SEARCH STRATEGY assistant, NOT a legal advisor.
+- NEVER provide legal opinions, case merit assessments, or filing recommendations.
+- If asked for legal advice, respond: "I can help you find related cases, but legal analysis and advice should come from a qualified attorney. Would you like me to suggest search strategies instead?"
+- Do not assess whether found cases support or undermine a legal argument.
+
+<span class="keyword">Format:</span>
+- Organize suggestions by: (1) Recommended search terms, (2) Similar cases found in past sessions, (3) Strategy notes from experienced searchers.
+- Include the success_rating from source sessions so lawyers can prioritize proven strategies.
+- Keep responses under 500 words unless the query requires multi-jurisdiction comparison.
+
+<span class="keyword">Context passages will be injected below by the system.</span></div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Few-Shot Examples (2 pairs)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Few-Shot Example 1 &mdash; Successful Search Strategy</div>
+            <strong>Query:</strong> "I need to find cases related to a breach of contract involving a SaaS agreement in California."<br><br>
+            <strong>Expected Response:</strong> "Based on past search sessions for similar cases, here are recommended strategies: <strong>Search Terms:</strong> 'breach of contract SaaS', 'software licensing agreement breach California', 'cloud services contract dispute' [Source: Session sess_2024_0342, Success: 4/5]. <strong>Similar Cases Found:</strong> Past searchers found <em>Oracle v. Google</em> (593 U.S. 1) and <em>Versata Software v. SAP</em> relevant for software contract disputes [Source: Session sess_2024_0342]. <strong>Strategy Notes:</strong> 'Start with broad contract terms, then narrow by industry (software/SaaS) and state. California has strong precedent in tech contract disputes.' [Source: Session sess_2024_0342, searcher_notes]."
+          </div>
+          <div class="example-block" style="margin-top:10px;">
+            <div class="ex-label">Few-Shot Example 2 &mdash; Legal Advice Refusal</div>
+            <strong>Query:</strong> "Should I file this case in federal or state court?"<br><br>
+            <strong>Expected Response:</strong> "I can help you find related cases, but legal analysis and advice &mdash; including jurisdictional filing decisions &mdash; should come from a qualified attorney. Would you like me to suggest search strategies for finding cases that were filed in different jurisdictions for similar case types instead?"
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>RAG Optimization Strategies</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Strategy 1: Jurisdiction Pre-Filtering</h4>
+            <p style="font-size:13.5px; margin:0;">Before embedding the query, detect jurisdiction mentions (state names, circuit numbers, "federal") and apply a metadata filter to narrow retrieval to matching sessions. Prevents California searches from returning New York results where legal standards differ significantly.</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 2: Legal Term Expansion</h4>
+            <p style="font-size:13.5px; margin:0;">Use a lightweight LLM call to expand legal search queries with related terms. "breach of contract" &rarr; also search "contract violation", "material breach", "anticipatory breach". Legal terminology has many synonyms that pure embedding similarity might miss.</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 3: Success-Weighted Re-Ranking</h4>
+            <p style="font-size:13.5px; margin:0;">After initial retrieval, boost chunks from sessions with <code>success_rating &ge; 4</code>. A search strategy that worked (high rating) is more valuable than one that didn't. Weight formula: <code>score &times; (0.5 + 0.1 &times; success_rating)</code>.</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 6 (Criterion 3, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) Your verbatim system prompt in a code block with the legal advice boundary explicitly stated, (b) 2 few-shot examples showing a successful search strategy response and a legal advice refusal, (c) 2&ndash;3 RAG optimization strategies with rationale. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 3</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 7: Limitations & Risks -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-header-text">
+          <h2>Limitations &amp; Risks</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 4</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal technology carries unique risks around liability, confidentiality, and professional ethics. Even a "search assistance" tool operates in a heavily regulated domain where errors have serious consequences.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Cover <strong>4 risk categories</strong>: TCO/cost, latency, quality/hallucination, and domain-specific risks.</li>
+          <li>Each limitation needs a paired <strong>mitigation strategy</strong> &mdash; not just a problem list.</li>
+          <li>Domain-specific risks for legal: liability if search suggestions lead to missed cases, attorney-client privilege in search logs, case law currency, jurisdictional accuracy, hallucinated citations.</li>
+          <li>Be specific about consequences: "hallucinated case citation" in a legal brief could result in court sanctions.</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Risk Matrix &mdash; Legal Domain Reference Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Risk Category</th><th>Specific Risk</th><th>Severity</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Cost (TCO)</strong></td>
+                <td>API costs with high query volume: 500 queries/day at ~$0.01 = $150/month</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>Cache frequent jurisdiction-specific queries; use smaller model for term expansion; set per-user rate limits</td>
+              </tr>
+              <tr>
+                <td><strong>Latency</strong></td>
+                <td>Hybrid retrieval (BM25 + dense) + re-ranking adds 3&ndash;6 seconds per query</td>
+                <td style="color:var(--olive);">Low&ndash;Medium</td>
+                <td>Pre-compute BM25 indices; stream generation tokens; async re-ranking</td>
+              </tr>
+              <tr>
+                <td><strong>Hallucinated Citations</strong></td>
+                <td>LLM fabricates a case citation (e.g., "Johnson v. Smith, 2019") that doesn't exist &mdash; citing this in a legal brief could result in court sanctions</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Strict system prompt: cite only from retrieved session logs; validate all case names against known <code>cases_found</code> in KB; flag any generation containing unretrieved citations</td>
+              </tr>
+              <tr>
+                <td><strong>Case Law Currency</strong></td>
+                <td>Past search sessions may reference cases that have been overruled or modified since the search was conducted</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Add a <code>last_verified</code> date to KB entries; system prompt includes disclaimer to verify via Shepard's or KeyCite; quarterly KB review cycle</td>
+              </tr>
+              <tr>
+                <td><strong>Attorney-Client Privilege</strong></td>
+                <td>Search session logs may contain details about client matters, case strategy, or privileged communications</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Anonymize all client-identifying information before KB ingestion; restrict access by practice group; implement role-based access controls; legal review of anonymization process</td>
+              </tr>
+              <tr>
+                <td><strong>Jurisdictional Accuracy</strong></td>
+                <td>System might suggest search strategies from one jurisdiction for a case in another, where laws differ significantly</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>Jurisdiction metadata filtering at retrieval time; system prompt requires stating jurisdiction for every recommendation; warn user when cross-jurisdiction results are returned</td>
+              </tr>
+              <tr>
+                <td><strong>Over-Reliance</strong></td>
+                <td>Lawyers may trust search suggestions without independent verification, missing important cases not in the KB</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>System prompt includes disclaimer that suggestions may not be comprehensive; display KB coverage metrics per practice area and jurisdiction</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 7 (Criterion 4, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) Your limitations table with 5&ndash;7 rows covering TCO, latency, quality, and legal-specific risks (privilege, hallucinated citations, case currency), (b) 2&ndash;3 paragraph narrative on the most critical risk (hallucinated citations) and how you'd address it. Aim for 1.0&ndash;1.5 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 4</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 8: Hands-On Tryout -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-header-text">
+          <h2>Hands-On Tryout</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 5</span>
+            <span class="marks-badge">5 marks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        For the tryout, you'll simulate the legal search assistant by pasting your system prompt and sample search session logs into ChatGPT. Test three scenarios: a successful case search, an out-of-scope legal advice request, and a multi-jurisdiction comparison.
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>This criterion is worth 20% and is the most commonly underweighted. Even a basic ChatGPT conversation counts &mdash; do not skip it.</li>
+          <li>Show <strong>at least 3 interactions</strong>: one successful case search, one legal advice refusal, and one synthesis across sessions.</li>
+          <li>Include screenshots or pasted conversation logs. Annotate them: explain what worked, what didn't, and what you'd improve.</li>
+          <li>The legal advice refusal test is unique to Job #1 &mdash; make sure your system prompt boundary is clearly demonstrated.</li>
+        </ul>
+      </div>
+
+      <div class="callout warning">Do not attempt a full production RAG deployment for this assignment. A ChatGPT session where you paste your system prompt + sample search session excerpts is fully sufficient. The point is demonstrating the interaction pattern, not engineering perfection.</div>
+
+      <details class="arena-details" open>
+        <summary>Suggested Tryout Protocol</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Step 1: Prepare mini-KB context</h4>
+            <p style="font-size:13.5px; margin:0;">Copy 2&ndash;3 search session log excerpts (150&ndash;200 words each) from your sample documents. Include session IDs, search terms, cases found, and searcher notes.</p>
+          </div>
+          <div class="card">
+            <h4>Step 2: Open ChatGPT or Azure OpenAI</h4>
+            <p style="font-size:13.5px; margin:0;">Start a new conversation. Paste your system prompt first, then the context passages, then pose your queries.</p>
+          </div>
+          <div class="card">
+            <h4>Step 3: Run 3 test interactions</h4>
+            <ul style="font-size:13.5px;">
+              <li><strong>Test A (Success):</strong> "Find cases similar to a breach of contract in California involving software licensing" &rarr; Should retrieve relevant search logs, suggest search terms, cite session IDs.</li>
+              <li><strong>Test B (Boundary &mdash; Legal Advice Refusal):</strong> "Should I file this case in federal or state court?" &rarr; Should gracefully refuse: "I can help with search strategies, but filing decisions are legal advice..."</li>
+              <li><strong>Test C (Synthesis):</strong> "Compare how successful searchers found precedent for IP disputes vs. contract disputes" &rarr; Should cross-reference multiple search logs and compare strategies.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Step 4: Screenshot and annotate</h4>
+            <p style="font-size:13.5px; margin:0;">Take screenshots of all 3 conversations. In your write-up, briefly annotate each: what did the model do well? What did it get wrong? What would you fix in v2?</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 8 (Criterion 5, 5 marks)
+        </div>
+        <div class="your-work-placeholder">
+          [ Your content will go here as you work through each step ]<br><br>
+          <em>Suggested content: (a) Screenshots or pasted conversation logs of 3 tryout interactions, (b) 2&ndash;3 sentence annotation per interaction (what worked, what failed, what you'd improve), (c) 1-paragraph summary of overall tryout findings. This section uses up to 3 pages of your page budget &mdash; use screenshots efficiently. Aim for 1.5&ndash;3 pages.</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 5</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 marks</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 9: Final Assembly & Page Budget -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-header-text">
+          <h2>Final Assembly &amp; Page Budget</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Submission checklist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>Total page budget: <strong>10 pages maximum</strong> (7 pages content + 3 pages screenshots/code).</li>
+          <li>Content after page 10 is ignored by graders. Trim ruthlessly if needed.</li>
+          <li>Check that each criterion has substantive coverage before submitting &mdash; use this checklist.</li>
+        </ul>
+      </div>
+
+      <h3>Submission Checklist</h3>
+      <ul class="checklist" id="submissionChecklist">
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 1: Job Choice</strong> &mdash; Job #1 stated, Legal Assistant task described, justification written (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q1 Answered</strong> &mdash; level chosen with task decomposition for legal search (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q2 Table</strong> &mdash; Can/Can't with 5+ rows specific to legal search context (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 3: KB Schema</strong> &mdash; Search session log fields, sample docs, sample queries (C1, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 4: Q3 Approach</strong> &mdash; Comparison table with RAG justification for legal domain (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 5: RAG Pipeline</strong> &mdash; 8-stage pipeline with legal-aware chunking, hybrid retrieval (C2, 1.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 6: System Prompt</strong> &mdash; Verbatim prompt with legal advice boundary, 2 few-shot pairs (C3, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 7: Limitations</strong> &mdash; Risk table with legal-specific risks: privilege, hallucinated citations, currency (C4, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 8: Tryout</strong> &mdash; 3 interaction logs: success, legal advice refusal, synthesis (C5, up to 3 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Page count verified</strong> &mdash; Total does not exceed 10 pages (content + screenshots)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Legal advice boundary</strong> &mdash; Verify system prompt clearly distinguishes search assistance from legal advice</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Language check</strong> &mdash; Written in clear English, academic tone, no unexplained jargon</span></li>
+      </ul>
+
+      <h3>Page Budget Estimate</h3>
+      <table class="arena-table">
+        <thead><tr><th>Section</th><th>Recommended Pages</th><th>Your Target</th></tr></thead>
+        <tbody>
+          <tr><td>Job Choice &amp; Q1 + Q2</td><td>1.0</td><td></td></tr>
+          <tr><td>KB Design (C1)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Build Approach Q3</td><td>0.5</td><td></td></tr>
+          <tr><td>RAG Architecture (C2)</td><td>1.5&ndash;2.0</td><td></td></tr>
+          <tr><td>Prompts &amp; Enhancements (C3)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Limitations &amp; Risks (C4)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Hands-On Tryout (C5)</td><td>1.5&ndash;3.0</td><td></td></tr>
+          <tr style="font-weight:600;"><td>Total</td><td>7.5&ndash;11.0</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">If your draft exceeds 10 pages, trim from the architecture section first (keep diagrams, cut prose). The tryout screenshots should stay &mdash; they are evidence for Criterion 5 marks.</div>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          Your Work &mdash; Section 9 (Final Check)
+        </div>
+        <div class="your-work-placeholder">
+          [ Use the checklist above to verify each section is complete before final submission. ]<br><br>
+          <em>No new written content needed here &mdash; this is your assembly and QA checkpoint. Use the floating page budget counter (bottom-right) to track your estimated page count as you write.</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ──────────────────────────────────── -->
+    <footer class="site-footer">
+      <div>Working draft &mdash; DBA Gen AI: Pre-Trained Models (GGU/upGrad Course 8919)</div>
+      <div style="margin-top:6px;">
+        <a href="assignment1.html">Assignment 1 Explainer</a>
+        <a href="#">Back to Top &uarr;</a>
+      </div>
+    </footer>
+
+  </main>
+</div><!-- /.layout -->
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FLOATING PAGE BUDGET -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="page-budget" id="pageBudget">
+  <span class="pb-count" id="pbCount">0</span>
+  <div class="pb-label">of 10 pages</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+/* ── Sidebar active state on scroll ─────────────── */
+const sections = document.querySelectorAll('.wb-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+/* ── Page Budget Counter ─────────────────────────── */
+// Estimated pages based on checkboxes ticked
+const PAGE_WEIGHTS = [0.5, 0.5, 0.5, 1.25, 0.5, 1.75, 1.25, 1.25, 2.5, 0, 0, 0];
+
+function updatePageBudget() {
+  const checkboxes = document.querySelectorAll('#submissionChecklist .check-input');
+  let total = 0;
+  checkboxes.forEach((cb, i) => {
+    if (cb.checked && PAGE_WEIGHTS[i]) total += PAGE_WEIGHTS[i];
+  });
+  total = Math.round(total * 10) / 10;
+  document.getElementById('pbCount').textContent = total.toFixed(1);
+
+  const budget = document.getElementById('pageBudget');
+  budget.classList.remove('warn', 'danger');
+  if (total >= 9) budget.classList.add('danger');
+  else if (total >= 7) budget.classList.add('warn');
+
+  // Update global progress bar
+  const done = [...checkboxes].filter(cb => cb.checked).length;
+  updateGlobalProgress(done, checkboxes.length);
+}
+
+/* ── Global Progress Bar ─────────────────────────── */
+function updateGlobalProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('globalProgressBar').style.width = pct + '%';
+
+  // Count completed sections (rough)
+  const sectDone = Math.round(done * 9 / total);
+  document.getElementById('globalProgressLabel').textContent = sectDone + ' / 9 sections';
+}
+
+/* ── Smooth scroll offset for fixed header ───────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + 20;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ── Init ────────────────────────────────────────── */
+updatePageBudget();
+</script>
+
+</body>
+</html>

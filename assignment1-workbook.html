@@ -7,478 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-/* ── Reset ────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  /* DesignArena warm palette */
-  --white: #ffffff;
-  --cream: #F7F6F5;
-  --cream-dark: #F3F1EF;
-  --cream-darker: #EEEDEA;
-  --warm-gray: #D9D9D9;
-  --warm-gray-dark: #898584;
-  --border: #D9D9D9;
-
-  /* Text */
-  --text-primary: #292C33;
-  --text-secondary: #6B7280;
-  --text-muted: #6A6A6A;
-  --text-light: #F8F7F6;
-
-  /* Earthy accents */
-  --teal: #487265;
-  --teal-light: #DDEFEF;
-  --teal-border: #568788;
-  --teal-dark: #407967;
-  --sage: #A0C3C4;
-  --olive: #AAB788;
-  --gold: #D4C68B;
-  --copper: #BC976A;
-  --bronze: #CAAB84;
-  --sand: #CB9F69;
-
-  /* Layout */
-  --max-w: 820px;
-  --header-h: 55px;
-  --sidebar-w: 220px;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  background: var(--white);
-  color: var(--text-primary);
-  line-height: 1.7;
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── Typography ───────────────────────────────── */
-h1, h2, h3 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-h1 { font-size: 2.4rem; line-height: 1.1; letter-spacing: -0.04em; }
-h2 { font-size: 1.6rem; line-height: 1.25; margin-bottom: .65rem; }
-h3 { font-size: 1.15rem; line-height: 1.3; margin: 1.25rem 0 .4rem; }
-h4 {
-  font-family: 'Inter', sans-serif;
-  font-size: .9rem; font-weight: 600;
-  margin: 1rem 0 .35rem;
-  color: var(--text-primary);
-}
-p { margin-bottom: .65rem; }
-li { margin-bottom: .3rem; }
-ul, ol { padding-left: 1.5rem; }
-a { color: var(--teal); text-decoration: underline; }
-a:hover { color: var(--teal-dark); }
-
-/* ── Layout ───────────────────────────────────── */
-.container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
-
-/* ── Fixed Header ─────────────────────────────── */
-header.site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: var(--header-h); background: var(--white);
-  border-bottom: 1px solid var(--cream-darker);
-  display: flex; align-items: center; justify-content: center;
-}
-.header-inner {
-  width: 100%; max-width: calc(var(--max-w) + var(--sidebar-w) + 40px);
-  padding: 0 18px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.header-brand {
-  display: flex; align-items: baseline; gap: 8px;
-}
-.header-brand .logo {
-  font-family: 'Playfair Display', serif; font-size: 1.1rem;
-  font-weight: 600; color: var(--text-primary); text-decoration: none;
-  letter-spacing: -0.02em;
-}
-.header-brand .byline {
-  font-size: 11px; color: var(--warm-gray-dark);
-}
-.header-actions {
-  display: flex; align-items: center; gap: 12px;
-}
-.header-actions a {
-  font-size: 13px; color: var(--text-secondary); text-decoration: none;
-  padding: 5px 12px; border-radius: 9999px;
-  border: 1px solid var(--border);
-  transition: all .2s;
-}
-.header-actions a:hover { border-color: var(--teal-border); color: var(--teal); }
-
-/* ── Progress Bar ─────────────────────────────── */
-.progress-bar-wrap {
-  position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 190;
-  background: var(--cream-darker); height: 3px;
-}
-.progress-bar-fill {
-  height: 100%; background: var(--teal); width: 0%;
-  transition: width 0.4s ease;
-}
-.progress-label {
-  position: fixed; top: calc(var(--header-h) + 6px); right: 18px;
-  z-index: 190; font-size: 11px; color: var(--text-muted);
-  background: var(--white); padding: 2px 8px; border-radius: 10px;
-  border: 1px solid var(--cream-darker);
-}
-
-/* ── Main Layout with Sidebar ─────────────────── */
-.layout {
-  display: flex;
-  align-items: flex-start;
-  max-width: calc(var(--max-w) + var(--sidebar-w) + 40px);
-  margin: 0 auto;
-  padding: 0 18px;
-  gap: 32px;
-}
-
-/* ── Sidebar Nav ──────────────────────────────── */
-.sidebar {
-  flex-shrink: 0;
-  width: var(--sidebar-w);
-  position: sticky;
-  top: calc(var(--header-h) + 18px);
-  max-height: calc(100vh - var(--header-h) - 36px);
-  overflow-y: auto;
-  padding: 16px 0;
-}
-.sidebar::-webkit-scrollbar { width: 3px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--warm-gray); border-radius: 99px; }
-.sidebar-label {
-  font-size: 10px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--warm-gray-dark);
-  padding: 0 12px; margin-bottom: 8px;
-}
-.sidebar-nav { list-style: none; padding: 0; }
-.sidebar-nav li { margin-bottom: 2px; }
-.sidebar-nav a {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 12px; border-radius: 8px;
-  font-size: 13px; color: var(--text-secondary);
-  text-decoration: none; transition: all .2s;
-  line-height: 1.3;
-}
-.sidebar-nav a:hover { background: var(--cream); color: var(--text-primary); }
-.sidebar-nav a.active { background: var(--teal-light); color: var(--teal-dark); font-weight: 500; }
-.sidebar-nav .sn-badge {
-  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
-  background: var(--cream-darker); display: flex; align-items: center;
-  justify-content: center; font-size: 11px; font-weight: 600;
-  color: var(--text-primary); transition: background .2s;
-}
-.sidebar-nav a.active .sn-badge {
-  background: var(--teal); color: var(--white);
-}
-.sidebar-nav a.done .sn-badge {
-  background: var(--olive); color: var(--white);
-}
-.sidebar-nav a.done .sn-badge::after { content: ''; }
-.sidebar-divider { height: 1px; background: var(--cream-darker); margin: 10px 12px; }
-
-/* ── Main Content ─────────────────────────────── */
-.main-content {
-  flex: 1;
-  min-width: 0;
-  padding-top: calc(var(--header-h) + 28px);
-  padding-bottom: 80px;
-}
-
-/* ── Hero Strip ───────────────────────────────── */
-.hero-strip {
-  background: var(--cream);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px 28px 24px;
-  margin-bottom: 32px;
-}
-.hero-strip h1 { margin-bottom: 8px; }
-.hero-strip .subtitle {
-  font-size: .95rem; color: var(--text-secondary); margin-bottom: 16px;
-}
-.hero-pills {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 12px 5px 8px; border-radius: 40px;
-  font-size: 13px; font-weight: 500;
-  background: var(--white); border: 1px solid var(--border);
-  color: var(--text-primary);
-}
-.pill .dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-}
-
-/* ── Workbook Section ─────────────────────────── */
-.wb-section {
-  margin-bottom: 48px;
-  scroll-margin-top: calc(var(--header-h) + 20px);
-}
-
-/* ── Section Header ───────────────────────────── */
-.section-header {
-  display: flex; align-items: flex-start; gap: 14px;
-  margin-bottom: 16px; padding-bottom: 14px;
-  border-bottom: 1px solid var(--cream-darker);
-}
-.section-num {
-  flex-shrink: 0; width: 38px; height: 38px;
-  background: var(--text-primary); color: var(--text-light);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
-  margin-top: 3px;
-}
-.section-header-text { flex: 1; }
-.section-header-text h2 { margin: 0 0 4px; }
-.section-header-meta {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-}
-.criterion-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 500;
-  background: var(--cream-darker); color: var(--text-secondary);
-  border: 1px solid var(--border);
-}
-.marks-badge {
-  display: inline-block; background: var(--gold); color: var(--text-primary);
-  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 600;
-}
-.ungraded-badge {
-  display: inline-block; background: var(--cream-darker); color: var(--text-muted);
-  padding: 3px 10px; border-radius: 40px; font-size: 12px; font-weight: 500;
-}
-
-/* ── Rubric Reminder ──────────────────────────── */
-.rubric-reminder {
-  background: var(--teal-light);
-  border: 1px solid var(--teal-border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 14px;
-  font-size: 13.5px;
-  line-height: 1.6;
-}
-.rubric-reminder .rubric-label {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .07em; color: var(--teal-dark); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.rubric-reminder .rubric-label::before {
-  content: '';
-  display: inline-block;
-  width: 12px; height: 12px; border-radius: 3px;
-  background: var(--teal); flex-shrink: 0;
-}
-.rubric-reminder ul {
-  margin: 0; padding-left: 1.25rem;
-  color: var(--teal-dark);
-}
-.rubric-reminder li { margin-bottom: .2rem; }
-
-/* ── Your Work Area ───────────────────────────── */
-.your-work {
-  background: var(--cream);
-  border: 1.5px dashed var(--warm-gray);
-  border-radius: 12px;
-  padding: 24px 22px;
-  min-height: 140px;
-  position: relative;
-}
-.your-work-label {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .07em; color: var(--text-muted);
-  margin-bottom: 12px;
-}
-.your-work-label .yw-icon {
-  width: 18px; height: 18px; border-radius: 4px;
-  background: var(--warm-gray); display: flex; align-items: center;
-  justify-content: center; flex-shrink: 0; font-size: 10px;
-}
-.your-work-placeholder {
-  color: var(--text-muted); font-style: italic; font-size: 14px;
-  line-height: 1.6;
-}
-
-/* ── Callouts ─────────────────────────────────── */
-.callout {
-  border-radius: 10px; padding: 14px 16px; margin: 14px 0;
-  font-size: 13.5px; line-height: 1.6;
-  border: 1px solid;
-}
-.callout.strategy {
-  background: var(--teal-light); border-color: var(--teal-border);
-}
-.callout.strategy::before {
-  content: 'Tip  '; font-weight: 700; color: var(--teal-dark);
-}
-.callout.warning {
-  background: #faf6ef; border-color: var(--copper);
-}
-.callout.warning::before {
-  content: 'Watch Out  '; font-weight: 700; color: var(--copper);
-}
-.callout.golden {
-  background: #faf8f0; border-color: var(--gold);
-}
-.callout.golden::before {
-  content: 'Key Decision  '; font-weight: 700; color: var(--sand);
-}
-
-/* ── Cards ────────────────────────────────────── */
-.card {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: 12px; padding: 18px;
-  margin-bottom: 10px;
-  transition: border-color .2s;
-}
-.card:hover { border-color: var(--teal-border); }
-.card h4 { margin-top: 0; }
-
-/* ── Table ────────────────────────────────────── */
-.arena-table {
-  width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px;
-}
-.arena-table th {
-  text-align: left; padding: 9px 11px; font-weight: 500;
-  color: var(--text-secondary); font-size: 12px;
-  border-bottom: 1px solid var(--border); background: var(--cream);
-}
-.arena-table td {
-  padding: 9px 11px; border-bottom: 1px solid var(--cream-darker);
-  vertical-align: top;
-}
-.arena-table tr:last-child td { border-bottom: none; }
-
-/* ── Arena Details / Summary ──────────────────── */
-details.arena-details {
-  border: 1px solid var(--border); border-radius: 10px;
-  margin-bottom: 8px; background: var(--white);
-  transition: border-color .2s;
-}
-details.arena-details:hover { border-color: var(--teal-border); }
-details.arena-details[open] { border-color: var(--teal-border); }
-details.arena-details > summary {
-  padding: 12px 16px; cursor: pointer; font-weight: 500;
-  font-size: 14px; list-style: none;
-  display: flex; align-items: center; gap: 8px;
-}
-details.arena-details > summary::before {
-  content: '\25B6'; font-size: .6rem; color: var(--teal);
-  transition: transform .2s;
-}
-details.arena-details[open] > summary::before { transform: rotate(90deg); }
-details.arena-details > summary::-webkit-details-marker { display: none; }
-details.arena-details > .detail-body { padding: 0 16px 16px; }
-
-/* ── Code Block ───────────────────────────────── */
-.code-block {
-  background: var(--text-primary); color: var(--cream);
-  padding: 14px 16px; border-radius: 10px;
-  font-family: 'Fira Code', 'Consolas', monospace;
-  font-size: 12.5px; line-height: 1.6; overflow-x: auto;
-  margin: 10px 0; white-space: pre-wrap; word-break: break-word;
-}
-.code-block .comment { color: var(--warm-gray-dark); }
-.code-block .keyword { color: var(--sage); }
-.code-block .string { color: var(--olive); }
-
-/* ── Example Block ────────────────────────────── */
-.example-block {
-  background: var(--cream-dark); border-radius: 10px;
-  padding: 14px 16px; margin: 10px 0; font-size: 13.5px;
-  border-left: 3px solid var(--bronze);
-}
-.example-block .ex-label {
-  font-size: 11px; font-weight: 700; color: var(--sand);
-  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px;
-}
-
-/* ── Checklist ────────────────────────────────── */
-.checklist { list-style: none; padding: 0; margin: 12px 0; }
-.checklist li {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 4px; font-size: 13.5px;
-  border-bottom: 1px solid var(--cream-darker);
-}
-.checklist li:last-child { border-bottom: none; }
-.check-input {
-  flex-shrink: 0; width: 17px; height: 17px; margin-top: 3px;
-  accent-color: var(--teal); cursor: pointer;
-}
-
-/* ── Progress Indicator Block ─────────────────── */
-.progress-block {
-  display: flex; align-items: center; gap: 10px;
-  margin-top: 10px; font-size: 12.5px; color: var(--text-secondary);
-}
-.progress-block .pb-bar-wrap {
-  flex: 1; height: 6px; background: var(--cream-darker);
-  border-radius: 99px; overflow: hidden;
-}
-.progress-block .pb-bar { height: 100%; background: var(--gold); border-radius: 99px; }
-
-/* ── Floating Page Budget ─────────────────────── */
-.page-budget {
-  position: fixed; bottom: 24px; right: 24px; z-index: 300;
-  background: var(--text-primary); color: var(--text-light);
-  border-radius: 12px; padding: 12px 16px;
-  font-size: 12px; text-align: center; min-width: 100px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.18);
-  transition: background .3s;
-}
-.page-budget.warn { background: var(--copper); }
-.page-budget.danger { background: #b05050; }
-.page-budget .pb-count {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem; font-weight: 600; line-height: 1;
-  margin-bottom: 3px; display: block;
-}
-.page-budget .pb-label { color: rgba(255,255,255,.7); font-size: 10.5px; }
-
-/* ── Footer ───────────────────────────────────── */
-footer.site-footer {
-  padding: 28px 0 24px;
-  text-align: center; font-size: 13px; color: var(--text-muted);
-  border-top: 1px solid var(--cream-darker);
-  margin-top: 16px;
-}
-footer.site-footer a {
-  color: var(--text-muted); text-decoration: none; margin: 0 8px;
-}
-footer.site-footer a:hover { text-decoration: underline; }
-
-/* ── Responsive ───────────────────────────────── */
-@media (max-width: 860px) {
-  .sidebar { display: none; }
-  .layout { padding: 0 14px; }
-}
-@media (max-width: 640px) {
-  h1 { font-size: 1.8rem; }
-  h2 { font-size: 1.3rem; }
-  .layout { padding: 0 12px; }
-  .arena-table { font-size: 12px; }
-  .arena-table th, .arena-table td { padding: 7px 8px; }
-  .page-budget { bottom: 14px; right: 14px; }
-}
-
-/* ── Print ────────────────────────────────────── */
-@media print {
-  header.site-header, .sidebar, .page-budget, .progress-bar-wrap, .progress-label { display: none; }
-  .main-content { padding-top: 12px; }
-  .layout { display: block; padding: 0 16px; }
-  details.arena-details[open] > .detail-body { display: block !important; }
-}
-</style>
+<link rel="stylesheet" href="workbook-shared.css">
 </head>
 <body>
 
@@ -596,9 +125,10 @@ footer.site-footer a:hover { text-decoration: underline; }
           Your Work &mdash; Section 1
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: 2&ndash;3 paragraphs. (a) State Job #5 chosen, (b) describe your customization to "DBA Gen AI Professor" with specifics about the student population and teaching context, (c) explain why this customization makes the RAG use case stronger than the base job.</em>
-        </div>
+<h4>Job #5: Secondary School Teacher → DBA Gen AI Professor</h4>
+<p><strong>Customization:</strong> The original job is "Secondary School Teacher — Prepare how to teach a new lesson." We customize this to a DBA (Doctor of Business Administration) program professor who teaches Generative AI. The core task — preparing lesson content — maps directly, but the domain shifts to postgraduate AI education.</p>
+<p><strong>Why this job benefits from GenAI:</strong> A Gen AI professor must stay current with a rapidly evolving field (new papers weekly), synthesize across dozens of research papers and textbooks, and tailor explanations to business doctoral students who need practical applications. A RAG-based assistant can index the course knowledge base, retrieve relevant materials on demand, and generate pedagogically structured responses — dramatically reducing lesson preparation time while ensuring coverage of source materials.</p>
+</div>
       </div>
     </section>
 
@@ -667,9 +197,23 @@ footer.site-footer a:hover { text-decoration: underline; }
           Your Work &mdash; Section 2 (Q1 + Q2)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) State your Q1 choice with 2&ndash;3 sentence justification referencing your task decomposition above. (b) Your completed Can/Can't table with 5&ndash;7 rows specific to the professor context. Aim for 0.5&ndash;1 page.</em>
-        </div>
+<h4>Q1: Task Decomposition</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Sub-task</th><th>GenAI Can Help?</th><th>How</th></tr></thead>
+<tbody>
+<tr><td>Find relevant course materials for a topic</td><td>Yes</td><td>Semantic search over embedded lecture notes and papers</td></tr>
+<tr><td>Explain a concept at the right level</td><td>Yes</td><td>RAG retrieval + LLM generation with professor persona</td></tr>
+<tr><td>Create quiz questions</td><td>Yes</td><td>Quiz-questions mode generates varied difficulty levels</td></tr>
+<tr><td>Design a teaching plan</td><td>Yes</td><td>Teaching-plan mode structures objectives, activities, assessments</td></tr>
+<tr><td>Grade student submissions</td><td>Partially</td><td>Can assess factual accuracy but cannot evaluate original thinking</td></tr>
+<tr><td>Manage classroom dynamics</td><td>No</td><td>Requires real-time human judgment and emotional intelligence</td></tr>
+<tr><td>Provide pastoral care</td><td>No</td><td>Requires empathy, trust, and professional counseling skills</td></tr>
+</tbody>
+</table>
+<h4>Q2: Can / Cannot Analysis</h4>
+<p><strong>GenAI CAN:</strong> Retrieve, synthesize, explain, quiz, plan — any task that involves processing the existing knowledge base and generating structured text output.</p>
+<p><strong>GenAI CANNOT:</strong> Replace human judgment in grading originality, manage interpersonal dynamics, provide emotional support, or make ethical decisions about student welfare. The professor remains essential for these irreplaceable human functions.</p>
+</div>
       </div>
     </section>
 
@@ -778,9 +322,24 @@ footer.site-footer a:hover { text-decoration: underline; }
           Your Work &mdash; Section 3 (Criterion 1, 5 marks)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) KB schema table with your chosen metadata fields, (b) 4&ndash;5 sample documents with realistic details, (c) 4&ndash;5 sample queries with retrieval mappings. Aim for 1.0&ndash;1.5 pages.</em>
-        </div>
+<h4>Knowledge Base Schema</h4>
+<p>The KB contains <strong>1,260 embedded chunks</strong> from <strong>13 source documents</strong> across 4 source types:</p>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Source Type</th><th>Count</th><th>Format</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Lecture Notes</td><td>6 files → 1,136 chunks</td><td>Markdown</td><td>Session_01_24_Jan_2026.md — Gen AI Overview</td></tr>
+<tr><td>Slide Decks</td><td>6 files → 110 chunks</td><td>PDF</td><td>S02 — RNN to Transformers</td></tr>
+<tr><td>Assignment Specs</td><td>1 file → 14 chunks</td><td>Markdown</td><td>Assignment 1 spec with rubrics</td></tr>
+<tr><td>Research Papers</td><td>0 (planned)</td><td>PDF</td><td>Attention Is All You Need (future addition)</td></tr>
+</tbody>
+</table>
+<h4>Chunking Strategy</h4>
+<p><strong>Markdown documents:</strong> Heading-aware splitting. Split on H1-H3 headings first, then by paragraph if section exceeds 800 characters, then by sentence boundary. Each chunk inherits its parent heading for context.</p>
+<p><strong>PDF documents:</strong> Sliding window — 800-character chunks with 150-character overlap, snapping to sentence boundaries (last ". " before window end). Prevents mid-word splits.</p>
+<p><strong>Context injection:</strong> Each chunk is prefixed with <code>[Source: type:filename | Title]</code> before embedding, ensuring the vector captures source context.</p>
+<h4>Sample Query → Retrieved Chunks</h4>
+<p>Query: <em>"What is attention in transformers?"</em> → Top 3 results: Session 3 (score 0.76), Session 4 (score 0.76), Session 2 (score 0.75) — all from lecture notes covering the transformer architecture.</p>
+</div>
       </div>
 
       <div class="progress-block">
@@ -835,9 +394,18 @@ footer.site-footer a:hover { text-decoration: underline; }
           Your Work &mdash; Section 4 (Q3)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) Your Q3 comparison table with professor-specific reasoning, (b) 2&ndash;3 paragraph argument for why RAG is the right choice for this knowledge domain, citing cost, latency, freshness, and accuracy. Aim for 0.5&ndash;0.75 pages.</em>
-        </div>
+<h4>Q3: Why RAG over alternatives?</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Approach</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td><strong>Build from scratch</strong></td><td>Full control</td><td>Years of work, no existing LLM capabilities</td><td>Impractical</td></tr>
+<tr><td><strong>Fine-tune a model</strong></td><td>Domain-specific behavior</td><td>Expensive ($1K+ GPU time), needs 10K+ examples, stale after training</td><td>Overkill for 13 docs</td></tr>
+<tr><td><strong>Prompt engineering only</strong></td><td>Zero infrastructure</td><td>Limited to context window (~128K tokens), no persistent KB</td><td>Doesn't scale beyond a few docs</td></tr>
+<tr><td><strong>RAG (Retrieval-Augmented Generation)</strong></td><td>Uses existing LLM, adds domain knowledge via retrieval, easily updated</td><td>Retrieval quality depends on chunking/embedding, adds latency</td><td><strong>Best fit ✓</strong></td></tr>
+</tbody>
+</table>
+<p><strong>Rationale:</strong> RAG is ideal because: (1) the KB is small enough for a local vector store, (2) course materials change each semester (just re-ingest), (3) citations trace answers back to source documents, and (4) no fine-tuning budget is needed.</p>
+</div>
       </div>
     </section>
 
@@ -860,7 +428,7 @@ footer.site-footer a:hover { text-decoration: underline; }
         <div class="rubric-label">Rubric Reminder</div>
         <ul>
           <li><strong>Q4</strong> requires a full RAG pipeline description: ingestion, chunking, embedding, vector store, retrieval, augmentation, generation, and output.</li>
-          <li>Name your chosen tools/models at each stage (e.g., "OpenAI text-embedding-3-small for embeddings, Pinecone for vector store").</li>
+          <li>Name your chosen tools/models at each stage (e.g., "Google Gemini gemini-embedding-001 for embeddings, JSON cosine-similarity store (fallback) for vector store").</li>
           <li>Include your <strong>evaluation methodology</strong>: how will you measure if the RAG system is working? Mention at least 2 metrics.</li>
           <li>A flow diagram or numbered pipeline steps earns clarity marks.</li>
         </ul>
@@ -875,15 +443,15 @@ footer.site-footer a:hover { text-decoration: underline; }
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 2 &mdash; Chunking</h4>
-            <p style="font-size:13.5px; margin:0;">Strategy: recursive character splitter, 500-token chunks, 50-token overlap. Papers chunked by paragraph boundary. FAQ chunked as individual Q&amp;A pairs. Rationale: 500 tokens fits well within gpt-4o context while providing enough context per chunk.</p>
+            <p style="font-size:13.5px; margin:0;">Strategy: recursive character splitter, 800-character chunks, 150-character overlap. Papers chunked by paragraph boundary. FAQ chunked as individual Q&amp;A pairs. Rationale: 500 tokens fits well within gemini-2.0-flash context while providing enough context per chunk.</p>
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 3 &mdash; Embedding</h4>
-            <p style="font-size:13.5px; margin:0;">Model: <code>text-embedding-3-small</code> (OpenAI, 1536 dimensions). Each chunk embedded via OpenAI API. Cost: ~$0.02 per million tokens. Rationale: strong semantic retrieval quality, low cost for a ~500-document KB.</p>
+            <p style="font-size:13.5px; margin:0;">Model: <code>gemini-embedding-001</code> (Google Gemini, 3072 dimensions). Each chunk embedded via Google Gemini API. Cost: free tier (up to 1,500 RPD). Rationale: strong semantic retrieval quality, low cost for a ~500-document KB.</p>
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 4 &mdash; Vector Store</h4>
-            <p style="font-size:13.5px; margin:0;">Platform: Pinecone (or FAISS for local). Index: cosine similarity. Metadata filters enabled for <code>doc_type</code>, <code>year</code>, <code>course_relevance</code>. Namespace per course module for scoped retrieval.</p>
+            <p style="font-size:13.5px; margin:0;">Platform: JSON cosine-similarity store (fallback) (or FAISS for local). Index: cosine similarity. Metadata filters enabled for <code>doc_type</code>, <code>year</code>, <code>course_relevance</code>. Namespace per course module for scoped retrieval.</p>
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 5 &mdash; Query Processing &amp; Retrieval</h4>
@@ -895,7 +463,7 @@ footer.site-footer a:hover { text-decoration: underline; }
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 7 &mdash; Generation</h4>
-            <p style="font-size:13.5px; margin:0;">LLM: <code>gpt-4o</code> via Azure OpenAI. Temperature: 0.2 (factual task). Max tokens: 600. Model instructed to answer from context only and flag if KB is insufficient.</p>
+            <p style="font-size:13.5px; margin:0;">LLM: <code>gemini-2.0-flash</code> via Google AI Studio. Temperature: 0.2 (factual task). Max tokens: 600. Model instructed to answer from context only and flag if KB is insufficient.</p>
           </div>
           <div class="card">
             <h4 style="margin-top:0; color:var(--teal-dark);">Stage 8 &mdash; Output &amp; Evaluation</h4>
@@ -910,9 +478,34 @@ footer.site-footer a:hover { text-decoration: underline; }
           Your Work &mdash; Section 5 (Criterion 2, 5 marks)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) Your 8-stage pipeline with specific tool choices, (b) a simple flow diagram (optional but recommended &mdash; can be ASCII or described), (c) evaluation methodology with at least 2 metrics. Aim for 1.5&ndash;2 pages.</em>
-        </div>
+<h4>8-Stage RAG Pipeline (Actual Implementation)</h4>
+<ol style="font-size:13.5px; line-height:1.8;">
+<li><strong>Document Loading:</strong> <code>loader.ts</code> reads markdown (Bun.file().text()) and PDFs (pdf-parse with Buffer.from(arrayBuffer)). Extracts metadata: session number, title, source type.</li>
+<li><strong>Chunking:</strong> <code>chunker.ts</code> — markdown-aware splitting for lecture notes (heading → paragraph → sentence hierarchy); sliding window (800/150) for PDFs. Context prefix injected.</li>
+<li><strong>Embedding:</strong> <code>embedder.ts</code> — Gemini <code>gemini-embedding-001</code> (3072-dim vectors). Batched 20/batch with 2s rate-limit delays. taskType: RETRIEVAL_DOCUMENT for chunks, RETRIEVAL_QUERY for queries. Retry with exponential backoff (1s, 2s, 4s).</li>
+<li><strong>Storage:</strong> <code>fallback.ts</code> — JSON-persisted in-memory store with cosine similarity. 78MB store file (1,260 chunks × 3072 floats). Loads on server startup.</li>
+<li><strong>Query Embedding:</strong> User query embedded with taskType=RETRIEVAL_QUERY via same Gemini model.</li>
+<li><strong>Retrieval:</strong> <code>retriever.ts</code> — 2× oversampling (fetch 16, return 8). MMR-lite diversity reranking: penalize same-document results (−30%) and over-represented source types (−15% if ≥3 from same type).</li>
+<li><strong>Generation:</strong> <code>generator.ts</code> — Gemini <code>gemini-2.0-flash</code> (temp=0.4, max 2048 tokens). DBA Professor persona. 5 modes (explain, teaching-plan, quiz-questions, connect, research-angle). Relevance gate at score &lt; 0.70 returns clean refusal.</li>
+<li><strong>Response Assembly:</strong> Extract [N] citations from generated text, match to retrieved sources. Estimate confidence from top-3 retrieval scores.</li>
+</ol>
+<h4>Architecture Diagram</h4>
+<pre style="font-size:12px; background:#f8f6f0; padding:16px; border-radius:8px; overflow-x:auto;">
+User Query → [Embed Query] → [Vector Search (cosine sim)] → [MMR Rerank]
+                                        ↑                         ↓
+                              Fallback JSON Store          Top-8 Results
+                              (1,260 chunks, 3072-dim)          ↓
+                                                     [Relevance Gate ≥0.70]
+                                                           ↓         ↓
+                                                      On-topic    Off-topic
+                                                         ↓           ↓
+                                                   [Gemini Gen]  [Refusal]
+                                                         ↓
+                                                   [Citation Extract]
+                                                         ↓
+                                                  Answer + Sources + Confidence
+</pre>
+</div>
       </div>
 
       <div class="progress-block">
@@ -1010,9 +603,37 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
           Your Work &mdash; Section 6 (Criterion 3, 5 marks)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) Your verbatim system prompt in a code block, (b) 2 few-shot examples showing exact input/output format, (c) 2&ndash;3 RAG optimization strategies with rationale. Aim for 1.0&ndash;1.5 pages.</em>
-        </div>
+<h4>System Prompt (Actual)</h4>
+<pre style="font-size:12px; background:#f8f6f0; padding:16px; border-radius:8px; white-space:pre-wrap;">You are the DBA Gen AI Professor, an experienced academic who teaches Generative AI concepts to doctoral business administration students.
+
+When answering, ALWAYS:
+1. Use the provided knowledge base context as your primary source
+2. Cite specific sources using [N] notation
+3. If the knowledge base doesn't contain sufficient information, say so honestly
+4. Reference specific session numbers (e.g., "In Session 2, we covered...")
+5. When comparing models, create structured comparisons
+
+CRITICAL — Out-of-scope queries:
+If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state this is outside your domain, do NOT cite sources, and suggest a related topic.</pre>
+<h4>Mode-Specific Prompts</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Mode</th><th>Prompt Enhancement</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td>explain</td><td>Require formal definitions and mathematical formulations</td><td>Technical depth for attention formula, self-attention</td></tr>
+<tr><td>teaching-plan</td><td>Structure: objectives, concepts, activities, questions, assessment</td><td>Actionable lesson plans</td></tr>
+<tr><td>quiz-questions</td><td>5 questions at 3 difficulty levels (2 recall, 2 application, 1 analysis)</td><td>Bloom's taxonomy alignment</td></tr>
+<tr><td>connect</td><td>Require 3+ diverse sources, comparative analysis</td><td>Cross-document synthesis</td></tr>
+<tr><td>research-angle</td><td>Suggest DBA-level research gaps and methodologies</td><td>Doctoral-appropriate research directions</td></tr>
+</tbody>
+</table>
+<h4>Optimization Strategies</h4>
+<ul style="font-size:13.5px;">
+<li><strong>Context truncation:</strong> If total prompt exceeds 30K characters, drop lowest-scored results until under limit.</li>
+<li><strong>Relevance gate:</strong> Queries with best retrieval score &lt; 0.70 get a clean refusal (no LLM call, saving cost).</li>
+<li><strong>Confidence calibration:</strong> Confidence = avg(top-3 scores) + citation boost. Below 0.30 → penalized to 0.20 max.</li>
+<li><strong>Few-shot via context prefix:</strong> Each chunk includes [Source: type | title] prefix, teaching the LLM citation format implicitly.</li>
+</ul>
+</div>
       </div>
 
       <div class="progress-block">
@@ -1055,7 +676,7 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
             <tbody>
               <tr>
                 <td><strong>Cost (TCO)</strong></td>
-                <td>OpenAI API costs scale with student volume; 1,000 queries/day at ~$0.01/query = $300/month</td>
+                <td>Google Gemini API costs scale with student volume; 1,000 queries/day at free tier for prototype; ~$0.001/query at scale</td>
                 <td style="color:var(--sand);">Medium</td>
                 <td>Cache frequent queries (Redis); use smaller embedding model for re-index; set per-student rate limits</td>
               </tr>
@@ -1093,7 +714,7 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
                 <td><strong>Data Privacy</strong></td>
                 <td>Student Q&amp;A logs may contain identifiable information (FERPA-relevant)</td>
                 <td style="color:var(--copper);">High</td>
-                <td>Anonymize all student data before KB ingestion; no student-specific query logging without consent; host on institution-approved Azure tenant</td>
+                <td>Anonymize all student data before KB ingestion; no student-specific query logging without consent; host on institution-approved Google Cloud project</td>
               </tr>
             </tbody>
           </table>
@@ -1106,9 +727,28 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
           Your Work &mdash; Section 7 (Criterion 4, 5 marks)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) Your limitations table with 5&ndash;7 rows covering TCO, latency, quality, and domain-specific risks, (b) 2&ndash;3 paragraph narrative on the most critical risk and how you'd address it. Aim for 1.0&ndash;1.5 pages.</em>
-        </div>
+<h4>Limitation &amp; Risk Matrix</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Risk</th><th>Severity</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+<tbody>
+<tr><td><strong>Hallucination:</strong> LLM generates claims not in KB</td><td>High</td><td>Medium</td><td>System prompt restricts to context-only; citation extraction verifies grounding; relevance gate blocks off-topic</td></tr>
+<tr><td><strong>Stale knowledge:</strong> Course materials updated but KB not re-ingested</td><td>Medium</td><td>High</td><td>One-command re-ingestion (<code>bun run ingest</code>); cache invalidation deletes old embeddings</td></tr>
+<tr><td><strong>Embedding model changes:</strong> Google deprecates gemini-embedding-001</td><td>Medium</td><td>Medium</td><td>Already experienced: text-embedding-004 was deprecated. Config-driven model name allows quick swap</td></tr>
+<tr><td><strong>Rate limiting:</strong> Free tier caps at 1,500 requests/day</td><td>Low</td><td>Medium</td><td>Batch embedding with delays; query caching for repeated questions; paid tier available</td></tr>
+<tr><td><strong>Chunking quality:</strong> PDF text extraction misses formatting</td><td>Medium</td><td>High</td><td>Sliding window with sentence-boundary snapping; context prefix adds document metadata</td></tr>
+<tr><td><strong>Bias in generation:</strong> LLM may favor certain perspectives</td><td>Medium</td><td>Low</td><td>MMR diversity reranking ensures multiple source types; professor persona encourages balanced views</td></tr>
+<tr><td><strong>Privacy:</strong> Student queries could contain sensitive information</td><td>High</td><td>Low</td><td>No query logging; local vector store (no cloud DB); host on institution-approved Google Cloud project</td></tr>
+<tr><td><strong>Over-reliance:</strong> Professor delegates too much to assistant</td><td>Medium</td><td>Medium</td><td>Tool positioned as "preparation aid," not replacement; human reviews all generated content before use</td></tr>
+</tbody>
+</table>
+<h4>Known Limitations of Current Implementation</h4>
+<ul style="font-size:13.5px;">
+<li>No research papers in KB yet (only course materials) — limits depth on specific paper questions</li>
+<li>Single-turn only — no conversation memory across queries</li>
+<li>No user authentication — suitable for single-professor prototype only</li>
+<li>78MB store file loads into memory on startup — needs optimization for larger KBs</li>
+</ul>
+</div>
       </div>
 
       <div class="progress-block">
@@ -1139,7 +779,7 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
           <li>This criterion is worth 20% and is the most commonly underweighted. Even a basic ChatGPT conversation counts &mdash; do not skip it.</li>
           <li>Show <strong>at least 3 interactions</strong>: one successful retrieval, one failure case, and one showing your system prompt in action.</li>
           <li>Include screenshots or pasted conversation logs. Annotate them: explain what worked, what didn't, and what you'd improve.</li>
-          <li>If you use Azure OpenAI rather than ChatGPT, note the endpoint and model used.</li>
+          <li>If you use Google AI Studio rather than ChatGPT, note the endpoint and model used.</li>
         </ul>
       </div>
 
@@ -1153,7 +793,7 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
             <p style="font-size:13.5px; margin:0;">Copy 2&ndash;3 passages from your sample documents (150&ndash;200 words each). This simulates what your retriever would return.</p>
           </div>
           <div class="card">
-            <h4>Step 2: Open ChatGPT or Azure OpenAI</h4>
+            <h4>Step 2: Open ChatGPT or Google AI Studio</h4>
             <p style="font-size:13.5px; margin:0;">Start a new conversation. Paste your system prompt first, then paste the context passages, then pose your student queries.</p>
           </div>
           <div class="card">
@@ -1177,9 +817,36 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
           Your Work &mdash; Section 8 (Criterion 5, 5 marks)
         </div>
         <div class="your-work-placeholder">
-          [ Your content will go here as we work through each step ]<br><br>
-          <em>Suggested content: (a) Screenshots or pasted conversation logs of 3 tryout interactions, (b) 2&ndash;3 sentence annotation per interaction (what worked, what failed, what you'd improve), (c) 1-paragraph summary of overall tryout findings. This section uses up to 3 pages of your page budget &mdash; use screenshots efficiently. Aim for 1.5&ndash;3 pages.</em>
-        </div>
+<h4>Test A: Successful Concept Retrieval</h4>
+<p><strong>Query:</strong> "What is the attention mechanism in transformers?"<br>
+<strong>Mode:</strong> Explain<br>
+<strong>Result:</strong> Detailed explanation covering self-attention, multi-head attention, Q/K/V vectors. Cited 8 sources across Sessions 2, 3, and 4. Confidence: 0.86. Included mathematical formulation reference.</p>
+<p><em>[Screenshot of web UI showing query and response would go here]</em></p>
+
+<h4>Test B: Out-of-Scope Graceful Refusal</h4>
+<p><strong>Query:</strong> "What is the current stock price of Apple?"<br>
+<strong>Mode:</strong> Explain<br>
+<strong>Result:</strong> Clean refusal: "This question appears to be outside the scope of our Gen AI course materials." Zero citations, confidence: 0.19. Suggested related Gen AI topics instead.</p>
+<p><em>[Screenshot of refusal response would go here]</em></p>
+
+<h4>Test C: Multi-Document Synthesis</h4>
+<p><strong>Query:</strong> "Compare BERT, GPT, and T5 training approaches"<br>
+<strong>Mode:</strong> Connect<br>
+<strong>Result:</strong> Structured comparison across all three models. Referenced Sessions 2, 3, and 4. Distinguished masked language modeling (BERT) from autoregressive (GPT) and text-to-text (T5). Cited 5 sources from 3 different sessions. Confidence: 0.80.</p>
+<p><em>[Screenshot of comparison response would go here]</em></p>
+
+<h4>Holdout Validation Results</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Scenario</th><th>Score</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Basic Retrieval (attention mechanism)</td><td>70/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Citation Accuracy (BERT MLM)</td><td>85/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Course Administration (session topics)</td><td>85/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Multi-Doc Synthesis (BERT vs GPT vs T5)</td><td>75/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Out-of-Scope (stock price refusal)</td><td>95/100</td><td style="color:green;">PASS</td></tr>
+</tbody>
+</table>
+</div>
       </div>
 
       <div class="progress-block">
@@ -1250,9 +917,20 @@ You are a knowledgeable academic assistant for a DBA-level course on Generative 
           Your Work &mdash; Section 9 (Final Check)
         </div>
         <div class="your-work-placeholder">
-          [ Use the checklist above to verify each section is complete before final submission. ]<br><br>
-          <em>No new written content needed here &mdash; this is your assembly and QA checkpoint. Use the floating page budget counter (bottom-right) to track your estimated page count as you write.</em>
-        </div>
+<h4>Submission Checklist</h4>
+<ul style="font-size:13.5px; line-height:2;">
+<li>&#9745; Job #5 customized to DBA Gen AI Professor</li>
+<li>&#9745; Task decomposition with can/cannot analysis</li>
+<li>&#9745; Knowledge base designed with 1,260 chunks from 13 documents</li>
+<li>&#9745; RAG chosen over fine-tuning/prompting with justification</li>
+<li>&#9745; 8-stage pipeline documented with actual implementation details</li>
+<li>&#9745; System prompt + 5 mode-specific prompts + optimization strategies</li>
+<li>&#9745; Risk matrix with 8 risks and mitigations (Gemini-specific)</li>
+<li>&#9745; 3 test interactions + holdout validation (5/5 passed)</li>
+<li>&#9744; Screenshots of working web UI (to be captured)</li>
+<li>&#9744; Final page count ≤ 10 pages</li>
+</ul>
+</div>
       </div>
     </section>
 
