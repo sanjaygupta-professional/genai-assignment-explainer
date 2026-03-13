@@ -126,8 +126,8 @@
         </div>
         <div class="your-work-placeholder">
 <h4>Job #5: Secondary School Teacher → DBA Gen AI Professor</h4>
-<p><strong>Customization:</strong> The original job is "Secondary School Teacher — Prepare how to teach a new lesson." We customize this to a DBA (Doctor of Business Administration) program professor who teaches Generative AI. The core task — preparing lesson content — maps directly, but the domain shifts to postgraduate AI education.</p>
-<p><strong>Why this job benefits from GenAI:</strong> A Gen AI professor must stay current with a rapidly evolving field (new papers weekly), synthesize across dozens of research papers and textbooks, and tailor explanations to business doctoral students who need practical applications. A RAG-based assistant can index the course knowledge base, retrieve relevant materials on demand, and generate pedagogically structured responses — dramatically reducing lesson preparation time while ensuring coverage of source materials.</p>
+<p><strong>Customization:</strong> The original job is "Secondary School Teacher — Prepare how to teach a new lesson." I adapted this to a DBA (Doctor of Business Administration) professor teaching Generative AI. The underlying task is the same — preparing lesson content — but the domain moves to postgraduate AI education, where the source material is denser and changes faster.</p>
+<p><strong>Why this job benefits from GenAI:</strong> Teaching Gen AI means new papers drop every week, and a single lecture might pull from a dozen sources. Keeping up is genuinely hard. A RAG assistant that indexes the course knowledge base lets me retrieve the right material on demand and get structured draft responses, which cuts prep time significantly. The bigger win, though, is that it cites its sources — so I can trace any claim back to the original paper or lecture note rather than trusting the LLM's memory.</p>
 </div>
       </div>
     </section>
@@ -211,8 +211,8 @@
 </tbody>
 </table>
 <h4>Q2: Can / Cannot Analysis</h4>
-<p><strong>GenAI CAN:</strong> Retrieve, synthesize, explain, quiz, plan — any task that involves processing the existing knowledge base and generating structured text output.</p>
-<p><strong>GenAI CANNOT:</strong> Replace human judgment in grading originality, manage interpersonal dynamics, provide emotional support, or make ethical decisions about student welfare. The professor remains essential for these irreplaceable human functions.</p>
+<p><strong>GenAI CAN:</strong> Anything that boils down to "find the right passage and explain it." Retrieval, summarization, quiz generation, lesson planning — if the answer lives somewhere in the knowledge base, GenAI is fast and reliable at surfacing it.</p>
+<p><strong>GenAI CANNOT:</strong> Judge whether a student's argument is original, read the room when a class discussion goes sideways, or decide if a struggling student needs an extension. These require empathy and professional judgment that no retrieval pipeline can approximate.</p>
 </div>
       </div>
     </section>
@@ -336,7 +336,7 @@
 <h4>Chunking Strategy</h4>
 <p><strong>Markdown documents:</strong> Heading-aware splitting. Split on H1-H3 headings first, then by paragraph if section exceeds 800 characters, then by sentence boundary. Each chunk inherits its parent heading for context.</p>
 <p><strong>PDF documents:</strong> Sliding window — 800-character chunks with 150-character overlap, snapping to sentence boundaries (last ". " before window end). Prevents mid-word splits.</p>
-<p><strong>Context injection:</strong> Each chunk is prefixed with <code>[Source: type:filename | Title]</code> before embedding, ensuring the vector captures source context.</p>
+<p><strong>Context injection:</strong> Each chunk is prefixed with <code>[Source: type:filename | Title]</code> before embedding. This way the vector representation includes source context, not just the raw text.</p>
 <h4>Sample Query → Retrieved Chunks</h4>
 <p>Query: <em>"What is attention in transformers?"</em> → Top 3 results: Session 3 (score 0.76), Session 4 (score 0.76), Session 2 (score 0.75) — all from lecture notes covering the transformer architecture.</p>
 </div>
@@ -404,7 +404,7 @@
 <tr><td><strong>RAG (Retrieval-Augmented Generation)</strong></td><td>Uses existing LLM, adds domain knowledge via retrieval, easily updated</td><td>Retrieval quality depends on chunking/embedding, adds latency</td><td><strong>Best fit ✓</strong></td></tr>
 </tbody>
 </table>
-<p><strong>Rationale:</strong> RAG is ideal because: (1) the KB is small enough for a local vector store, (2) course materials change each semester (just re-ingest), (3) citations trace answers back to source documents, and (4) no fine-tuning budget is needed.</p>
+<p><strong>Rationale:</strong> RAG wins here because the KB is only 13 documents — small enough for a local JSON vector store with no cloud costs. Course materials change each semester, and with RAG I just re-run the ingestion script instead of retraining a model. I also get citations for free, since retrieved chunks carry their source metadata. Fine-tuning would cost real money and go stale within months.</p>
 </div>
       </div>
     </section>
@@ -615,12 +615,13 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <tr><td>research-angle</td><td>Suggest DBA-level research gaps and methodologies</td><td>Doctoral-appropriate research directions</td></tr>
 </tbody>
 </table>
-<h4>Optimization Strategies</h4>
+<h4>Optimization strategies</h4>
+<p style="font-size:13.5px;">I built in four practical optimizations based on issues that came up during testing:</p>
 <ul style="font-size:13.5px;">
-<li><strong>Context truncation:</strong> If total prompt exceeds 30K characters, drop lowest-scored results until under limit.</li>
-<li><strong>Relevance gate:</strong> Queries with best retrieval score &lt; 0.70 get a clean refusal (no LLM call, saving cost).</li>
-<li><strong>Confidence calibration:</strong> Confidence = avg(top-3 scores) + citation boost. Below 0.30 → penalized to 0.20 max.</li>
-<li><strong>Few-shot via context prefix:</strong> Each chunk includes [Source: type | title] prefix, teaching the LLM citation format implicitly.</li>
+<li>If the total prompt exceeds 30K characters, the system drops the lowest-scored results until it fits. This came up with broad queries that pulled too many chunks.</li>
+<li>A relevance gate at score &lt; 0.70 returns a refusal without calling the LLM at all. This saves API cost on off-topic queries and avoids hallucinated answers when the KB has nothing relevant.</li>
+<li>Confidence is calculated as avg(top-3 retrieval scores) with a citation boost. Anything below 0.30 gets capped at 0.20 — this prevents the UI from displaying false confidence on weak retrievals.</li>
+<li>Each chunk includes a [Source: type | title] prefix, which implicitly teaches the LLM the citation format. No few-shot examples needed for citation behavior.</li>
 </ul>
 </div>
       </div>
@@ -730,12 +731,12 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <tr><td><strong>Over-reliance:</strong> Professor delegates too much to assistant</td><td>Medium</td><td>Medium</td><td>Tool positioned as "preparation aid," not replacement; human reviews all generated content before use</td></tr>
 </tbody>
 </table>
-<h4>Known Limitations of Current Implementation</h4>
+<h4>What I'd fix in v2</h4>
 <ul style="font-size:13.5px;">
-<li>No research papers in KB yet (only course materials) — limits depth on specific paper questions</li>
-<li>Single-turn only — no conversation memory across queries</li>
-<li>No user authentication — suitable for single-professor prototype only</li>
-<li>78MB store file loads into memory on startup — needs optimization for larger KBs</li>
+<li>The KB has no research papers yet, just course materials. Asking about a specific paper's methodology returns weak results.</li>
+<li>Each query is stateless — no conversation memory. A student can't say "tell me more about that" because "that" is gone.</li>
+<li>There's no authentication. Right now it's a single-professor prototype; adding students would need login and rate limiting.</li>
+<li>The 78MB vector store loads entirely into memory on startup. Fine for 1,260 chunks, but this won't scale past maybe 10K without switching to a proper vector DB.</li>
 </ul>
 </div>
       </div>
@@ -809,7 +810,7 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <h4>Test A: Successful Concept Retrieval</h4>
 <p><strong>Query:</strong> "What is the attention mechanism in transformers?"<br>
 <strong>Mode:</strong> Explain<br>
-<strong>Result:</strong> Detailed explanation covering self-attention, multi-head attention, Q/K/V vectors. Cited 8 sources across Sessions 2, 3, and 4. Confidence: 0.86. Included mathematical formulation reference.</p>
+<strong>Result:</strong> The system returned a solid explanation covering self-attention, multi-head attention, and Q/K/V vectors. It pulled 8 sources from Sessions 2, 3, and 4, which is exactly where attention is covered in the course. Confidence came back at 0.86. It even included the mathematical formulation from the lecture notes, which I didn't expect from a retrieval-based system.</p>
 <figure style="margin:16px 0;">
 <img src="images/screenshots/02-test-a-attention.png" alt="RAG app response to attention mechanism query — 8 sources cited, confidence 0.86" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
 <figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Detailed explanation of attention mechanisms with 8 cited sources</figcaption>
@@ -818,7 +819,7 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <h4>Test B: Out-of-Scope Graceful Refusal</h4>
 <p><strong>Query:</strong> "What is the current stock price of Apple?"<br>
 <strong>Mode:</strong> Explain<br>
-<strong>Result:</strong> Clean refusal: "This question appears to be outside the scope of our Gen AI course materials." Zero citations, confidence: 0.19. Suggested related Gen AI topics instead.</p>
+<strong>Result:</strong> This is where the relevance gate earned its keep. The system recognized that stock prices have nothing to do with the course KB, returned zero citations, and gave a confidence of just 0.19. The refusal message was clean: "This question appears to be outside the scope of our Gen AI course materials." It also suggested related Gen AI topics the student could ask about instead.</p>
 <figure style="margin:16px 0;">
 <img src="images/screenshots/03-test-b-outofscope.png" alt="RAG app graceful refusal for out-of-scope quantum computing query" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
 <figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Graceful refusal for out-of-scope query with suggested related topics</figcaption>
@@ -827,7 +828,7 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <h4>Test C: Multi-Document Synthesis</h4>
 <p><strong>Query:</strong> "Compare BERT, GPT, and T5 training approaches"<br>
 <strong>Mode:</strong> Connect<br>
-<strong>Result:</strong> Structured comparison across all three models. Referenced Sessions 2, 3, and 4. Distinguished masked language modeling (BERT) from autoregressive (GPT) and text-to-text (T5). Cited 5 sources from 3 different sessions. Confidence: 0.80.</p>
+<strong>Result:</strong> This was the hardest test — it required pulling from three separate sessions and synthesizing them into a coherent comparison. The system distinguished masked language modeling (BERT) from autoregressive (GPT) and text-to-text (T5), citing 5 sources across 3 sessions. Confidence: 0.80. The MMR diversity reranking helped here; without it, the results would have skewed toward whichever session had the most chunks about training.</p>
 <figure style="margin:16px 0;">
 <img src="images/screenshots/04-test-c-synthesis.png" alt="RAG app multi-document synthesis comparing BERT, GPT, and T5" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
 <figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Multi-document synthesis comparing three model architectures</figcaption>
