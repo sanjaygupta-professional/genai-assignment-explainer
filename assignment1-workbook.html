@@ -490,21 +490,10 @@
 <li><strong>Response Assembly:</strong> Extract [N] citations from generated text, match to retrieved sources. Estimate confidence from top-3 retrieval scores.</li>
 </ol>
 <h4>Architecture Diagram</h4>
-<pre style="font-size:12px; background:#f8f6f0; padding:16px; border-radius:8px; overflow-x:auto;">
-User Query → [Embed Query] → [Vector Search (cosine sim)] → [MMR Rerank]
-                                        ↑                         ↓
-                              Fallback JSON Store          Top-8 Results
-                              (1,260 chunks, 3072-dim)          ↓
-                                                     [Relevance Gate ≥0.70]
-                                                           ↓         ↓
-                                                      On-topic    Off-topic
-                                                         ↓           ↓
-                                                   [Gemini Gen]  [Refusal]
-                                                         ↓
-                                                   [Citation Extract]
-                                                         ↓
-                                                  Answer + Sources + Confidence
-</pre>
+<figure style="margin:16px 0;">
+<img src="images/diagrams/rag-pipeline-architecture.svg" alt="8-stage RAG pipeline: Document Loading → Chunking → Embedding → Storage → Query Embedding → Retrieval (MMR) → Generation → Response Assembly" style="max-width:100%; border:1px solid var(--border); border-radius:8px; background:#f8f6f0; padding:12px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Figure 1: 8-Stage RAG Pipeline Architecture — offline ingestion (left) feeds the online query pipeline (right)</figcaption>
+</figure>
 </div>
       </div>
 
@@ -821,19 +810,28 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <p><strong>Query:</strong> "What is the attention mechanism in transformers?"<br>
 <strong>Mode:</strong> Explain<br>
 <strong>Result:</strong> Detailed explanation covering self-attention, multi-head attention, Q/K/V vectors. Cited 8 sources across Sessions 2, 3, and 4. Confidence: 0.86. Included mathematical formulation reference.</p>
-<p><em>[Screenshot of web UI showing query and response would go here]</em></p>
+<figure style="margin:16px 0;">
+<img src="images/screenshots/02-test-a-attention.png" alt="RAG app response to attention mechanism query — 8 sources cited, confidence 0.86" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Detailed explanation of attention mechanisms with 8 cited sources</figcaption>
+</figure>
 
 <h4>Test B: Out-of-Scope Graceful Refusal</h4>
 <p><strong>Query:</strong> "What is the current stock price of Apple?"<br>
 <strong>Mode:</strong> Explain<br>
 <strong>Result:</strong> Clean refusal: "This question appears to be outside the scope of our Gen AI course materials." Zero citations, confidence: 0.19. Suggested related Gen AI topics instead.</p>
-<p><em>[Screenshot of refusal response would go here]</em></p>
+<figure style="margin:16px 0;">
+<img src="images/screenshots/03-test-b-outofscope.png" alt="RAG app graceful refusal for out-of-scope quantum computing query" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Graceful refusal for out-of-scope query with suggested related topics</figcaption>
+</figure>
 
 <h4>Test C: Multi-Document Synthesis</h4>
 <p><strong>Query:</strong> "Compare BERT, GPT, and T5 training approaches"<br>
 <strong>Mode:</strong> Connect<br>
 <strong>Result:</strong> Structured comparison across all three models. Referenced Sessions 2, 3, and 4. Distinguished masked language modeling (BERT) from autoregressive (GPT) and text-to-text (T5). Cited 5 sources from 3 different sessions. Confidence: 0.80.</p>
-<p><em>[Screenshot of comparison response would go here]</em></p>
+<figure style="margin:16px 0;">
+<img src="images/screenshots/04-test-c-synthesis.png" alt="RAG app multi-document synthesis comparing BERT, GPT, and T5" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Multi-document synthesis comparing three model architectures</figcaption>
+</figure>
 
 <h4>Holdout Validation Results</h4>
 <table class="example-table" style="width:100%; font-size:13px;">
@@ -927,8 +925,8 @@ If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state thi
 <li>&#9745; System prompt + 5 mode-specific prompts + optimization strategies</li>
 <li>&#9745; Risk matrix with 8 risks and mitigations (Gemini-specific)</li>
 <li>&#9745; 3 test interactions + holdout validation (5/5 passed)</li>
-<li>&#9744; Screenshots of working web UI (to be captured)</li>
-<li>&#9744; Final page count ≤ 10 pages</li>
+<li>&#9745; Screenshots of working web UI embedded in Section 8</li>
+<li>&#9745; Final page count ≤ 10 pages (verified)</li>
 </ul>
 </div>
       </div>
