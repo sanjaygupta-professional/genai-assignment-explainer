@@ -1,1 +1,6 @@
 .vercel
+rag-pipeline/data/qdrant_db/
+rag-pipeline/data/kuzu_db/
+rag-pipeline/.env
+__pycache__/
+*.pyc
