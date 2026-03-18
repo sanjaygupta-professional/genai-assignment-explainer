@@ -30,8 +30,24 @@ DEMO_QUERIES = [
         ),
     },
     {
-        "label": "3. Hindi multilingual query",
+        "label": "3a. Hindi multilingual query",
         "query": "मेरे बेटे को सेरेब्रल पाल्सी है, उम्र 8 साल। कौन सी सरकारी योजनाएं उपलब्ध हैं?",
+    },
+    {
+        "label": "3b. Hindi query — state + income in Hindi",
+        "query": "हम राजस्थान में रहते हैं, सालाना आय 1.2 लाख है। मेरी बेटी को श्रवण बाधित है, उम्र 7 साल। कौन सी योजनाएं मिल सकती हैं?",
+    },
+    {
+        "label": "3c. Hinglish query (mixed Hindi + English)",
+        "query": "Meri daughter ko autism hai, age 4 years. Koi government scheme hai kya early intervention ke liye?",
+    },
+    {
+        "label": "3d. Hindi query — document requirements",
+        "query": "ADIP योजना के लिए कौन-कौन से documents चाहिए? और कितनी income limit है?",
+    },
+    {
+        "label": "3e. Hindi query — scheme comparison",
+        "query": "निरामय और ADIP योजना में क्या फ़र्क है? दोनों में से कौन सी बेहतर है cerebral palsy के लिए?",
     },
     {
         "label": "4. Out-of-scope query (guardrails test)",

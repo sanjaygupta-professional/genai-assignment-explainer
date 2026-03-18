@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="alternate" hreflang="en" href="rag-infra-playground.html">
-    <link rel="alternate" hreflang="hi" href="hi/rag-infra-playground.html">
-    <title>RAG Infrastructure Explorer</title>
+    <title>RAG Infrastructure Explorer — हिन्दी</title>
+    <link rel="alternate" hreflang="en" href="../rag-infra-playground.html">
+    <link rel="alternate" hreflang="hi" href="rag-infra-playground.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --white: #ffffff;
@@ -42,11 +42,27 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--white);
             color: var(--text-primary);
             overflow-x: hidden;
         }
+
+        /* Language Switcher */
+        .lang-switch {
+          position: fixed; top: 16px; right: 16px;
+          display: flex; gap: 4px; z-index: 200;
+          background: #F7F6F5; border: 1px solid #D9D9D9;
+          border-radius: 40px; padding: 4px;
+        }
+        .lang-switch a {
+          padding: 6px 14px; border-radius: 40px;
+          font-size: 13px; font-weight: 500; text-decoration: none;
+          color: #6B7280; transition: all .2s;
+          font-family: 'Inter', sans-serif;
+        }
+        .lang-switch a.active { background: #487265; color: #fff; }
+        .lang-switch a:hover:not(.active) { color: #292C33; }
 
         /* Header */
         .header {
@@ -72,7 +88,7 @@
         }
 
         .header-nav a {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
@@ -216,7 +232,7 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
         }
 
         select:hover,
@@ -425,7 +441,7 @@
             font-size: 13px;
             font-weight: 500;
             transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
         }
 
         .copy-btn:hover {
@@ -437,7 +453,7 @@
         }
 
         .prompt-output {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
             line-height: 1.7;
             font-size: 14px;
             white-space: pre-wrap;
@@ -507,45 +523,32 @@
                 font-size: 10px;
             }
         }
-        .lang-switch {
-            position: fixed; top: 16px; right: 16px;
-            display: flex; gap: 4px; z-index: 200;
-            background: #F7F6F5; border: 1px solid #D9D9D9;
-            border-radius: 40px; padding: 4px;
-        }
-        .lang-switch a {
-            padding: 6px 14px; border-radius: 40px;
-            font-size: 13px; font-weight: 500; text-decoration: none;
-            color: #6B7280; transition: all .2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .lang-switch a.active { background: #487265; color: #fff; }
-        .lang-switch a:hover:not(.active) { color: #292C33; }
     </style>
 </head>
 <body>
-<div class="lang-switch">
-  <a href="rag-infra-playground.html" class="active">EN</a>
-  <a href="hi/rag-infra-playground.html">हिन्दी</a>
-</div>
+    <div class="lang-switch">
+      <a href="../rag-infra-playground.html">EN</a>
+      <a href="rag-infra-playground.html" class="active">हिन्दी</a>
+    </div>
+
     <header class="header">
         <div class="header-title">RAG Infrastructure Explorer</div>
         <nav class="header-nav">
-            <a href="index.html">Back to Home</a>
+            <a href="../index.html">होम पर वापस जाएँ</a>
         </nav>
     </header>
 
     <div class="container">
         <div class="controls">
-            <h2>Presets</h2>
+            <h2>प्रीसेट</h2>
             <div class="presets">
                 <div class="preset-card" data-preset="minimal">
-                    <div class="preset-title">Minimal (Free)</div>
-                    <div class="preset-desc">Free tier everything</div>
+                    <div class="preset-title">Minimal (फ्री)</div>
+                    <div class="preset-desc">सब कुछ free tier पर</div>
                 </div>
                 <div class="preset-card" data-preset="oci">
                     <div class="preset-title">All OCI</div>
-                    <div class="preset-desc">Self-hosted on Oracle Cloud</div>
+                    <div class="preset-desc">Oracle Cloud पर self-hosted</div>
                 </div>
                 <div class="preset-card" data-preset="hybrid">
                     <div class="preset-title">Production Hybrid</div>
@@ -553,15 +556,15 @@
                 </div>
                 <div class="preset-card" data-preset="budget">
                     <div class="preset-title">Student Budget</div>
-                    <div class="preset-desc">Mix of free + cheap paid</div>
+                    <div class="preset-desc">Free + सस्ते paid का मिश्रण</div>
                 </div>
             </div>
 
-            <h2>1. Frontend & UI</h2>
+            <h2>1. Frontend और UI</h2>
             <div class="control-group">
                 <label class="control-label">
-                    Frontend Host
-                    <span class="tooltip" data-tip="Where your web interface is deployed and served to users">?</span>
+                    Frontend Host (फ्रंटएंड होस्ट)
+                    <span class="tooltip" data-tip="आपका web interface कहाँ deploy और serve होगा">?</span>
                 </label>
                 <select id="frontendHost">
                     <option value="vercel">Vercel</option>
@@ -571,8 +574,8 @@
             </div>
             <div class="control-group">
                 <label class="control-label">
-                    Framework
-                    <span class="tooltip" data-tip="JavaScript framework for building your UI">?</span>
+                    Framework (फ्रेमवर्क)
+                    <span class="tooltip" data-tip="UI बनाने के लिए JavaScript framework">?</span>
                 </label>
                 <select id="framework">
                     <option value="nextjs">Next.js</option>
@@ -584,8 +587,8 @@
             <h2>2. Backend / API Layer</h2>
             <div class="control-group">
                 <label class="control-label">
-                    Backend Host
-                    <span class="tooltip" data-tip="Where your API endpoints and business logic run">?</span>
+                    Backend Host (बैकएंड होस्ट)
+                    <span class="tooltip" data-tip="आपके API endpoints और business logic कहाँ चलेंगे">?</span>
                 </label>
                 <select id="backendHost">
                     <option value="vercel-serverless">Vercel Serverless Functions</option>
@@ -595,8 +598,8 @@
             </div>
             <div class="control-group">
                 <label class="control-label">
-                    API Framework
-                    <span class="tooltip" data-tip="Framework for handling HTTP requests and routing">?</span>
+                    API Framework (API फ्रेमवर्क)
+                    <span class="tooltip" data-tip="HTTP requests और routing handle करने का framework">?</span>
                 </label>
                 <select id="apiFramework">
                     <option value="nextjs-api">Next.js API Routes</option>
@@ -608,19 +611,19 @@
             <h2>3. LangChain Orchestration</h2>
             <div class="control-group">
                 <label class="control-label">
-                    LangChain Runtime
-                    <span class="tooltip" data-tip="Where LangChain code executes - can be co-located with backend or separate">?</span>
+                    LangChain Runtime (लैंगचेन रनटाइम)
+                    <span class="tooltip" data-tip="LangChain code कहाँ execute होगा — backend के साथ या अलग से">?</span>
                 </label>
                 <select id="langchainRuntime">
-                    <option value="backend">Same as Backend</option>
-                    <option value="oci-vm">Separate OCI VM</option>
-                    <option value="langserve">LangServe on Railway</option>
+                    <option value="backend">Backend के साथ</option>
+                    <option value="oci-vm">अलग OCI VM</option>
+                    <option value="langserve">Railway पर LangServe</option>
                 </select>
             </div>
             <div class="control-group">
                 <label class="control-label">
-                    Chain Type
-                    <span class="tooltip" data-tip="LangChain pattern for retrieval and generation">?</span>
+                    Chain Type (चेन टाइप)
+                    <span class="tooltip" data-tip="Retrieval और generation के लिए LangChain pattern">?</span>
                 </label>
                 <select id="chainType">
                     <option value="retrievalqa">RetrievalQA</option>
@@ -629,62 +632,62 @@
                 </select>
             </div>
 
-            <h2>4. Vector Database</h2>
+            <h2>4. Vector Database (वेक्टर डेटाबेस)</h2>
             <div class="control-group">
                 <label class="control-label">
-                    Vector DB
-                    <span class="tooltip" data-tip="Storage and search for document embeddings">?</span>
+                    Vector DB (वेक्टर DB)
+                    <span class="tooltip" data-tip="Document embeddings को store और search करने के लिए">?</span>
                 </label>
                 <select id="vectorDb">
                     <option value="pinecone">Pinecone (managed)</option>
                     <option value="weaviate">Weaviate Cloud</option>
-                    <option value="chroma">Chroma (self-hosted on OCI)</option>
+                    <option value="chroma">Chroma (OCI पर self-hosted)</option>
                     <option value="pgvector">pgvector on OCI PostgreSQL</option>
                     <option value="qdrant">Qdrant Cloud</option>
                 </select>
             </div>
             <div class="control-group">
                 <label class="control-label">
-                    Embedding Model
-                    <span class="tooltip" data-tip="Converts text to vector embeddings">?</span>
+                    Embedding Model (एम्बेडिंग मॉडल)
+                    <span class="tooltip" data-tip="Text को vector embeddings में convert करता है">?</span>
                 </label>
                 <select id="embeddingModel">
                     <option value="openai-embed">OpenAI text-embedding-3-small</option>
                     <option value="cohere">Cohere embed-v3</option>
-                    <option value="hf-selfhosted">HuggingFace (self-hosted on OCI)</option>
+                    <option value="hf-selfhosted">HuggingFace (OCI पर self-hosted)</option>
                 </select>
             </div>
 
             <h2>5. LLM Provider</h2>
             <div class="control-group">
                 <label class="control-label">
-                    LLM
-                    <span class="tooltip" data-tip="Large language model for generating answers">?</span>
+                    LLM (लार्ज लैंग्वेज मॉडल)
+                    <span class="tooltip" data-tip="जवाब generate करने के लिए Large Language Model">?</span>
                 </label>
                 <select id="llm">
                     <option value="openai-gpt4o">OpenAI GPT-4o-mini</option>
                     <option value="anthropic">Anthropic Claude Sonnet</option>
                     <option value="gemini">Google Gemini Flash</option>
-                    <option value="ollama">Self-hosted on OCI (Ollama)</option>
+                    <option value="ollama">OCI पर Self-hosted (Ollama)</option>
                 </select>
             </div>
 
-            <h2>6. Document Storage & Ingestion</h2>
+            <h2>6. Document Storage और Ingestion</h2>
             <div class="control-group">
                 <label class="control-label">
-                    Source Documents
-                    <span class="tooltip" data-tip="Where your original documents are stored">?</span>
+                    Source Documents (सोर्स डॉक्यूमेंट्स)
+                    <span class="tooltip" data-tip="आपके original documents कहाँ stored हैं">?</span>
                 </label>
                 <select id="docStorage">
                     <option value="github-repo">GitHub Repo</option>
                     <option value="oci-object">OCI Object Storage</option>
-                    <option value="oci-filesystem">Local filesystem on OCI VM</option>
+                    <option value="oci-filesystem">OCI VM पर Local filesystem</option>
                 </select>
             </div>
             <div class="control-group">
                 <label class="control-label">
-                    Ingestion Pipeline
-                    <span class="tooltip" data-tip="How documents are processed and loaded into vector DB">?</span>
+                    Ingestion Pipeline (इंजेशन पाइपलाइन)
+                    <span class="tooltip" data-tip="Documents कैसे process होकर vector DB में load होंगे">?</span>
                 </label>
                 <select id="ingestion">
                     <option value="batch-script">LangChain + batch script</option>
@@ -720,7 +723,7 @@
 
             <div class="diagram" id="diagram">
                 <div class="cost-total">
-                    <div class="cost-label">Est. Monthly Cost</div>
+                    <div class="cost-label">अनुमानित मासिक लागत</div>
                     <div class="cost-value" id="totalCost">$0</div>
                 </div>
             </div>
@@ -728,8 +731,8 @@
 
         <div class="prompt-container">
             <div class="prompt-header">
-                <div class="prompt-title">Prompt Output</div>
-                <button class="copy-btn" id="copyBtn">Copy Prompt</button>
+                <div class="prompt-title">Prompt Output (प्रॉम्प्ट आउटपुट)</div>
+                <button class="copy-btn" id="copyBtn">प्रॉम्प्ट कॉपी करें</button>
             </div>
             <div class="prompt-output" id="promptOutput"></div>
         </div>
@@ -945,7 +948,7 @@
                 }
 
                 // User box (special)
-                drawServiceBox(diagram, 'user', { name: 'User', icon: '👤', provider: 'none', cost: 0 },
+                drawServiceBox(diagram, 'user', { name: 'उपयोगकर्ता', icon: '👤', provider: 'none', cost: 0 },
                     'User', layout.user.x, layout.user.y);
 
                 // Frontend
@@ -1062,7 +1065,7 @@
 
                 var cost = document.createElement('div');
                 cost.className = 'service-cost';
-                cost.textContent = service.cost === 0 ? 'Free' : '~$' + service.cost + '/mo';
+                cost.textContent = service.cost === 0 ? 'फ्री' : '~$' + service.cost + '/माह';
 
                 box.appendChild(header);
                 box.appendChild(roleLabel);
@@ -1149,28 +1152,28 @@
                 };
 
                 var ingestionNames = {
-                    'batch-script': 'LangChain Document Loaders with a batch script',
-                    'serverless-trigger': 'Serverless function trigger on document upload',
-                    'manual-ui': 'Manual upload UI with live processing'
+                    'batch-script': 'LangChain Document Loaders के साथ batch script',
+                    'serverless-trigger': 'Document upload पर serverless function trigger',
+                    'manual-ui': 'Manual upload UI जिसमें live processing हो'
                 };
 
                 var totalCost = frontend.cost + backend.cost + langchainService.cost +
                                vectorDb.cost + embedding.cost + llm.cost + storage.cost;
 
-                var costRange = totalCost === 0 ? '$0 (all free tiers)' :
+                var costRange = totalCost === 0 ? '$0 (सब free tiers)' :
                                 '$' + totalCost + '-' + Math.round(totalCost * 1.5);
 
-                var prompt = "I'm building a RAG application for a DBA Gen AI assignment using LangChain. Here's my infrastructure:\n\n" +
-                    'Frontend: ' + frameworkNames[state.framework] + ' deployed on ' + frontend.name + ' ' + (frontend.cost === 0 ? '(free tier)' : '') + '\n' +
-                    'Backend: ' + backend.name + ' with ' + apiNames[state.apiFramework] + '\n' +
-                    'Orchestration: LangChain ' + chainNames[state.chainType] + ' ' + (state.langchainRuntime === 'backend' ? 'running in the backend' : 'on ' + langchainService.name) + '\n' +
+                var prompt = "मैं DBA Gen AI assignment के लिए LangChain का use करके एक RAG application बना रहा/रही हूँ। मेरा infrastructure यह है:\n\n" +
+                    'Frontend: ' + frameworkNames[state.framework] + ', ' + frontend.name + ' पर deployed ' + (frontend.cost === 0 ? '(free tier)' : '') + '\n' +
+                    'Backend: ' + backend.name + ', ' + apiNames[state.apiFramework] + ' के साथ\n' +
+                    'Orchestration: LangChain ' + chainNames[state.chainType] + ' ' + (state.langchainRuntime === 'backend' ? 'backend में चल रहा है' : langchainService.name + ' पर') + '\n' +
                     'Vector DB: ' + vectorDb.name + ' ' + (vectorDb.cost === 0 ? '(free tier)' : '') + '\n' +
                     'Embeddings: ' + embedding.name + '\n' +
-                    'LLM: ' + llm.name + ' ' + (llm.provider === 'external' ? 'via API' : '(self-hosted)') + '\n' +
+                    'LLM: ' + llm.name + ' ' + (llm.provider === 'external' ? 'API के through' : '(self-hosted)') + '\n' +
                     'Document Store: ' + storage.name + '\n' +
                     'Ingestion: ' + ingestionNames[state.ingestion] + '\n\n' +
-                    'Estimated monthly cost: ' + costRange + '\n\n' +
-                    'Please help me implement this architecture step by step, including setup instructions, code examples, and any configuration files needed.';
+                    'अनुमानित मासिक लागत: ' + costRange + '\n\n' +
+                    'कृपया इस architecture को step by step implement करने में मदद करें — setup instructions, code examples, और ज़रूरी configuration files के साथ।';
 
                 output.textContent = prompt;
             }
@@ -1179,10 +1182,10 @@
                 var promptText = document.getElementById('promptOutput').textContent;
                 navigator.clipboard.writeText(promptText).then(function() {
                     var btn = document.getElementById('copyBtn');
-                    btn.textContent = 'Copied!';
+                    btn.textContent = 'कॉपी हो गया!';
                     btn.classList.add('copied');
                     setTimeout(function() {
-                        btn.textContent = 'Copy Prompt';
+                        btn.textContent = 'प्रॉम्प्ट कॉपी करें';
                         btn.classList.remove('copied');
                     }, 2000);
                 });

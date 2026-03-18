@@ -1,23 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Assignment Explainers — Gen AI: Pre-Trained Models</title>
-<link rel="alternate" hreflang="en" href="index.html">
-<link rel="alternate" hreflang="hi" href="hi/index.html">
+<link rel="alternate" hreflang="en" href="../index.html">
+<link rel="alternate" hreflang="hi" href="index.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  background: #ffffff; color: #292C33; line-height: 1.7;
+  font-family: 'Noto Sans Devanagari', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: #ffffff; color: #292C33; line-height: 1.8;
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 48px 18px;
   -webkit-font-smoothing: antialiased;
+}
+.lang-switch {
+  position: fixed; top: 16px; right: 16px;
+  display: flex; gap: 4px; z-index: 100;
+  background: #F7F6F5; border: 1px solid #D9D9D9;
+  border-radius: 40px; padding: 4px;
+}
+.lang-switch a {
+  padding: 6px 14px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  color: #6B7280; transition: all .2s;
+  font-family: 'Inter', sans-serif;
+}
+.lang-switch a.active {
+  background: #487265; color: #fff;
+}
+.lang-switch a:hover:not(.active) {
+  color: #292C33;
 }
 h1 {
   font-family: 'Playfair Display', Georgia, serif;
@@ -26,7 +44,7 @@ h1 {
 }
 .subtitle {
   font-size: 1rem; color: #6B7280; text-align: center;
-  max-width: 480px; margin-bottom: 40px;
+  max-width: 520px; margin-bottom: 40px;
 }
 .cards {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -45,6 +63,7 @@ h1 {
 .card .pill {
   display: inline-block; padding: 4px 12px; border-radius: 40px;
   font-size: 12px; font-weight: 600; margin-bottom: 12px;
+  font-family: 'Inter', sans-serif;
 }
 .card h2 {
   font-family: 'Playfair Display', serif; font-size: 1.35rem;
@@ -54,23 +73,6 @@ h1 {
 .card .arrow {
   display: inline-block; margin-top: 16px; font-size: 14px;
   color: #487265; font-weight: 500;
-}
-.lang-switch {
-  position: fixed; top: 16px; right: 16px;
-  display: flex; gap: 4px; z-index: 100;
-  background: #F7F6F5; border: 1px solid #D9D9D9;
-  border-radius: 40px; padding: 4px;
-}
-.lang-switch a {
-  padding: 6px 14px; border-radius: 40px;
-  font-size: 13px; font-weight: 500; text-decoration: none;
-  color: #6B7280; transition: all .2s;
-}
-.lang-switch a.active {
-  background: #487265; color: #fff;
-}
-.lang-switch a:hover:not(.active) {
-  color: #292C33;
 }
 footer {
   margin-top: 48px; text-align: center;
@@ -85,53 +87,53 @@ footer {
 <body>
 
 <div class="lang-switch">
-  <a href="index.html" class="active">EN</a>
-  <a href="hi/index.html">हिन्दी</a>
+  <a href="../index.html">EN</a>
+  <a href="index.html" class="active">हिन्दी</a>
 </div>
 
 <h1>Assignment Explainers</h1>
-<p class="subtitle">Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919). Interactive guides to help you ace both assignments.</p>
+<p class="subtitle">Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919)। दोनों assignments में अच्छा score करने के लिए interactive guides।</p>
 
 <div class="cards">
   <a href="assignment1.html" class="card">
     <span class="pill" style="background:#A0C3C4; color:#292C33;">Individual</span>
     <h2>Assignment 1</h2>
-    <p>Design a RAG-based GenAI solution for one of 10 jobs. Covers KB design, architecture, prompts, limitations, and hands-on tryout.</p>
-    <span class="arrow">Open Explainer &rarr;</span>
+    <p>10 jobs में से किसी एक के लिए RAG-based GenAI solution design करें। KB design, architecture, prompts, limitations, और hands-on tryout cover किया गया है।</p>
+    <span class="arrow">Explainer खोलें &rarr;</span>
   </a>
   <a href="group-assignment.html" class="card">
     <span class="pill" style="background:#D4C68B; color:#292C33;">Group</span>
     <h2>Group Assignment</h2>
-    <p>Build a Gen AI product from scratch: vision, solution design, product roadmap, ROI analysis, and a 10-slide elevator pitch.</p>
-    <span class="arrow">Open Explainer &rarr;</span>
+    <p>Scratch से एक Gen AI product बनाएं: vision, solution design, product roadmap, ROI analysis, और 10-slide elevator pitch।</p>
+    <span class="arrow">Explainer खोलें &rarr;</span>
   </a>
   <a href="assignment1-workbook.html" class="card">
     <span class="pill" style="background:#487265; color:#F8F7F6;">Workbook</span>
     <h2>Assignment 1 Workbook</h2>
-    <p>Step-by-step working document for Assignment 1. DBA Gen AI Professor (Job #5) &mdash; build your submission section by section.</p>
-    <span class="arrow">Open Workbook &rarr;</span>
+    <p>Assignment 1 के लिए step-by-step working document। DBA Gen AI Professor (Job #5) &mdash; अपना submission section by section बनाएं।</p>
+    <span class="arrow">Workbook खोलें &rarr;</span>
   </a>
   <a href="legal-assistant-workbook.html" class="card">
     <span class="pill" style="background:#487265; color:#F8F7F6;">Workbook</span>
     <h2>Legal Assistant Workbook</h2>
-    <p>Step-by-step working document for Assignment 1. Legal Assistant (Job #1) &mdash; design a RAG-based case search assistant.</p>
-    <span class="arrow">Open Workbook &rarr;</span>
+    <p>Assignment 1 के लिए step-by-step working document। Legal Assistant (Job #1) &mdash; RAG-based case search assistant design करें।</p>
+    <span class="arrow">Workbook खोलें &rarr;</span>
   </a>
   <a href="rag-infra-playground.html" class="card">
     <span class="pill" style="background:#292C33; color:#F8F7F6;">Playground</span>
     <h2>RAG Infrastructure Explorer</h2>
-    <p>Interactive playground to design the physical architecture of your RAG application. Configure services, see deployment diagrams, estimate costs.</p>
-    <span class="arrow">Open Playground &rarr;</span>
+    <p>अपने RAG application की physical architecture design करने के लिए interactive playground। Services configure करें, deployment diagrams देखें, costs estimate करें।</p>
+    <span class="arrow">Playground खोलें &rarr;</span>
   </a>
   <a href="rag-pipeline-story.html" class="card">
     <span class="pill" style="background:#2D6A5A; color:#fff;">Pipeline Story</span>
     <h2>SamarthSchool RAG + KG</h2>
-    <p>The full story of building a hybrid RAG + Knowledge Graph pipeline for disability welfare scheme navigation &mdash; from ideation to working prototype.</p>
-    <span class="arrow">Read the Story &rarr;</span>
+    <p>Disability welfare scheme navigation के लिए hybrid RAG + Knowledge Graph pipeline बनाने की पूरी कहानी &mdash; ideation से working prototype तक।</p>
+    <span class="arrow">कहानी पढ़ें &rarr;</span>
   </a>
 </div>
 
-<footer>Study guide &mdash; not affiliated with GGU or upGrad</footer>
+<footer>Study guide &mdash; GGU या upGrad से affiliated नहीं है</footer>
 
 </body>
 </html>

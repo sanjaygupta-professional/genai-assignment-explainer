@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 1 Workbook — DBA Gen AI Professor</title>
+<link rel="alternate" hreflang="en" href="../assignment1-workbook.html">
+<link rel="alternate" hreflang="hi" href="assignment1-workbook.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../workbook-shared.css">
+<style>
+/* ── Hindi font override ─────────────────────────── */
+body {
+  font-family: 'Noto Sans Devanagari', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+h1, h2, h3, h4, .header-brand .logo, .section-header h2 {
+  font-family: 'Playfair Display', 'Noto Sans Devanagari', Georgia, serif;
+}
+.sidebar-nav a, .sidebar-label, .rubric-label, .ex-label,
+.your-work-label, .callout, .progress-label, .pb-label,
+.ungraded-badge, .criterion-badge, .marks-badge {
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+}
+/* ── Language Switcher ───────────────────────────── */
+.lang-switch {
+  position: fixed; top: 16px; right: 16px;
+  display: flex; gap: 4px; z-index: 200;
+  background: #F7F6F5; border: 1px solid #D9D9D9;
+  border-radius: 40px; padding: 4px;
+}
+.lang-switch a {
+  padding: 6px 14px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  color: #6B7280; transition: all .2s;
+  font-family: 'Inter', sans-serif;
+}
+.lang-switch a.active { background: #487265; color: #fff; }
+.lang-switch a:hover:not(.active) { color: #292C33; }
+</style>
+</head>
+<body>
+
+<div class="lang-switch">
+  <a href="../assignment1-workbook.html">EN</a>
+  <a href="assignment1-workbook.html" class="active">हिन्दी</a>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FIXED HEADER -->
+<!-- ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">Assignment 1 Workbook</a>
+      <span class="byline">DBA Gen AI Professor &bull; Job #5</span>
+    </div>
+    <div class="header-actions">
+      <a href="assignment1.html">&#8592; Explainer पर वापस जाएँ</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress Bar ──────────────────────────────── -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="globalProgressBar"></div>
+</div>
+<div class="progress-label" id="globalProgressLabel">0 / 9 sections</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ── Sidebar ──────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-label">अनुभाग</div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="#s1" data-sec="1"><span class="sn-badge">1</span>Job का चुनाव</a></li>
+      <li><a href="#s2" data-sec="2"><span class="sn-badge">2</span>GenAI क्षमता</a></li>
+      <li><a href="#s3" data-sec="3"><span class="sn-badge">3</span>Knowledge Base</a></li>
+      <li><a href="#s4" data-sec="4"><span class="sn-badge">4</span>Build Approach</a></li>
+      <li><a href="#s5" data-sec="5"><span class="sn-badge">5</span>RAG Architecture</a></li>
+      <li><a href="#s6" data-sec="6"><span class="sn-badge">6</span>Prompts और Enhancements</a></li>
+      <li><a href="#s7" data-sec="7"><span class="sn-badge">7</span>सीमाएँ और जोखिम</a></li>
+      <li><a href="#s8" data-sec="8"><span class="sn-badge">8</span>Hands-On Tryout</a></li>
+      <li><a href="#s9" data-sec="9"><span class="sn-badge">9</span>Final Assembly</a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label" style="margin-top:4px;">अंक</div>
+    <div style="padding: 0 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.7;">
+      <div>C1 KB Design &mdash; <strong>5</strong></div>
+      <div>C2 RAG Architecture &mdash; <strong>5</strong></div>
+      <div>C3 Prompts &mdash; <strong>5</strong></div>
+      <div>C4 सीमाएँ &mdash; <strong>5</strong></div>
+      <div>C5 Tryout &mdash; <strong>5</strong></div>
+      <div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--cream-darker); font-weight:600; color:var(--text-primary);">कुल &mdash; 25</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ── Hero Strip ──────────────────────────────── -->
+    <div class="hero-strip">
+      <h1>DBA Gen AI Professor<br><span style="font-size:1.5rem; color:var(--text-secondary);">Assignment 1 Working Notebook</span></h1>
+      <p class="subtitle">यह आपका working document है जिसमें आप एक academic professor के लिए RAG-based GenAI assistant डिज़ाइन करेंगे। Assignment पर काम करते हुए हर section भरते जाइए।</p>
+      <div class="hero-pills">
+        <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 अंक</span>
+        <span class="pill"><span class="dot" style="background:var(--gold)"></span> अधिकतम 10 पेज</span>
+        <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 Criteria</span>
+        <span class="pill"><span class="dot" style="background:var(--bronze)"></span> Job #5 Customized</span>
+        <span class="pill"><span class="dot" style="background:var(--teal)"></span> RAG Pipeline</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 1: Job Choice & Justification -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-header-text">
+          <h2>Job का चुनाव और तर्क</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">सीधे graded नहीं &mdash; सभी criteria की नींव</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>आपकी customization विश्वसनीय और specific होनी चाहिए &mdash; "DBA Gen AI Professor" के लिए सिर्फ़ job title नहीं, एक ठोस task description चाहिए।</li>
+          <li>स्पष्ट रूप से बताइए कि आपने assignment में से <em>कौन सा</em> Job # चुना और क्यों यह customization base job से बेहतर RAG use case बनाती है।</li>
+          <li>Graders यहाँ clarity को reward करते हैं: एक crisp one-paragraph justification दिखाता है कि student assignment structure को समझता है।</li>
+        </ul>
+      </div>
+
+      <div class="callout strategy">Job #5 है "Secondary School Teacher." इसे "DBA Gen AI Professor" में customize करने से आपको एक richer, ज़्यादा specialized KB मिलता है &mdash; research papers, textbooks, और course materials बिल्कुल वही structured text corpus है जहाँ RAG सबसे अच्छा काम करता है। इससे आप genuine subject-matter authority के साथ लिख सकते हैं।</div>
+
+      <details class="arena-details">
+        <summary>Context: यह customization strong क्यों है?</summary>
+        <div class="detail-body">
+          <p>एक secondary school teacher की KB में general curricula, lesson plans, और textbooks हो सकती हैं। एक <strong>DBA Gen AI Professor</strong> की KB कहीं ज़्यादा rich है:</p>
+          <ul>
+            <li>LLMs, RAG, और AI ethics पर peer-reviewed research papers</li>
+            <li>Machine learning और NLP पर academic textbooks</li>
+            <li>Course syllabi, assignment rubrics, और grading schemas</li>
+            <li>पिछले cohorts के student FAQ archives</li>
+            <li>Conference proceedings (NeurIPS, ICML, ACL)</li>
+          </ul>
+          <p>हर document type का एक clear retrieval use case है, जो आपकी RAG story को airtight बनाता है।</p>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 1
+        </div>
+        <div class="your-work-placeholder">
+<h4>Job #5: Secondary School Teacher → DBA Gen AI Professor</h4>
+<p><strong>Customization:</strong> Original job है "Secondary School Teacher — Prepare how to teach a new lesson." मैंने इसे DBA (Doctor of Business Administration) professor में adapt किया है जो Generative AI पढ़ाता है। Underlying task वही है — lesson content तैयार करना — लेकिन domain postgraduate AI education में shift हो जाता है, जहाँ source material denser है और तेज़ी से बदलता है।</p>
+<p><strong>GenAI से इस job को फ़ायदा क्यों:</strong> Gen AI पढ़ाने का मतलब है कि हर हफ़्ते नए papers आते हैं, और एक ही lecture के लिए दर्ज़नों sources चाहिए। Up-to-date रहना genuinely मुश्किल है। एक RAG assistant जो course knowledge base को index करता है, मुझे demand पर सही material retrieve करने देता है और structured draft responses देता है, जो prep time काफ़ी कम कर देता है। बड़ा फ़ायदा यह है कि यह sources cite करता है — तो मैं किसी भी claim को original paper या lecture note तक trace कर सकता हूँ, LLM की memory पर भरोसा करने की ज़रूरत नहीं।</p>
+</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 2: GenAI Capability Assessment -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-header-text">
+          <h2>GenAI क्षमता मूल्यांकन</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Criteria 1&ndash;4 में काम आता है</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q1</strong> (Fully/Mostly/Partly/Hardly): एक level चुनिए और task decomposition से justify कीजिए &mdash; सिर्फ़ assertion नहीं।</li>
+          <li><strong>Q2</strong> (Can vs. Can't table): Specific और symmetric रखिए &mdash; हर "can" के साथ एक paired "limitation" होनी चाहिए। "GenAI students की मदद कर सकता है" जैसी vague entries से बचिए।</li>
+          <li>यह table एक key grading artifact है; इसे substantive रखिए (minimum 4&ndash;6 rows)।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q1: DBA Gen AI Professor की GenAI से कितनी मदद हो सकती है?</summary>
+        <div class="detail-body">
+          <p>अपना level चुनिए और professor के tasks decompose करके justify कीजिए:</p>
+          <table class="arena-table">
+            <thead><tr><th>Professor का Sub-Task</th><th>GenAI Capability</th><th>तर्क</th></tr></thead>
+            <tbody>
+              <tr><td>Course concepts पर students के सवालों का जवाब देना</td><td style="color:var(--teal-dark); font-weight:500;">High (80%+)</td><td>RAG exact textbook/paper passages retrieve करता है; factual answers</td></tr>
+              <tr><td>किसी topic के लिए readings recommend करना</td><td style="color:var(--teal-dark); font-weight:500;">High (90%+)</td><td>Paper KB पर topic-based semantic search</td></tr>
+              <tr><td>किसी paper की methodology explain करना</td><td style="color:var(--sand); font-weight:500;">Medium (60%)</td><td>LLM summarization strong है लेकिन subtle nuance miss हो सकता है</td></tr>
+              <tr><td>Student assignments grade करना</td><td style="color:var(--copper); font-weight:500;">Low (20%)</td><td>Academic judgment और rubric interpretation चाहिए</td></tr>
+              <tr><td>नए lecture examples generate करना</td><td style="color:var(--teal-dark); font-weight:500;">High (80%)</td><td>Retrieved context से LLM generation</td></tr>
+            </tbody>
+          </table>
+          <div class="callout golden">एक DBA Gen AI Professor के लिए, <strong>"Mostly (80%+)"</strong> defensible choice है। ज़्यादातर tasks information-retrieval और explanation tasks हैं जहाँ RAG excel करता है। Grading और original research design अभी भी human-only रहेंगे।</div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Q2: Can vs. Can't Table (scaffold दिया गया)</summary>
+        <div class="detail-body">
+          <p>आपका two-column analysis। अपनी specific rows add कीजिए:</p>
+          <table class="arena-table">
+            <thead><tr><th style="width:50%">GenAI <em>क्या कर सकता है</em></th><th>GenAI <em>क्या नहीं कर सकता</em></th></tr></thead>
+            <tbody>
+              <tr><td>Uploaded research papers से relevant passages retrieve करना</td><td>किसी paper के claims को real-world empirical data से verify करना</td></tr>
+              <tr><td>Paper का abstract और methodology section summarize करना</td><td>Paper की originality या academic contribution assess करना</td></tr>
+              <tr><td>Course KB का use करके students के factual सवालों का जवाब देना</td><td>Borderline student work पर academic judgment exercise करना</td></tr>
+              <tr><td>Textbook chapter से aligned worked examples generate करना</td><td>Retrieved content से परे genuinely novel pedagogical insights बनाना</td></tr>
+              <tr><td>किसी subtopic पर multiple papers cross-reference करना (जैसे chunking strategies)</td><td>Student academic dishonesty detect करना</td></tr>
+              <tr><td>Student की stated confusion के basis पर pre-requisite readings suggest करना</td><td>Student की emotional state या learning disability को real-time में adapt करना</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 2 (Q1 + Q2)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Q1: Task Decomposition</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Sub-task</th><th>GenAI मदद कर सकता है?</th><th>कैसे</th></tr></thead>
+<tbody>
+<tr><td>किसी topic के लिए relevant course materials ढूँढना</td><td>हाँ</td><td>Embedded lecture notes और papers पर semantic search</td></tr>
+<tr><td>सही level पर concept explain करना</td><td>हाँ</td><td>RAG retrieval + professor persona के साथ LLM generation</td></tr>
+<tr><td>Quiz questions बनाना</td><td>हाँ</td><td>Quiz-questions mode varied difficulty levels generate करता है</td></tr>
+<tr><td>Teaching plan design करना</td><td>हाँ</td><td>Teaching-plan mode objectives, activities, assessments structure करता है</td></tr>
+<tr><td>Student submissions grade करना</td><td>आंशिक रूप से</td><td>Factual accuracy assess कर सकता है लेकिन original thinking evaluate नहीं कर सकता</td></tr>
+<tr><td>Classroom dynamics manage करना</td><td>नहीं</td><td>Real-time human judgment और emotional intelligence चाहिए</td></tr>
+<tr><td>Pastoral care देना</td><td>नहीं</td><td>Empathy, trust, और professional counseling skills चाहिए</td></tr>
+</tbody>
+</table>
+<h4>Q2: Can / Cannot Analysis</h4>
+<p><strong>GenAI CAN:</strong> कुछ भी जो "सही passage ढूँढो और explain करो" तक सीमित हो। Retrieval, summarization, quiz generation, lesson planning — अगर जवाब knowledge base में कहीं है, तो GenAI उसे तेज़ी और reliably surface कर सकता है।</p>
+<p><strong>GenAI CANNOT:</strong> यह judge करना कि student का argument original है या नहीं, class discussion बिगड़ने पर room read करना, या struggling student को extension देने का decision लेना। इनके लिए empathy और professional judgment चाहिए जो कोई retrieval pipeline approximate नहीं कर सकती।</p>
+</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 3: Knowledge Base Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-header-text">
+          <h2>Knowledge Base Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 1</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>अपनी KB का <strong>schema</strong> describe कीजिए: document types, metadata fields, documents कैसे chunk और index होते हैं।</li>
+          <li><strong>3&ndash;5 sample documents</strong> दीजिए (realistic titles, sizes, formats) &mdash; सिर्फ़ generic "research papers" नहीं।</li>
+          <li><strong>3&ndash;5 sample queries</strong> include कीजिए जो professor या student actually type करेगा, साथ में कौन से KB documents retrieve होंगे।</li>
+          <li>Graders check करते हैं: क्या KB इतनी specific है कि believable लगे? क्या इस corpus पर retrieval actually काम करेगा?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>KB Schema &mdash; Reference Design</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Field</th><th>Type</th><th>Example Value</th><th>उद्देश्य</th></tr></thead>
+            <tbody>
+              <tr><td><code>doc_id</code></td><td>string</td><td>paper_vaswani_2017</td><td>Unique identifier</td></tr>
+              <tr><td><code>doc_type</code></td><td>enum</td><td>research_paper</td><td>Source type से filter</td></tr>
+              <tr><td><code>title</code></td><td>string</td><td>"Attention Is All You Need"</td><td>Display और search</td></tr>
+              <tr><td><code>authors</code></td><td>string[]</td><td>["Vaswani", "Shazeer", ...]</td><td>Attribution</td></tr>
+              <tr><td><code>year</code></td><td>int</td><td>2017</td><td>Recency filter</td></tr>
+              <tr><td><code>topic_tags</code></td><td>string[]</td><td>["transformers", "attention", "NLP"]</td><td>Topic-based filtering</td></tr>
+              <tr><td><code>chunk_index</code></td><td>int</td><td>3</td><td>Parent doc में positional context</td></tr>
+              <tr><td><code>chunk_text</code></td><td>text</td><td>"The encoder maps an input sequence..."</td><td>Retrieved passage</td></tr>
+              <tr><td><code>embedding</code></td><td>float[1536]</td><td>[0.021, -0.034, ...]</td><td>Semantic search vector</td></tr>
+              <tr><td><code>course_relevance</code></td><td>string[]</td><td>["Week 3", "Module 2"]</td><td>Curriculum alignment</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">Chunk size recommendation: 400&ndash;600 tokens, 50-token overlap। हर paper ~20&ndash;40 chunks बनता है।</p>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Documents (5 realistic examples)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Doc 1 &mdash; Research Paper</div>
+            <strong>Title:</strong> "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al., 2020)<br>
+            <strong>Format:</strong> PDF, 12 pages, ~6,000 words<br>
+            <strong>KB में भूमिका:</strong> RAG architecture पर core reading; "RAG क्या है?" और "retrieval generation के साथ कैसे interact करता है?" का जवाब देता है
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 2 &mdash; Textbook Chapter</div>
+            <strong>Title:</strong> "Chapter 7: Large Language Models" from <em>Speech and Language Processing</em> (Jurafsky &amp; Martin, 2024 draft)<br>
+            <strong>Format:</strong> PDF, 45 pages, ~22,000 words<br>
+            <strong>KB में भूमिका:</strong> Foundational theory; tokenization, pretraining, और prompting पर सवालों का जवाब
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 3 &mdash; Course Syllabus</div>
+            <strong>Title:</strong> "GGU DBA Course 8919 Syllabus &amp; Assignment Rubrics" (current term)<br>
+            <strong>Format:</strong> DOCX, 8 pages<br>
+            <strong>KB में भूमिका:</strong> Assignments, deadlines, grading criteria पर student Q&amp;A
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 4 &mdash; Student FAQ Archive</div>
+            <strong>Title:</strong> "Cohort 2024 Q&amp;A Log &mdash; Anonymized" (500 Q&amp;A pairs)<br>
+            <strong>Format:</strong> JSON / CSV, ~30,000 tokens<br>
+            <strong>KB में भूमिका:</strong> बार-बार आने वाले student questions का जवाब; professor का repetitive load कम करता है
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 5 &mdash; Conference Paper</div>
+            <strong>Title:</strong> "Evaluating RAG Systems: Metrics and Benchmarks" (Gao et al., 2023)<br>
+            <strong>Format:</strong> PDF, 9 pages<br>
+            <strong>KB में भूमिका:</strong> Week 6 lectures के लिए evaluation methodology; "RAG quality कैसे measure करें?" का जवाब
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Queries और Retrieval Targets</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Sample Query</th><th>Retrieved Doc(s)</th><th>Expected Response Type</th></tr></thead>
+            <tbody>
+              <tr><td>"RAG में dense और sparse retrieval में क्या फ़र्क है?"</td><td>Lewis et al. 2020 (chunks 3&ndash;5); Jurafsky Ch.7 (chunk 12)</td><td>Citations के साथ comparative explanation</td></tr>
+              <tr><td>"Assignment 1 में Criterion 2 कैसे grade होता है?"</td><td>Course Syllabus (chunks 4&ndash;6)</td><td>Direct rubric quote + elaboration</td></tr>
+              <tr><td>"Transformers single-head की जगह multi-head attention क्यों use करते हैं?"</td><td>Vaswani 2017 (chunks 7&ndash;9); Jurafsky Ch.7 (chunks 15&ndash;17)</td><td>Primary source से technical explanation</td></tr>
+              <tr><td>"अपने RAG project के लिए कौन से evaluation metrics use करने चाहिए?"</td><td>Gao et al. 2023 (chunks 2&ndash;6)</td><td>Structured list: RAGAS, faithfulness, relevance scores</td></tr>
+              <tr><td>"क्या Assignment 2 बिना penalty late submit कर सकते हैं?"</td><td>Course Syllabus (chunk 2); Cohort FAQ (Q#47)</td><td>Qualification के साथ policy statement</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 3 (Criterion 1, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Knowledge Base Schema</h4>
+<p>KB में <strong>1,260 embedded chunks</strong> हैं जो <strong>13 source documents</strong> से आते हैं, 4 source types में:</p>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Source Type</th><th>Count</th><th>Format</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Lecture Notes</td><td>6 files → 1,136 chunks</td><td>Markdown</td><td>Session_01_24_Jan_2026.md — Gen AI Overview</td></tr>
+<tr><td>Slide Decks</td><td>6 files → 110 chunks</td><td>PDF</td><td>S02 — RNN to Transformers</td></tr>
+<tr><td>Assignment Specs</td><td>1 file → 14 chunks</td><td>Markdown</td><td>Assignment 1 spec with rubrics</td></tr>
+<tr><td>Research Papers</td><td>0 (planned)</td><td>PDF</td><td>Attention Is All You Need (future addition)</td></tr>
+</tbody>
+</table>
+<h4>Chunking Strategy</h4>
+<p><strong>Markdown documents:</strong> Heading-aware splitting। पहले H1-H3 headings पर split, फिर अगर section 800 characters से ज़्यादा हो तो paragraph पर, फिर sentence boundary पर। हर chunk अपनी parent heading inherit करता है context के लिए।</p>
+<p><strong>PDF documents:</strong> Sliding window — 800-character chunks, 150-character overlap, sentence boundaries पर snap (window end से पहले last ". ")। Mid-word splits prevent होते हैं।</p>
+<p><strong>Context injection:</strong> हर chunk को embedding से पहले <code>[Source: type:filename | Title]</code> prefix किया जाता है। इस तरह vector representation में source context include होता है, सिर्फ़ raw text नहीं।</p>
+<h4>Sample Query → Retrieved Chunks</h4>
+<p>Query: <em>"Transformers में attention क्या है?"</em> → Top 3 results: Session 3 (score 0.76), Session 4 (score 0.76), Session 2 (score 0.75) — सभी lecture notes से जो transformer architecture cover करते हैं।</p>
+</div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 1</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 4: Build Approach -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-header-text">
+          <h2>Build Approach &mdash; RAG क्यों?</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Q3 &mdash; Criterion 2 का आधार</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q3</strong> में कम से कम 3 approaches compare करने हैं: from-scratch training, fine-tuning, pure prompting, और RAG। आपको argue करना है कि <em>RAG आपके specific job के लिए क्यों जीतता है</em>।</li>
+          <li>अपनी KB से tied concrete reasons दीजिए &mdash; जैसे, "research papers frequently update होते हैं, इसलिए static fine-tune stale हो जाएगा" ज़्यादा strong है "RAG flexible है" से।</li>
+          <li>एक comparison table structure के लिए clear marks earn करती है।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q3: Approach Comparison Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Approach</th><th>Professor KB के लिए Feasibility</th><th>मुख्य सीमा</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Scratch से Train</strong></td><td style="color:var(--copper);">संभव नहीं</td><td>Billions of tokens और massive compute चाहिए; KB ~100 docs है। कोई justification नहीं।</td></tr>
+              <tr><td><strong>Fine-Tuning</strong></td><td style="color:var(--sand);">आंशिक रूप से संभव</td><td>100 papers पर fine-tuning possible है लेकिन expensive, और KB updates के लिए re-tuning चाहिए। Papers continuously publish होते हैं। Knowledge हफ़्तों में stale हो जाता है।</td></tr>
+              <tr><td><strong>Pure Prompting</strong></td><td style="color:var(--sand);">आंशिक रूप से संभव</td><td>Context window limits के कारण सिर्फ़ 1&ndash;2 papers per prompt fit होती हैं। 500-paper corpus पर scale नहीं हो सकता। Citation traceability खो जाती है।</td></tr>
+              <tr><td><strong>RAG (चुना गया)</strong></td><td style="color:var(--teal-dark); font-weight:600;">Optimal</td><td>Query time पर dynamically relevant chunks retrieve करता है। KB updates = सिर्फ़ re-index। Full citation provenance। कोई GPU training cost नहीं। किसी भी corpus size पर scale।</td></tr>
+            </tbody>
+          </table>
+          <div class="callout strategy">Professor context के लिए, RAG का killer argument है <strong>knowledge freshness</strong>: नए papers हर हफ़्ते publish होते हैं, और RAG आपको उन्हें minutes में KB में add करने देता है बिना retraining के। Fine-tuning इस velocity को match नहीं कर सकता।</div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 4 (Q3)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Q3: Alternatives के बजाय RAG क्यों?</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Approach</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td><strong>Scratch से build</strong></td><td>Full control</td><td>सालों का काम, कोई existing LLM capabilities नहीं</td><td>Impractical</td></tr>
+<tr><td><strong>Model fine-tune</strong></td><td>Domain-specific behavior</td><td>Expensive ($1K+ GPU time), 10K+ examples चाहिए, training के बाद stale</td><td>13 docs के लिए overkill</td></tr>
+<tr><td><strong>सिर्फ़ Prompt engineering</strong></td><td>Zero infrastructure</td><td>Context window (~128K tokens) तक limited, कोई persistent KB नहीं</td><td>कुछ docs से ज़्यादा पर scale नहीं</td></tr>
+<tr><td><strong>RAG (Retrieval-Augmented Generation)</strong></td><td>Existing LLM use, retrieval से domain knowledge add, easily updated</td><td>Retrieval quality chunking/embedding पर depend, latency add होती है</td><td><strong>Best fit &#10003;</strong></td></tr>
+</tbody>
+</table>
+<p><strong>तर्क:</strong> RAG यहाँ इसलिए जीतता है क्योंकि KB सिर्फ़ 13 documents है — local JSON vector store के लिए काफ़ी छोटी, बिना cloud costs के। Course materials हर semester बदलती हैं, और RAG के साथ मैं model retrain करने की बजाय बस ingestion script re-run करता हूँ। Citations भी free मिलती हैं, क्योंकि retrieved chunks अपना source metadata carry करते हैं। Fine-tuning में real money लगेगा और months में stale हो जाएगा।</p>
+</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 5: RAG Architecture Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-header-text">
+          <h2>RAG Architecture Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 2</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q4</strong> में full RAG pipeline description चाहिए: ingestion, chunking, embedding, vector store, retrieval, augmentation, generation, और output।</li>
+          <li>हर stage पर अपने chosen tools/models name कीजिए (जैसे, "Google Gemini gemini-embedding-001 embeddings के लिए, JSON cosine-similarity store (fallback) vector store के लिए")।</li>
+          <li>अपनी <strong>evaluation methodology</strong> include कीजिए: RAG system काम कर रहा है यह कैसे measure करेंगे? कम से कम 2 metrics mention कीजिए।</li>
+          <li>एक flow diagram या numbered pipeline steps clarity marks earn करती है।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q4: Full RAG Pipeline &mdash; 8-Stage Architecture</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 1 &mdash; Document Ingestion</h4>
+            <p style="font-size:13.5px; margin:0;">Source formats: PDF (papers), DOCX (syllabus), JSON (FAQ)। Tools: PDF extraction के लिए <code>pypdf2</code>, DOCX के लिए <code>python-docx</code>, custom JSON parser। Output: source metadata attached raw text strings।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 2 &mdash; Chunking</h4>
+            <p style="font-size:13.5px; margin:0;">Strategy: recursive character splitter, 800-character chunks, 150-character overlap। Papers paragraph boundary पर chunked। FAQ individual Q&amp;A pairs के रूप में chunked। Rationale: 500 tokens gemini-2.0-flash context में अच्छे से fit होते हैं और per chunk enough context देते हैं।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 3 &mdash; Embedding</h4>
+            <p style="font-size:13.5px; margin:0;">Model: <code>gemini-embedding-001</code> (Google Gemini, 3072 dimensions)। हर chunk Google Gemini API से embed। Cost: free tier (1,500 RPD तक)। Rationale: strong semantic retrieval quality, ~500-document KB के लिए low cost।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 4 &mdash; Vector Store</h4>
+            <p style="font-size:13.5px; margin:0;">Platform: JSON cosine-similarity store (fallback) (या local FAISS)। Index: cosine similarity। <code>doc_type</code>, <code>year</code>, <code>course_relevance</code> के लिए metadata filters enabled। Scoped retrieval के लिए per course module namespace।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 5 &mdash; Query Processing और Retrieval</h4>
+            <p style="font-size:13.5px; margin:0;">Student query same model से embed। Cosine similarity से top-k=5 chunks retrieve। Optional: hybrid search (dense + BM25 keyword)। Precision के लिए cross-encoder re-ranking। अगर query specific module target करे तो metadata filter apply।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 6 &mdash; Context Augmentation</h4>
+            <p style="font-size:13.5px; margin:0;">Retrieved chunks context window में concatenate। Format: <code>[Source: Lewis et al. 2020, chunk 3] &lt;text&gt;</code>। System prompt model को sources cite करने का instruction देता है। Total context budget: 4,000 tokens (5 chunks &times; ~500 tokens + system prompt + query)।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 7 &mdash; Generation</h4>
+            <p style="font-size:13.5px; margin:0;">LLM: Google AI Studio से <code>gemini-2.0-flash</code>। Temperature: 0.2 (factual task)। Max tokens: 600। Model को instruction कि context से ही answer करे और KB insufficient हो तो flag करे।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 8 &mdash; Output और Evaluation</h4>
+            <p style="font-size:13.5px; margin:0;">Response में source chunks की citations include। Evaluation: (a) <strong>Faithfulness</strong> &mdash; क्या answer retrieved passages से match करता है (no hallucination)? (b) <strong>Answer Relevance</strong> &mdash; क्या answer query address करता है? (c) <strong>Context Precision</strong> &mdash; क्या सही chunks retrieve हुए? Tools: RAGAS framework या manual spot-check।</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 5 (Criterion 2, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+<h4>8-Stage RAG Pipeline (Actual Implementation)</h4>
+<ol style="font-size:13.5px; line-height:1.8;">
+<li><strong>Document Loading:</strong> <code>loader.ts</code> markdown (Bun.file().text()) और PDFs (pdf-parse with Buffer.from(arrayBuffer)) read करता है। Metadata extract: session number, title, source type।</li>
+<li><strong>Chunking:</strong> <code>chunker.ts</code> — lecture notes के लिए markdown-aware splitting (heading → paragraph → sentence hierarchy); PDFs के लिए sliding window (800/150)। Context prefix inject होता है।</li>
+<li><strong>Embedding:</strong> <code>embedder.ts</code> — Gemini <code>gemini-embedding-001</code> (3072-dim vectors)। 20/batch batched, 2s rate-limit delays। chunks के लिए taskType: RETRIEVAL_DOCUMENT, queries के लिए RETRIEVAL_QUERY। Exponential backoff (1s, 2s, 4s) के साथ retry।</li>
+<li><strong>Storage:</strong> <code>fallback.ts</code> — cosine similarity के साथ JSON-persisted in-memory store। 78MB store file (1,260 chunks × 3072 floats)। Server startup पर load।</li>
+<li><strong>Query Embedding:</strong> User query same Gemini model से taskType=RETRIEVAL_QUERY के साथ embed।</li>
+<li><strong>Retrieval:</strong> <code>retriever.ts</code> — 2× oversampling (16 fetch, 8 return)। MMR-lite diversity reranking: same-document results penalize (−30%) और over-represented source types (−15% अगर same type से ≥3)।</li>
+<li><strong>Generation:</strong> <code>generator.ts</code> — Gemini <code>gemini-2.0-flash</code> (temp=0.4, max 2048 tokens)। DBA Professor persona। 5 modes (explain, teaching-plan, quiz-questions, connect, research-angle)। Score &lt; 0.70 पर relevance gate clean refusal return करता है।</li>
+<li><strong>Response Assembly:</strong> Generated text से [N] citations extract, retrieved sources से match। Top-3 retrieval scores से confidence estimate।</li>
+</ol>
+<h4>Architecture Diagram</h4>
+<figure style="margin:16px 0;">
+<img src="../images/diagrams/rag-pipeline-architecture.svg" alt="8-stage RAG pipeline: Document Loading → Chunking → Embedding → Storage → Query Embedding → Retrieval (MMR) → Generation → Response Assembly" style="max-width:100%; border:1px solid var(--border); border-radius:8px; background:#f8f6f0; padding:12px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Figure 1: 8-Stage RAG Pipeline Architecture — offline ingestion (बाएँ) online query pipeline (दाएँ) को feed करती है</figcaption>
+</figure>
+</div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 2</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 6: Prompts & RAG Enhancements -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-header-text">
+          <h2>Prompts और RAG Enhancements</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 3</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>अपना actual <strong>system prompt</strong> दीजिए (verbatim, code block में) &mdash; यह professor-context-specific होना चाहिए, generic नहीं।</li>
+          <li>1&ndash;2 <strong>few-shot examples</strong> include कीजिए जो exact input/output format दिखाएँ जो आप model से expect करते हैं।</li>
+          <li>कम से कम 2 <strong>RAG optimization strategies</strong> describe कीजिए जो आप apply करेंगे (जैसे query rewriting, re-ranking, chunk overlap tuning, HyDE)।</li>
+          <li>Graders specificity reward करते हैं: "मैंने system prompt use किया जो model को sources cite करने और KB के बाहर answer न करने का instruction देता है" concrete है। "मैंने अच्छा system prompt use किया" नहीं है।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>System Prompt (Reference Version)</summary>
+        <div class="detail-body">
+          <div class="code-block"><span class="comment"># System Prompt: DBA Gen AI Professor Assistant</span>
+
+You are a knowledgeable academic assistant for a DBA-level course on Generative AI and Pre-Trained Models (GGU Course 8919).
+
+<span class="keyword">Your role:</span>
+- Answer student questions using ONLY the retrieved context passages provided below.
+- Always cite the source document and chunk for every factual claim (format: [Source: Author, Year]).
+- If the retrieved context does not contain enough information to answer the question, say: "I don't have sufficient information in the course knowledge base to answer this accurately. Please consult your professor directly."
+- Do not hallucinate references, authors, or paper titles.
+- Maintain an academic, clear, and concise tone appropriate for doctoral-level students.
+
+<span class="keyword">Format:</span>
+- Use markdown headers for multi-part answers.
+- For technical questions, provide a brief definition, then depth.
+- Keep answers under 500 words unless the question requires a step-by-step explanation.
+
+<span class="keyword">Context passages will be injected below by the system.</span></div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Few-Shot Examples (2 pairs)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Few-Shot Example 1</div>
+            <strong>Student Query:</strong> "BM25 और dense retrieval में क्या फ़र्क है?"<br><br>
+            <strong>Expected Response:</strong> "BM25 एक sparse, keyword-based retrieval method है जो documents को term frequency और inverse document frequency से score करता है [Source: Jurafsky &amp; Martin, 2024, Ch.7, chunk 8]। Dense retrieval, इसके विपरीत, neural embeddings use करता है semantic similarity capture करने के लिए जब exact keywords match न हों [Source: Lewis et al., 2020, chunk 4]। Practice में, दोनों combine करने वाले hybrid approaches अक्सर किसी एक method से बेहतर perform करते हैं।"
+          </div>
+          <div class="example-block" style="margin-top:10px;">
+            <div class="ex-label">Few-Shot Example 2</div>
+            <strong>Student Query:</strong> "Assignment 2 कब due है?"<br><br>
+            <strong>Expected Response:</strong> "Course syllabus के अनुसार, Assignment 2 [date] को 11:59 PM तक due है [Source: GGU Course 8919 Syllabus, chunk 2]। कृपया upGrad portal पर updates check कीजिए, क्योंकि यह AI assistant KB indexing के समय का syllabus reflect करता है।"
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>RAG Optimization Strategies</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Strategy 1: Query Rewriting</h4>
+            <p style="font-size:13.5px; margin:0;">Student query embed करने से पहले, एक lightweight LLM call use करके उसे clearer retrieval-optimized form में rewrite करें। Example: "HyDE क्या है?" → "Hypothetical Document Embeddings (HyDE) explain करें और बताएँ कि ये RAG retrieval कैसे improve करते हैं।" यह terse या ambiguous student phrasing से होने वाली retrieval failures prevent करता है।</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 2: Cross-Encoder Re-Ranking</h4>
+            <p style="font-size:13.5px; margin:0;">Cosine similarity से top-20 chunks retrieve करें, फिर cross-encoder (जैसे <code>ms-marco-MiniLM-L-6-v2</code>) से re-rank करें जो query + chunk jointly consider करता है। Re-ranking के बाद top-5 return करें। यह nuanced academic queries के लिए precision significantly improve करता है।</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 3: Metadata Pre-Filtering</h4>
+            <p style="font-size:13.5px; margin:0;">Queries को classifier से route करके intent detect करें: "assignment question" vs. "technical concept" vs. "paper recommendation।" Accordingly metadata filters apply करें (जैसे assignment queries के लिए <code>doc_type=syllabus</code> restrict)। Retrieved context में noise कम होता है।</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 6 (Criterion 3, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+<h4>System Prompt (Actual)</h4>
+<pre style="font-size:12px; background:#f8f6f0; padding:16px; border-radius:8px; white-space:pre-wrap;">You are the DBA Gen AI Professor, an experienced academic who teaches Generative AI concepts to doctoral business administration students.
+
+When answering, ALWAYS:
+1. Use the provided knowledge base context as your primary source
+2. Cite specific sources using [N] notation
+3. If the knowledge base doesn't contain sufficient information, say so honestly
+4. Reference specific session numbers (e.g., "In Session 2, we covered...")
+5. When comparing models, create structured comparisons
+
+CRITICAL — Out-of-scope queries:
+If the question is NOT about Gen AI, ML, NLP, or transformers, clearly state this is outside your domain, do NOT cite sources, and suggest a related topic.</pre>
+<h4>Mode-Specific Prompts</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Mode</th><th>Prompt Enhancement</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td>explain</td><td>Formal definitions और mathematical formulations require</td><td>Attention formula, self-attention के लिए technical depth</td></tr>
+<tr><td>teaching-plan</td><td>Structure: objectives, concepts, activities, questions, assessment</td><td>Actionable lesson plans</td></tr>
+<tr><td>quiz-questions</td><td>3 difficulty levels पर 5 questions (2 recall, 2 application, 1 analysis)</td><td>Bloom's taxonomy alignment</td></tr>
+<tr><td>connect</td><td>3+ diverse sources, comparative analysis require</td><td>Cross-document synthesis</td></tr>
+<tr><td>research-angle</td><td>DBA-level research gaps और methodologies suggest</td><td>Doctoral-appropriate research directions</td></tr>
+</tbody>
+</table>
+<h4>Optimization strategies</h4>
+<p style="font-size:13.5px;">Testing के दौरान आई issues के basis पर मैंने चार practical optimizations build किए:</p>
+<ul style="font-size:13.5px;">
+<li>अगर total prompt 30K characters से exceed करे, तो system lowest-scored results drop कर देता है जब तक fit न हो जाए। यह broad queries के साथ आया जो बहुत ज़्यादा chunks pull कर रही थीं।</li>
+<li>Score &lt; 0.70 पर relevance gate LLM call किए बिना refusal return करता है। Off-topic queries पर API cost बचता है और KB में कुछ relevant न होने पर hallucinated answers avoid होते हैं।</li>
+<li>Confidence avg(top-3 retrieval scores) से calculate होती है citation boost के साथ। 0.30 से नीचे कुछ भी 0.20 पर cap हो जाता है — weak retrievals पर UI false confidence display न करे।</li>
+<li>हर chunk में [Source: type | title] prefix include है, जो implicitly LLM को citation format सिखाता है। Citation behavior के लिए few-shot examples की ज़रूरत नहीं।</li>
+</ul>
+</div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 3</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 7: Limitations & Risks -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-header-text">
+          <h2>सीमाएँ और जोखिम</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 4</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>4 risk categories</strong> cover कीजिए: TCO/cost, latency, quality/hallucination, और domain-specific risks।</li>
+          <li>हर limitation के साथ एक paired <strong>mitigation strategy</strong> चाहिए &mdash; सिर्फ़ problems की list नहीं।</li>
+          <li>Academic context के लिए domain-specific risks: papers का copyright, student data privacy (FERPA), students का assistant पर over-rely करके critical thinking develop न करने का risk।</li>
+          <li>Graders vague risks penalize करते हैं ("hallucination एक problem है")। Specific रहिए: क्या hallucinate होगा, और academic consequence क्या होगा?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Risk Matrix &mdash; Reference Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Risk Category</th><th>Specific Risk</th><th>गंभीरता</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Cost (TCO)</strong></td>
+                <td>Google Gemini API costs student volume के साथ scale; prototype के लिए 1,000 queries/day free tier; scale पर ~$0.001/query</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>Frequent queries cache (Redis); re-index के लिए smaller embedding model; per-student rate limits set</td>
+              </tr>
+              <tr>
+                <td><strong>Latency</strong></td>
+                <td>Retrieval + re-ranking + generation pipeline instant FAQ lookup से 2&ndash;5 seconds ज़्यादा लेता है</td>
+                <td style="color:var(--olive);">Low&ndash;Medium</td>
+                <td>Generation tokens stream; common queries pre-retrieve; async re-ranking</td>
+              </tr>
+              <tr>
+                <td><strong>Hallucination</strong></td>
+                <td>LLM एक non-existent paper citation fabricate करता है (जैसे "Smith, 2022 ने दिखाया कि...") student के research question का जवाब देते हुए</td>
+                <td style="color:var(--copper);">High</td>
+                <td>Strict system prompt: "सिर्फ़ retrieved context से cite करो"; source display enable ताकि students verify कर सकें; human professor quarterly spot-check</td>
+              </tr>
+              <tr>
+                <td><strong>KB Staleness</strong></td>
+                <td>नए papers weekly publish; re-indexing के बिना KB 1&ndash;2 months में outdated</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>arXiv + ACL Anthology feeds के लिए weekly automated ingestion pipeline; KB को index date से version-stamp</td>
+              </tr>
+              <tr>
+                <td><strong>Copyright</strong></td>
+                <td>Copyrighted textbooks (Jurafsky &amp; Martin) index करना और verbatim passages return करना publisher rights violate कर सकता है</td>
+                <td style="color:var(--copper);">High</td>
+                <td>सिर्फ़ open-access papers use; textbooks के लिए chunk retrieval 200-word excerpts तक limit; deployment से पहले university legal counsel consult</td>
+              </tr>
+              <tr>
+                <td><strong>Student Over-Reliance</strong></td>
+                <td>Students assistant use करके critical thinking bypass कर सकते हैं, learning outcomes hurt</td>
+                <td style="color:var(--sand);">Medium</td>
+                <td>System prompt assistant को Socratic follow-up questions पूछने का instruction; direct assignment-answer mode disable; professor सारी grading authority retain</td>
+              </tr>
+              <tr>
+                <td><strong>Data Privacy</strong></td>
+                <td>Student Q&amp;A logs में identifiable information हो सकती है (FERPA-relevant)</td>
+                <td style="color:var(--copper);">High</td>
+                <td>KB ingestion से पहले सभी student data anonymize; consent के बिना कोई student-specific query logging नहीं; institution-approved Google Cloud project पर host</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 7 (Criterion 4, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Limitation और Risk Matrix</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Risk</th><th>गंभीरता</th><th>संभावना</th><th>Mitigation</th></tr></thead>
+<tbody>
+<tr><td><strong>Hallucination:</strong> LLM ऐसे claims generate करता है जो KB में नहीं</td><td>High</td><td>Medium</td><td>System prompt context-only restrict करता है; citation extraction grounding verify करता है; relevance gate off-topic block करता है</td></tr>
+<tr><td><strong>Stale knowledge:</strong> Course materials updated लेकिन KB re-ingest नहीं</td><td>Medium</td><td>High</td><td>One-command re-ingestion (<code>bun run ingest</code>); cache invalidation पुराने embeddings delete करता है</td></tr>
+<tr><td><strong>Embedding model changes:</strong> Google gemini-embedding-001 deprecate करे</td><td>Medium</td><td>Medium</td><td>Already experienced: text-embedding-004 deprecated हुआ। Config-driven model name quick swap allow करता है</td></tr>
+<tr><td><strong>Rate limiting:</strong> Free tier 1,500 requests/day cap</td><td>Low</td><td>Medium</td><td>Delays के साथ batch embedding; repeated questions के लिए query caching; paid tier available</td></tr>
+<tr><td><strong>Chunking quality:</strong> PDF text extraction formatting miss करता है</td><td>Medium</td><td>High</td><td>Sentence-boundary snapping के साथ sliding window; context prefix document metadata add करता है</td></tr>
+<tr><td><strong>Generation में bias:</strong> LLM certain perspectives favor कर सकता है</td><td>Medium</td><td>Low</td><td>MMR diversity reranking multiple source types ensure करता है; professor persona balanced views encourage करता है</td></tr>
+<tr><td><strong>Privacy:</strong> Student queries में sensitive information हो सकती है</td><td>High</td><td>Low</td><td>कोई query logging नहीं; local vector store (कोई cloud DB नहीं); institution-approved Google Cloud project पर host</td></tr>
+<tr><td><strong>Over-reliance:</strong> Professor assistant पर बहुत ज़्यादा depend हो जाए</td><td>Medium</td><td>Medium</td><td>Tool "preparation aid" position किया गया है, replacement नहीं; human use से पहले सभी generated content review करता है</td></tr>
+</tbody>
+</table>
+<h4>v2 में क्या fix करूँगा</h4>
+<ul style="font-size:13.5px;">
+<li>KB में अभी research papers नहीं हैं, सिर्फ़ course materials। किसी specific paper की methodology पूछने पर weak results आते हैं।</li>
+<li>हर query stateless है — कोई conversation memory नहीं। Student "उसके बारे में और बताओ" नहीं कह सकता क्योंकि "उस" का context gone है।</li>
+<li>कोई authentication नहीं है। अभी यह single-professor prototype है; students add करने के लिए login और rate limiting चाहिए।</li>
+<li>78MB vector store startup पर पूरा memory में load होता है। 1,260 chunks के लिए ठीक है, लेकिन ~10K से ज़्यादा पर proper vector DB में switch करना होगा।</li>
+</ul>
+</div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 4</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 8: Hands-On Tryout -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-header-text">
+          <h2>Hands-On Tryout</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 5</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>यह criterion 20% worth है और सबसे commonly underweighted। एक basic ChatGPT conversation भी count होती है &mdash; skip मत कीजिए।</li>
+          <li>कम से कम <strong>3 interactions</strong> दिखाइए: एक successful retrieval, एक failure case, और एक जो आपका system prompt action में दिखाए।</li>
+          <li>Screenshots या pasted conversation logs include कीजिए। उन्हें annotate कीजिए: क्या अच्छा चला, क्या नहीं, और क्या improve करेंगे।</li>
+          <li>अगर ChatGPT की बजाय Google AI Studio use करें, तो endpoint और model note कीजिए।</li>
+        </ul>
+      </div>
+
+      <div class="callout warning">इस assignment के लिए full production RAG deployment मत करिए। एक simple ChatGPT session जहाँ आप अपना system prompt + relevant paper excerpts context के रूप में paste करें, पूरी तरह sufficient है। Point interaction pattern demonstrate करना है, engineering perfection नहीं।</div>
+
+      <details class="arena-details" open>
+        <summary>Suggested Tryout Protocol</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Step 1: अपना mini-KB context तैयार करें</h4>
+            <p style="font-size:13.5px; margin:0;">अपने sample documents से 2&ndash;3 passages copy करें (हर एक 150&ndash;200 words)। यह simulate करता है कि आपका retriever क्या return करेगा।</p>
+          </div>
+          <div class="card">
+            <h4>Step 2: ChatGPT या Google AI Studio खोलें</h4>
+            <p style="font-size:13.5px; margin:0;">नई conversation start करें। पहले अपना system prompt paste करें, फिर context passages, फिर अपने student queries pose करें।</p>
+          </div>
+          <div class="card">
+            <h4>Step 3: 3 test interactions run करें</h4>
+            <ul style="font-size:13.5px;">
+              <li><strong>Test A:</strong> एक query जो आपकी KB अच्छे से handle करती है (जैसे "RAG क्या है?")। Success case दिखाता है।</li>
+              <li><strong>Test B:</strong> एक query जो आपकी KB scope के बाहर है (जैसे "Microsoft का stock price क्या है?")। Graceful failure दिखाता है &mdash; model को कहना चाहिए "KB में नहीं है।"</li>
+              <li><strong>Test C:</strong> एक multi-hop question जिसमें 2 documents चाहिए (जैसे "हमारे professor assistant use case के लिए BM25 vs. dense retrieval compare करो")। Synthesis capability दिखाता है।</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Step 4: Screenshot और annotate करें</h4>
+            <p style="font-size:13.5px; margin:0;">तीनों conversations के screenshots लीजिए। अपने write-up में हर एक को briefly annotate कीजिए: model ने क्या अच्छा किया? क्या गलत? v2 में क्या fix करेंगे?</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 8 (Criterion 5, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Test A: Successful Concept Retrieval</h4>
+<p><strong>Query:</strong> "Transformers में attention mechanism क्या है?"<br>
+<strong>Mode:</strong> Explain<br>
+<strong>Result:</strong> System ने solid explanation return किया जिसमें self-attention, multi-head attention, और Q/K/V vectors cover थे। इसने Sessions 2, 3, और 4 से 8 sources pull किए, जो exactly वही हैं जहाँ course में attention cover होता है। Confidence 0.86 आई। इसने lecture notes से mathematical formulation भी include की, जो मुझे retrieval-based system से expect नहीं था।</p>
+<figure style="margin:16px 0;">
+<img src="../images/screenshots/02-test-a-attention.png" alt="RAG app response to attention mechanism query — 8 sources cited, confidence 0.86" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Attention mechanisms की detailed explanation, 8 cited sources के साथ</figcaption>
+</figure>
+
+<h4>Test B: Out-of-Scope Graceful Refusal</h4>
+<p><strong>Query:</strong> "Apple का current stock price क्या है?"<br>
+<strong>Mode:</strong> Explain<br>
+<strong>Result:</strong> यहाँ relevance gate ने अपना काम किया। System ने recognize किया कि stock prices का course KB से कोई लेना-देना नहीं, zero citations return किए, और confidence सिर्फ़ 0.19 दी। Refusal message clean था: "यह question हमारे Gen AI course materials के scope से बाहर लगता है।" इसने related Gen AI topics भी suggest किए जो student पूछ सकता है।</p>
+<figure style="margin:16px 0;">
+<img src="../images/screenshots/03-test-b-outofscope.png" alt="RAG app graceful refusal for out-of-scope quantum computing query" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: Out-of-scope query पर graceful refusal, suggested related topics के साथ</figcaption>
+</figure>
+
+<h4>Test C: Multi-Document Synthesis</h4>
+<p><strong>Query:</strong> "BERT, GPT, और T5 training approaches compare करो"<br>
+<strong>Mode:</strong> Connect<br>
+<strong>Result:</strong> यह सबसे मुश्किल test था — इसके लिए तीन अलग sessions से pull करके coherent comparison synthesize करना था। System ने masked language modeling (BERT) को autoregressive (GPT) और text-to-text (T5) से distinguish किया, 3 sessions से 5 sources cite करते हुए। Confidence: 0.80। MMR diversity reranking ने यहाँ मदद की; इसके बिना results उस session की तरफ़ skew हो जाते जिसमें training पर सबसे ज़्यादा chunks थे।</p>
+<figure style="margin:16px 0;">
+<img src="../images/screenshots/04-test-c-synthesis.png" alt="RAG app multi-document synthesis comparing BERT, GPT, and T5" style="max-width:100%; border:1px solid var(--border); border-radius:8px;">
+<figcaption style="font-size:12px; color:var(--text-secondary); margin-top:6px; text-align:center;">Web UI: तीन model architectures compare करती multi-document synthesis</figcaption>
+</figure>
+
+<h4>Holdout Validation Results</h4>
+<table class="example-table" style="width:100%; font-size:13px;">
+<thead><tr><th>Scenario</th><th>Score</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Basic Retrieval (attention mechanism)</td><td>70/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Citation Accuracy (BERT MLM)</td><td>85/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Course Administration (session topics)</td><td>85/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Multi-Doc Synthesis (BERT vs GPT vs T5)</td><td>75/100</td><td style="color:green;">PASS</td></tr>
+<tr><td>Out-of-Scope (stock price refusal)</td><td>95/100</td><td style="color:green;">PASS</td></tr>
+</tbody>
+</table>
+</div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 5</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 9: Final Assembly & Page Budget -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-header-text">
+          <h2>Final Assembly और Page Budget</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Submission checklist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>कुल page budget: <strong>अधिकतम 10 pages</strong> (7 pages content + 3 pages screenshots/code)।</li>
+          <li>Page 10 के बाद का content graders ignore करते हैं। ज़रूरत पड़े तो बेरहमी से trim कीजिए।</li>
+          <li>Submit करने से पहले check कीजिए कि हर criterion का substantive coverage है &mdash; यह checklist use कीजिए।</li>
+        </ul>
+      </div>
+
+      <h3>Submission Checklist</h3>
+      <ul class="checklist" id="submissionChecklist">
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 1: Job Choice</strong> &mdash; Job #5 stated, DBA Gen AI Professor customization described, justification लिखा (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q1 Answered</strong> &mdash; Mostly/Partly/etc. task decomposition justification के साथ चुना (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 2: Q2 Table</strong> &mdash; Professor context के specific 5+ rows वाली Can/Can't table (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 3: KB Schema</strong> &mdash; Metadata fields, chunk strategy, sample docs table (Criterion 1, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 4: Q3 Approach</strong> &mdash; 4 approaches वाली comparison table, RAG justification (0.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 5: RAG Pipeline</strong> &mdash; Tool names के साथ 8-stage pipeline, evaluation metrics (Criterion 2, 1.5 pages)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 6: System Prompt</strong> &mdash; Code block में verbatim prompt, 2 few-shot pairs (Criterion 3, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 7: Limitations</strong> &mdash; Mitigations के साथ risk table, 5+ rows (Criterion 4, 1.0 page)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Section 8: Tryout</strong> &mdash; Annotations के साथ 3 interaction logs (Criterion 5, 3 pages तक)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Page count verified</strong> &mdash; Total 10 pages (content + screenshots) से ज़्यादा नहीं</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सभी assumptions explicitly stated</strong> &mdash; Document formats, tool choices, sample queries assumptions declared</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Language check</strong> &mdash; Clear English में लिखा, academic tone, कोई unexplained jargon नहीं</span></li>
+      </ul>
+
+      <h3>Page Budget Estimate</h3>
+      <table class="arena-table">
+        <thead><tr><th>Section</th><th>Recommended Pages</th><th>आपका Target</th></tr></thead>
+        <tbody>
+          <tr><td>Job Choice और Q1 + Q2</td><td>1.0</td><td></td></tr>
+          <tr><td>KB Design (C1)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Build Approach Q3</td><td>0.5</td><td></td></tr>
+          <tr><td>RAG Architecture (C2)</td><td>1.5&ndash;2.0</td><td></td></tr>
+          <tr><td>Prompts और Enhancements (C3)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>सीमाएँ और जोखिम (C4)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Hands-On Tryout (C5)</td><td>1.5&ndash;3.0</td><td></td></tr>
+          <tr style="font-weight:600;"><td>कुल</td><td>7.5&ndash;11.0</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">अगर आपका draft 10 pages से ज़्यादा हो, तो पहले architecture section से trim कीजिए (diagrams रखिए, prose काटिए)। Tryout screenshots रहने चाहिए &mdash; वो Criterion 5 marks का evidence हैं।</div>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; Section 9 (Final Check)
+        </div>
+        <div class="your-work-placeholder">
+<h4>Submission Checklist</h4>
+<ul style="font-size:13.5px; line-height:2;">
+<li>&#9745; Job #5 DBA Gen AI Professor में customized</li>
+<li>&#9745; Can/cannot analysis के साथ task decomposition</li>
+<li>&#9745; 13 documents से 1,260 chunks वाली knowledge base designed</li>
+<li>&#9745; Justification के साथ fine-tuning/prompting पर RAG चुना</li>
+<li>&#9745; Actual implementation details के साथ 8-stage pipeline documented</li>
+<li>&#9745; System prompt + 5 mode-specific prompts + optimization strategies</li>
+<li>&#9745; 8 risks और mitigations वाली risk matrix (Gemini-specific)</li>
+<li>&#9745; 3 test interactions + holdout validation (5/5 passed)</li>
+<li>&#9745; Working web UI के screenshots Section 8 में embedded</li>
+<li>&#9745; Final page count ≤ 10 pages (verified)</li>
+</ul>
+</div>
+      </div>
+    </section>
+
+    <!-- ── Footer ──────────────────────────────────── -->
+    <footer class="site-footer">
+      <div>Working draft &mdash; DBA Gen AI: Pre-Trained Models (GGU/upGrad Course 8919)</div>
+      <div style="margin-top:6px;">
+        <a href="assignment1.html">Assignment 1 Explainer</a>
+        <a href="#">ऊपर जाएँ &uarr;</a>
+      </div>
+    </footer>
+
+  </main>
+</div><!-- /.layout -->
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FLOATING PAGE BUDGET -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="page-budget" id="pageBudget">
+  <span class="pb-count" id="pbCount">0</span>
+  <div class="pb-label">10 pages में से</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+/* ── Sidebar active state on scroll ─────────────── */
+const sections = document.querySelectorAll('.wb-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+/* ── Page Budget Counter ─────────────────────────── */
+// Estimated pages based on checkboxes ticked
+const PAGE_WEIGHTS = [0.5, 0.5, 0.5, 1.25, 0.5, 1.75, 1.25, 1.25, 2.5, 0, 0, 0];
+
+function updatePageBudget() {
+  const checkboxes = document.querySelectorAll('#submissionChecklist .check-input');
+  let total = 0;
+  checkboxes.forEach((cb, i) => {
+    if (cb.checked && PAGE_WEIGHTS[i]) total += PAGE_WEIGHTS[i];
+  });
+  total = Math.round(total * 10) / 10;
+  document.getElementById('pbCount').textContent = total.toFixed(1);
+
+  const budget = document.getElementById('pageBudget');
+  budget.classList.remove('warn', 'danger');
+  if (total >= 9) budget.classList.add('danger');
+  else if (total >= 7) budget.classList.add('warn');
+
+  // Update global progress bar
+  const done = [...checkboxes].filter(cb => cb.checked).length;
+  const sectionsDone = Math.min(9, Math.round(done * 9 / 12));
+  updateGlobalProgress(done, checkboxes.length);
+}
+
+/* ── Global Progress Bar ─────────────────────────── */
+function updateGlobalProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('globalProgressBar').style.width = pct + '%';
+
+  // Count completed sections (rough)
+  const sectDone = Math.round(done * 9 / total);
+  document.getElementById('globalProgressLabel').textContent = sectDone + ' / 9 sections';
+}
+
+/* ── Smooth scroll offset for fixed header ───────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + 20;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ── Init ────────────────────────────────────────── */
+updatePageBudget();
+</script>
+
+</body>
+</html>

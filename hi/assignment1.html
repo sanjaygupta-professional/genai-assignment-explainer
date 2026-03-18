@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 1 Explainer — Gen AI: Pre-Trained Models</title>
+<link rel="alternate" hreflang="en" href="../assignment1.html">
+<link rel="alternate" hreflang="hi" href="assignment1.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* DesignArena warm palette */
+  --white: #ffffff;
+  --cream: #F7F6F5;
+  --cream-dark: #F3F1EF;
+  --cream-darker: #EEEDEA;
+  --warm-gray: #D9D9D9;
+  --warm-gray-dark: #898584;
+  --border: #D9D9D9;
+
+  /* Text */
+  --text-primary: #292C33;
+  --text-secondary: #6B7280;
+  --text-muted: #6A6A6A;
+  --text-light: #F8F7F6;
+
+  /* Earthy accents */
+  --teal: #487265;
+  --teal-light: #DDEFEF;
+  --teal-border: #568788;
+  --teal-dark: #407967;
+  --sage: #A0C3C4;
+  --olive: #AAB788;
+  --gold: #D4C68B;
+  --copper: #BC976A;
+  --bronze: #CAAB84;
+  --sand: #CB9F69;
+
+  /* Layout */
+  --max-w: 780px;
+  --header-h: 55px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans Devanagari', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  background: var(--white);
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography ───────────────────────────────── */
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.8rem; line-height: 1.05; letter-spacing: -0.05em; }
+h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
+h3 { font-size: 1.25rem; line-height: 1.3; margin: 1.5rem 0 .5rem; }
+h4 {
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  margin: 1.25rem 0 .4rem;
+  color: var(--text-primary);
+}
+p { margin-bottom: .75rem; }
+li { margin-bottom: .35rem; }
+ul, ol { padding-left: 1.5rem; }
+a { color: var(--teal); text-decoration: underline; }
+a:hover { color: var(--teal-dark); }
+
+/* ── Layout ───────────────────────────────────── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
+
+/* ── Fixed Header ─────────────────────────────── */
+header.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-inner {
+  width: 100%; max-width: var(--max-w); padding: 0 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-brand {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.header-brand .logo {
+  font-family: 'Playfair Display', serif; font-size: 1.15rem;
+  font-weight: 600; color: var(--text-primary); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.header-brand .byline {
+  font-size: 11px; color: var(--warm-gray-dark);
+}
+.header-nav { display: flex; align-items: center; gap: 4px; }
+.header-nav a {
+  font-size: 13px; color: var(--text-primary); text-decoration: none;
+  padding: 5px 10px; border-radius: 9999px; transition: background .2s;
+}
+.header-nav a:hover { background: var(--cream); }
+.header-nav a.active {
+  background: var(--teal-light); border: 1px solid var(--teal-border);
+}
+
+/* ── Hero ──────────────────────────────────────── */
+.hero {
+  padding: calc(var(--header-h) + 48px) 0 48px;
+  text-align: center;
+}
+.hero h1 { margin-bottom: 16px; }
+.hero .subtitle {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 560px; margin: 0 auto 24px;
+}
+
+/* ── Pill Badges ──────────────────────────────── */
+.pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin: 20px 0;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px 8px 10px; border-radius: 40px;
+  font-size: 14px; font-weight: 500;
+  background: var(--cream); border: 1px solid var(--border);
+  color: var(--text-primary); transition: all .2s;
+}
+.pill .dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* ── Prompt Box ───────────────────────────────── */
+.prompt-box {
+  max-width: 648px; margin: 0 auto 32px;
+  background: var(--cream); border: 1px solid var(--copper);
+  border-radius: 12px; padding: 20px;
+  text-align: left;
+}
+.prompt-box .prompt-label {
+  font-size: 12px; font-weight: 500; color: var(--warm-gray-dark);
+  margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em;
+}
+.prompt-box .prompt-text {
+  font-size: 1rem; color: var(--text-primary); line-height: 1.6;
+  font-style: italic;
+}
+.prompt-box .prompt-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 12px; font-size: 12px; color: var(--warm-gray-dark);
+}
+.prompt-box .prompt-meta .badge {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px; padding: 4px 10px; font-size: 12px; font-weight: 500;
+}
+
+/* ── Section Bands ────────────────────────────── */
+.section-warm {
+  background: var(--cream); padding: 48px 18px;
+  margin: 0 -18px;
+}
+.section-white { padding: 48px 0; }
+
+/* ── Callouts ─────────────────────────────────── */
+.callout {
+  border-radius: 10px; padding: 16px 18px; margin: 16px 0;
+  font-size: 14px; line-height: 1.6;
+  border: 1px solid;
+}
+.callout.strategy {
+  background: var(--teal-light); border-color: var(--teal-border);
+}
+.callout.strategy::before {
+  content: 'रणनीति '; font-weight: 600; color: var(--teal-dark);
+}
+.callout.warning {
+  background: #faf6ef; border-color: var(--copper);
+}
+.callout.warning::before {
+  content: 'सावधान '; font-weight: 600; color: var(--copper);
+}
+.callout.golden {
+  background: #faf8f0; border-color: var(--gold);
+}
+.callout.golden::before {
+  content: 'सुनहरा नियम '; font-weight: 600; color: var(--sand);
+}
+
+/* ── Cards ────────────────────────────────────── */
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--teal-border); }
+.card h4 { margin-top: 0; }
+
+/* ── Flow Steps ───────────────────────────────── */
+.flow {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: .25rem; margin: 1.5rem 0;
+}
+.flow-step {
+  background: var(--cream); color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: .5rem 1rem; border-radius: 8px; font-size: .85rem;
+  text-align: center; font-weight: 500; min-width: 110px;
+}
+.flow-arrow { color: var(--warm-gray-dark); font-size: 1.2rem; }
+
+/* ── Job Selector ─────────────────────────────── */
+.jobs-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .75rem; margin: 1rem 0;
+}
+.job-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1rem 1.25rem; cursor: pointer; transition: all .2s;
+  position: relative;
+}
+.job-card:hover { border-color: var(--teal-border); transform: translateY(-2px); }
+.job-card.active { border-color: var(--teal-border); background: var(--teal-light); }
+.job-card .job-num {
+  position: absolute; top: .75rem; right: .75rem;
+  width: 24px; height: 24px; border-radius: 50%; font-size: .75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--text-primary);
+}
+.job-card h4 { margin: 0 0 .3rem; font-size: 1rem; padding-right: 2rem; }
+.job-card .task { font-size: .85rem; color: var(--text-secondary); }
+
+/* Job number badge colors cycling through earthy palette */
+.job-num-1 { background: var(--sage); }
+.job-num-2 { background: var(--olive); }
+.job-num-3 { background: var(--gold); }
+.job-num-4 { background: var(--copper); color: var(--white) !important; }
+.job-num-5 { background: var(--bronze); }
+.job-num-6 { background: var(--sage); }
+.job-num-7 { background: var(--olive); }
+.job-num-8 { background: var(--gold); }
+.job-num-9 { background: var(--copper); color: var(--white) !important; }
+.job-num-10 { background: var(--bronze); }
+
+/* ── Job Detail Panel ─────────────────────────── */
+.job-detail {
+  display: none; background: var(--white); border: 1px solid var(--teal-border);
+  border-radius: 12px; padding: 1.5rem; margin-top: .75rem;
+  animation: slideDown .3s ease;
+}
+.job-detail.visible { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Complexity Badges ────────────────────────── */
+.complexity {
+  display: inline-block; padding: 3px 12px; border-radius: 62px;
+  font-size: .8rem; font-weight: 600;
+}
+.complexity.easy { background: var(--sage); color: var(--text-primary); }
+.complexity.medium { background: var(--gold); color: var(--text-primary); }
+.complexity.hard { background: var(--copper); color: var(--white); }
+
+/* ── Marks Badge ──────────────────────────────── */
+.marks {
+  display: inline-block; background: var(--gold); color: var(--text-primary);
+  padding: 3px 12px; border-radius: 62px; font-size: .8rem; font-weight: 600;
+}
+
+/* ── Arena Details / Summary ──────────────────── */
+details.arena-details {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 10px; background: var(--white);
+  transition: border-color .2s;
+}
+details.arena-details:hover { border-color: var(--teal-border); }
+details.arena-details[open] { border-color: var(--teal-border); }
+details.arena-details > summary {
+  padding: 14px 18px; cursor: pointer; font-weight: 500;
+  font-size: 15px; list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+details.arena-details > summary::before {
+  content: '\25B6'; font-size: .65rem; color: var(--teal);
+  transition: transform .2s;
+}
+details.arena-details[open] > summary::before { transform: rotate(90deg); }
+details.arena-details > summary::-webkit-details-marker { display: none; }
+details.arena-details > .detail-body { padding: 0 18px 18px; }
+
+/* ── Step Badge (inline) ──────────────────────── */
+.step-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--text-primary); color: var(--text-light);
+  font-family: 'Playfair Display', serif;
+  font-weight: 600; font-size: .85rem; flex-shrink: 0;
+}
+
+/* ── Table ────────────────────────────────────── */
+.arena-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+}
+.arena-table th {
+  text-align: left; padding: 10px 12px; font-weight: 500;
+  color: var(--text-secondary); font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+.arena-table td {
+  padding: 10px 12px; border-bottom: 1px solid var(--cream-darker);
+  vertical-align: top;
+}
+.arena-table tr:last-child td { border-bottom: none; }
+.arena-table .row-good { background: #f0f7f4; }
+.arena-table .row-sat { background: #faf6ef; }
+.arena-table .row-poor { background: #faf0ee; }
+
+/* ── Bar Chart ────────────────────────────────── */
+.bar-chart {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 8px; height: 200px; margin: 24px 0 8px; padding: 0 12px;
+}
+.bar-col {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex: 1; max-width: 120px;
+}
+.bar {
+  width: 100%; border-radius: 6px 6px 0 0;
+}
+.bar-label {
+  font-size: 11px; color: var(--text-secondary); text-align: center;
+  line-height: 1.3;
+}
+.bar-value {
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+}
+
+/* ── Example Block ────────────────────────────── */
+.example-block {
+  background: var(--cream); border-radius: 10px;
+  padding: 16px 18px; margin: 12px 0; font-size: 14px;
+}
+.example-block .ex-label {
+  font-size: 12px; font-weight: 600; color: var(--teal-dark);
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
+}
+
+/* ── Code Block ───────────────────────────────── */
+.code-block {
+  background: var(--text-primary); color: var(--cream);
+  padding: 16px 18px; border-radius: 10px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px; line-height: 1.6; overflow-x: auto;
+  margin: 12px 0; white-space: pre-wrap; word-break: break-word;
+}
+.code-block .comment { color: var(--warm-gray-dark); }
+.code-block .keyword { color: var(--sage); }
+.code-block .string { color: var(--olive); }
+
+/* ── Checklist ────────────────────────────────── */
+.checklist { list-style: none; padding: 0; margin: 16px 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; font-size: 14px;
+  border-bottom: 1px solid var(--cream-darker);
+}
+.checklist li:last-child { border-bottom: none; }
+.check-box {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;
+  border: 2px solid var(--warm-gray); border-radius: 4px;
+}
+
+/* ── RAG Diagram ──────────────────────────────── */
+.rag-diagram {
+  width: 100%; max-width: 780px; margin: 1.5rem auto; display: block;
+}
+
+/* ── CTA Button ───────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text-primary); color: var(--text-light);
+  border: none; border-radius: 50px; padding: 14px 28px;
+  font-size: 16px; font-weight: 400; font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s;
+}
+.btn-primary:hover { background: #3a3d44; color: var(--text-light); text-decoration: none; }
+
+/* ── Section Title with number ────────────────── */
+.section-title {
+  display: flex; align-items: center; gap: 12px; margin-bottom: .75rem;
+}
+.section-num {
+  flex-shrink: 0; width: 36px; height: 36px;
+  background: var(--text-primary); color: var(--text-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600;
+}
+
+/* ── Footer ───────────────────────────────────── */
+footer.site-footer {
+  padding: 32px 0 24px;
+  text-align: center; font-size: 14px; color: var(--text-muted);
+  border-top: 1px solid var(--cream-darker);
+  margin-top: 24px;
+}
+footer.site-footer a {
+  color: var(--text-muted); text-decoration: none; margin: 0 8px;
+}
+footer.site-footer a:hover { text-decoration: underline; }
+
+/* ── Language Switcher ────────────────────────── */
+.lang-switch {
+  position: fixed; top: 16px; right: 16px;
+  display: flex; gap: 4px; z-index: 200;
+  background: #F7F6F5; border: 1px solid #D9D9D9;
+  border-radius: 40px; padding: 4px;
+}
+.lang-switch a {
+  padding: 6px 14px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  color: #6B7280; transition: all .2s;
+  font-family: 'Inter', sans-serif;
+}
+.lang-switch a.active { background: #487265; color: #fff; }
+.lang-switch a:hover:not(.active) { color: #292C33; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  .jobs-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+  .arena-table { font-size: 13px; }
+  .arena-table th, .arena-table td { padding: 8px; }
+  .bar-chart { height: 150px; gap: 4px; }
+  .header-nav a { font-size: 12px; padding: 4px 7px; }
+}
+
+/* ── Print ────────────────────────────────────── */
+@media print {
+  header.site-header { display: none; }
+  .hero { padding-top: 24px; }
+  details.arena-details[open] > .detail-body { display: block !important; }
+  .job-card:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="lang-switch">
+  <a href="../assignment1.html">EN</a>
+  <a href="assignment1.html" class="active">हिन्दी</a>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="../index.html" class="logo">Assignment 1</a>
+      <span class="byline">GenAI Pre-Trained Models</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#overview">सारांश</a>
+      <a href="#jobs">जॉब्स</a>
+      <a href="#questions">सवाल</a>
+      <a href="#rubric" class="active">रूब्रिक</a>
+      <a href="#guide">गाइड</a>
+      <a href="#rag-primer">RAG</a>
+      <a href="#maximizer">मैक्सिमाइज़र</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="hero" id="overview">
+  <h1>Assignment 1<br>Explainer</h1>
+  <p class="subtitle">एक real-world job के लिए RAG-based GenAI solution डिज़ाइन करें। Knowledge base से लेकर working demo तक &mdash; यह आपका architecture challenge है।</p>
+
+  <div class="pills">
+    <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 अंक</span>
+    <span class="pill"><span class="dot" style="background:var(--gold)"></span> 7 + 3 पेज</span>
+    <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 मानदंड</span>
+    <span class="pill"><span class="dot" style="background:var(--copper)"></span> RAG Solution</span>
+    <span class="pill"><span class="dot" style="background:var(--bronze)"></span> व्यक्तिगत</span>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-label">Assignment एक वाक्य में</div>
+    <div class="prompt-text">&ldquo;10 jobs में से एक चुनें, उसका Knowledge Base डिज़ाइन करें, RAG pipeline का architecture बनाएं, limitations पहचानें, और ChatGPT या Azure OpenAI पर try करके देखें।&rdquo;</div>
+    <div class="prompt-meta">
+      <span>GGU DBA &mdash; upGrad Course 8919</span>
+      <span class="badge">व्यक्तिगत</span>
+    </div>
+  </div>
+
+  <a href="#guide" class="btn-primary">गाइड देखें &darr;</a>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- SCORE DISTRIBUTION BAR CHART -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="section-warm">
+  <h2>अंकों का वितरण</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 24px;">पांच मानदंड, हर एक <strong>5 अंक</strong> का (आपके ग्रेड का 20%)। नीचे दिया गया चार्ट दिखाता है कि आपके marks कहां हैं &mdash; बराबर weightage का मतलब है कोई भी criterion optional नहीं है।</p>
+
+  <div class="bar-chart" id="barChart">
+    <!-- Rendered by JS -->
+  </div>
+  <div style="text-align:center; font-size: 12px; color: var(--warm-gray-dark); margin-top: 4px;">हर एक 5 अंक &mdash; कुल 25</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 1. OVERVIEW (The Big Picture) -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="section-white">
+  <div class="section-title">
+    <span class="section-num">1</span>
+    <h2 style="margin:0;">Assignment का सारांश</h2>
+  </div>
+
+  <p>इस assignment में आपको 10 real-world jobs में से एक के लिए <strong>RAG-based GenAI solution को conceptually design</strong> करना है। आप production software नहीं बना रहे &mdash; आप यह demonstrate कर रहे हैं कि आप एक ऐसे GenAI system को architect करना समझते हैं जो domain-specific knowledge का इस्तेमाल करके नए employees को उनका काम बेहतर तरीके से करने में मदद करता है।</p>
+
+  <div class="card">
+    <h4>30 सेकंड में पूरी तस्वीर</h4>
+    <div class="flow">
+      <div class="flow-step">10 में से 1 Job चुनें</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">GenAI की क्षमता आंकें</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">अपना KB डिज़ाइन करें</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">RAG Pipeline बनाएं</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">Limitations पहचानें</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">Try करके देखें!</div>
+    </div>
+  </div>
+
+  <h3>Format की ज़रूरतें</h3>
+  <ul>
+    <li><strong>लंबाई:</strong> 1&ndash;7 A4 पेज written content + 3 पेज तक screenshots/code। <em>पेज 10 के बाद का content ignore किया जाएगा।</em></li>
+    <li><strong>शैली:</strong> &ldquo;A lucid note&rdquo; &mdash; साफ़, structured prose (slides या bullet dumps नहीं)।</li>
+    <li><strong>Assumptions:</strong> KB document formats, sample queries, tool choices आदि के बारे में reasonable assumptions लेने की छूट है। उन्हें clearly state करें।</li>
+    <li><strong>भाषा:</strong> English।</li>
+  </ul>
+
+  <div class="callout strategy">5वां criterion &mdash; अपने solution को actually try करना &mdash; architecture design जितना ही 20% weightage रखता है। इसे optional मत समझिए! ChatGPT पर एक basic conversation भी जो आपका approach demonstrate करे, count होती है। यह सबसे ज़्यादा underweight किया जाने वाला criterion है।</div>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 2. THE 10 JOBS -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="section-warm" id="jobs">
+  <div class="section-title">
+    <span class="section-num">2</span>
+    <h2 style="margin:0;">10 Jobs &mdash; Interactive Selector</h2>
+  </div>
+  <p>किसी भी job पर click करें उसकी KB details, sample query, complexity rating, और strategic hints देखने के लिए। वो चुनें जो आपकी strengths से match करे।</p>
+
+  <div class="jobs-grid" id="jobsGrid"></div>
+  <div id="jobDetail" class="job-detail"></div>
+
+  <div class="callout strategy" style="margin-top:16px;">वो job चुनें जहां KB <strong>text-heavy और structured</strong> हो &mdash; वहीं RAG सबसे अच्छा काम करता है। Legal Assistant (#1), Insurance Underwriter (#4), और HR Executive (#7) जैसे jobs में naturally structured document corpora होता है। ऐसे jobs से बचें जहां काम मुख्य रूप से creative/visual है (जैसे Graphic Designer) जब तक आप एक clear retrieval story articulate नहीं कर सकते।</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 3. THE 5 QUESTIONS -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="section-white" id="questions">
+  <div class="section-title">
+    <span class="section-num">3</span>
+    <h2 style="margin:0;">5 सवाल जो आपको ज़रूर answer करने हैं</h2>
+  </div>
+
+  <details class="arena-details" open>
+    <summary>Q1: GenAI कितना मदद कर सकता है? (पूरी तरह / ज़्यादातर / कुछ हद तक / बहुत कम)</summary>
+    <div class="detail-body">
+      <p>आपको एक चुनना है: <strong>(a) पूरी तरह 100%</strong>, <strong>(b) ज़्यादातर 80%+</strong>, <strong>(c) कुछ हद तक 40%+</strong>, या <strong>(d) बहुत कम &lt;20%</strong>।</p>
+
+      <h4>अपनी Choice को कैसे Justify करें</h4>
+      <ul>
+        <li><strong>Task को sub-tasks में तोड़ें।</strong> हर एक के लिए assess करें: क्या GenAI यह कर सकता है? कितनी अच्छी तरह?</li>
+        <li><strong>Human-only हिस्से पहचानें:</strong> judgment calls, ethical decisions, physical actions, real-time social cues।</li>
+        <li><strong>Specific रहें:</strong> &ldquo;GenAI similar cases retrieve कर सकता है और search terms suggest कर सकता है (70% काम), लेकिन legal applicability verify करना और final case selection इंसान को करना होगा (30%).&rdquo;</li>
+      </ul>
+
+      <div class="callout warning">&ldquo;पूरी तरह&rdquo; तब तक न चुनें जब तक आप सच में 100% automation defend न कर सकें। ज़्यादातर jobs में human oversight ज़रूरी है। &ldquo;ज़्यादातर&rdquo; अधिकांश choices के लिए safe sweet spot है &mdash; यह दिखाता है कि आप GenAI की power समझते हैं साथ ही real-world limits भी।</div>
+
+      <div class="example-block">
+        <div class="ex-label">उदाहरण &mdash; Legal Assistant</div>
+        <strong>Similar cases ढूंढना:</strong> &ldquo;ज़्यादातर (80%+)। RAG के साथ GenAI past search logs search कर सकता है, successful queries में patterns पहचान सकता है, relevant search terms suggest कर सकता है, और case similarity rank भी कर सकता है। हालांकि, legal relevance verify करना, jurisdictional applicability check करना, और returned cases currently good law हैं यह validate करना इंसान को ही करना होगा।&rdquo;
+      </div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Q2: GenAI इस task के लिए क्या कर सकता है vs क्या नहीं?</summary>
+    <div class="detail-body">
+      <p>एक clear two-column analysis बनाएं:</p>
+      <table class="arena-table">
+        <thead><tr><th style="width:50%">GenAI यह कर सकता है</th><th>GenAI यह नहीं कर सकता</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Semantic similarity के basis पर relevant KB documents retrieve करना</td>
+            <td>Professional judgment या ethical reasoning करना</td>
+          </tr>
+          <tr>
+            <td>Multiple sources की information को coherent responses में synthesize करना</td>
+            <td>Human verification के बिना factual accuracy guarantee करना</td>
+          </tr>
+          <tr>
+            <td>Historical data में patterns पहचानना</td>
+            <td>ऐसी novel situations handle करना जिनका KB में कोई precedent नहीं</td>
+          </tr>
+          <tr>
+            <td>Past expert behavior के basis पर next steps suggest करना</td>
+            <td>Real-time contextual nuances (tone, urgency, politics) समझना</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout strategy">सबसे मज़बूत answers में हर &ldquo;नहीं कर सकता&rdquo; item को एक specific mitigation strategy से जोड़ा जाता है। उदाहरण: &ldquo;GenAI accuracy guarantee नहीं कर सकता &rarr; हम confidence score add करते हैं और 0.8 threshold से नीचे responses के लिए human-in-the-loop review रखते हैं।&rdquo;</div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Q3: Build approach &mdash; From scratch, fine-tuning, prompting, या RAG?</summary>
+    <div class="detail-body">
+      <p>Assignment strongly hint करता है कि <strong>RAG</strong> expected answer है &mdash; यह title और problem statement में है। लेकिन आपको फिर भी justify करना चाहिए कि alternatives की जगह RAG <em>क्यों</em>:</p>
+
+      <table class="arena-table">
+        <thead><tr><th>Approach</th><th>कब काम करता है</th><th>यहां क्यों नहीं</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>From scratch</strong></td>
+            <td>Unique language/domain, massive data, unlimited budget</td>
+            <td>बहुत expensive, millions of examples चाहिए, solved problems को reinvent करता है</td>
+          </tr>
+          <tr>
+            <td><strong>Fine-tuning</strong></td>
+            <td>Narrow domain style, consistent output format ज़रूरी हो</td>
+            <td>KB updates के लिए retraining ज़रूरी; evolving knowledge के साथ scale नहीं करता</td>
+          </tr>
+          <tr>
+            <td><strong>Prompting only</strong></td>
+            <td>General knowledge tasks, proprietary data की ज़रूरत नहीं</td>
+            <td>KB access नहीं कर सकता; context window से limited; domain-specific knowledge नहीं</td>
+          </tr>
+          <tr class="row-good">
+            <td><strong>RAG</strong></td>
+            <td>Domain-specific KB, current data चाहिए, explainability important</td>
+            <td><em>यही answer है</em> &mdash; KB solution का centerpiece है</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout strategy">भले ही RAG expected है, mention करें कि आप <strong>approaches combine</strong> कर सकते हैं: retrieval के लिए RAG + response quality के लिए prompt engineering + domain-specific language के लिए potential fine-tuning। यह sophistication दिखाता है।</div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Q4: Conceptual RAG architecture design</summary>
+    <div class="detail-body">
+      <p>यह आपके assignment का core है &mdash; पूरी visual guide के लिए <a href="#rag-primer">Section 6: RAG Architecture Primer</a> देखें। आपके design में ये cover होने चाहिए:</p>
+      <ol>
+        <li><strong>Document ingestion:</strong> KB documents को कैसे chunk, embed, और index किया जाएगा</li>
+        <li><strong>Query pipeline:</strong> User queries कैसे embedding &rarr; retrieval &rarr; context injection &rarr; LLM generation से flow करेंगी</li>
+        <li><strong>Tool choices:</strong> Specific embedding models, vector DBs, LLMs, orchestration frameworks</li>
+        <li><strong>Prompt design:</strong> System prompts, few-shot examples, output format instructions</li>
+        <li><strong>Evaluation method:</strong> आप कैसे measure करेंगे कि solution actually काम करता है या नहीं</li>
+      </ol>
+
+      <div class="callout golden">Criterion 2 का rubric explicitly कहता है: &ldquo;the method of estimating the success of the approach is also clearly stated.&rdquo; बहुत से students architecture describe करते हैं लेकिन यह बताना भूल जाते हैं कि उसे <em>evaluate</em> कैसे करेंगे। Retrieval precision, answer relevance scores, या user satisfaction ratings जैसे metrics शामिल करें।</div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Q5: Limitations और risks</summary>
+    <div class="detail-body">
+      <p>Assignment specifically TCO और response time mention करता है। ये categories cover करें:</p>
+      <ul>
+        <li><strong>Cost (TCO):</strong> Embedding computation, vector DB hosting, हर query पर LLM API costs, KB maintenance</li>
+        <li><strong>Performance:</strong> Latency (embedding + retrieval + generation), concurrent users के लिए throughput</li>
+        <li><strong>Quality risks:</strong> Hallucination, retrieval failures, outdated KB, historical data में bias</li>
+        <li><strong>Operational risks:</strong> Data privacy, KB curation effort, model deprecation, vendor lock-in</li>
+        <li><strong>Domain-specific risks:</strong> आपके chosen job से specific जो भी हो (जैसे Legal Assistant के लिए legal liability)</li>
+      </ul>
+
+      <div class="callout strategy">सिर्फ risks list मत करें &mdash; हर एक के लिए <strong>mitigations propose करें</strong>। &ldquo;Hallucination risk &rarr; हर response में source citations include करके और high-stakes decisions के लिए human review require करके mitigate किया जाएगा।&rdquo; यह weakness को आपके answer में strength बना देता है।</div>
+    </div>
+  </details>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 4. RUBRIC DEEP-DIVE -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="section-warm" id="rubric">
+  <div class="section-title">
+    <span class="section-num">4</span>
+    <h2 style="margin:0;">Rubric Deep-Dive</h2>
+  </div>
+  <p>हर criterion 5 में से score होता है। यहां बताया गया है कि graders क्या देख रहे हैं &mdash; और 5 को 3 से क्या अलग करता है।</p>
+
+  <!-- Criterion 1 -->
+  <details class="arena-details">
+    <summary><span class="marks">5 अंक</span> &nbsp; Criterion 1: KB और Sample Query Format की Detailing</summary>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">स्कोर</th><th>कैसा दिखता है</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td><strong>अच्छा (5-4)</strong></td><td>KB document structure (fields, format, metadata) का clear description, अलग-अलग complexity की multiple realistic sample queries, documents कैसे organized हैं और क्यों इसकी व्याख्या</td></tr>
+          <tr class="row-sat"><td><strong>ठीक-ठाक (3-2)</strong></td><td>General background presented है लेकिन KB specifics vague हैं &mdash; कोई document schema नहीं, सिर्फ एक generic query</td></tr>
+          <tr class="row-poor"><td><strong>सुधार ज़रूरी (1)</strong></td><td>न KB और न ही query specifics clearly stated हैं</td></tr>
+          <tr><td><strong>Address ही नहीं किया (0)</strong></td><td>Section पूरी तरह missing है</td></tr>
+        </tbody>
+      </table>
+
+      <h4>&ldquo;5&rdquo; वाले Answer में क्या शामिल होता है</h4>
+      <ul>
+        <li>एक <strong>document schema</strong> जिसमें 3-5 fields दिखें (जैसे case_id, date, jurisdiction, summary, full_text, outcome, tags)</li>
+        <li>एक <strong>sample KB document</strong> &mdash; 3-4 lines भी काफी हैं जो दिखाएं कि real entry कैसी दिखती है</li>
+        <li><strong>3+ sample queries</strong> जो simple lookup से लेकर complex analytical questions तक हों</li>
+        <li><strong>Document size, volume, और update frequency</strong> की व्याख्या</li>
+      </ul>
+
+      <div class="example-block">
+        <div class="ex-label">Legal Assistant KB Schema</div>
+        <code>{ "case_id": "LC-2024-00431", "date": "2024-03-15", "jurisdiction": "California", "practice_area": "IP-Patent", "search_terms_used": ["patent infringement", "software claims"], "relevant_cases_found": ["Smith v. TechCorp 2019", ...], "success_rating": 4, "searcher_notes": "Key was combining patent class codes with natural language terms..." }</code>
+      </div>
+    </div>
+  </details>
+
+  <!-- Criterion 2 -->
+  <details class="arena-details">
+    <summary><span class="marks">5 अंक</span> &nbsp; Criterion 2: Overall GenAI Solution Design</summary>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">स्कोर</th><th>कैसा दिखता है</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td><strong>अच्छा (5-4)</strong></td><td>Approach clearly described है और success estimate करने का method भी clearly stated है</td></tr>
+          <tr class="row-sat"><td><strong>ठीक-ठाक (3-2)</strong></td><td>या तो approach या evaluation method unclear है</td></tr>
+          <tr class="row-poor"><td><strong>सुधार ज़रूरी (1)</strong></td><td>न approach और न evaluation clearly described है</td></tr>
+        </tbody>
+      </table>
+
+      <h4>छिपी हुई Requirement: Evaluation Methodology</h4>
+      <p>ध्यान दें rubric कहता है <em>&ldquo;the method of estimating the success of the approach is also clearly stated.&rdquo;</em> यह सबसे commonly miss किया जाने वाला element है। ये शामिल करें:</p>
+      <ul>
+        <li><strong>Retrieval metrics:</strong> Precision@k, Recall@k, MRR (Mean Reciprocal Rank)</li>
+        <li><strong>Generation quality:</strong> Faithfulness score (क्या answer retrieved context से match करता है?), relevance, completeness</li>
+        <li><strong>End-to-end:</strong> User satisfaction ratings, task completion time comparison (GenAI के साथ vs बिना)</li>
+      </ul>
+
+      <div class="callout golden">एक beautiful architecture diagram बनाना लेकिन कोई evaluation plan नहीं, guaranteed 3 है 5 की जगह। हमेशा शामिल करें: &ldquo;हम इस solution को evaluate करेंगे...&rdquo;</div>
+    </div>
+  </details>
+
+  <!-- Criterion 3 -->
+  <details class="arena-details">
+    <summary><span class="marks">5 अंक</span> &nbsp; Criterion 3: Prompts और RAG Effectiveness Enhancement</summary>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">स्कोर</th><th>कैसा दिखता है</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td><strong>अच्छा (5-4)</strong></td><td>Technically correct solution जिसमें effective prompt design और RAG optimization strategies हैं</td></tr>
+          <tr class="row-sat"><td><strong>ठीक-ठाक (3-2)</strong></td><td>Technical evaluation में कुछ gaps हैं</td></tr>
+          <tr class="row-poor"><td><strong>सुधार ज़रूरी (1)</strong></td><td>Solution technically correct नहीं है</td></tr>
+        </tbody>
+      </table>
+
+      <h4>&ldquo;Technically Correct&rdquo; का मतलब क्या है</h4>
+      <ul>
+        <li><strong>Prompts:</strong> Actual system prompts दिखाएं जिनमें role definition, instructions, और output format हो। कम से कम एक few-shot example शामिल करें।</li>
+        <li><strong>RAG enhancements:</strong> कम से कम 2-3 strategies mention करें: hybrid search (keyword + semantic), re-ranking, query expansion, metadata filtering, chunk overlap strategy।</li>
+        <li><strong>Correct pipeline:</strong> Technical flow make sense करता हो &mdash; आप queries को एक model से embed नहीं कर रहे और documents को किसी दूसरे incompatible model से।</li>
+      </ul>
+
+      <div class="example-block">
+        <div class="ex-label">Legal Assistant RAG के लिए System Prompt</div>
+        <code>You are a legal research assistant helping new paralegals find relevant past cases. Use ONLY the provided context from our case log database. For each suggestion, cite the specific case log entry. If the context doesn&rsquo;t contain relevant information, say so &mdash; do NOT fabricate case references. Format: bullet list with case ID, relevance explanation, and suggested search terms.</code>
+      </div>
+    </div>
+  </details>
+
+  <!-- Criterion 4 -->
+  <details class="arena-details">
+    <summary><span class="marks">5 अंक</span> &nbsp; Criterion 4: Solution Limitations की पहचान</summary>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">स्कोर</th><th>कैसा दिखता है</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td><strong>अच्छा (5-4)</strong></td><td>Clearly stated limitations जिनमें specifics हैं &mdash; TCO estimates, latency numbers, concrete risk scenarios</td></tr>
+          <tr class="row-sat"><td><strong>ठीक-ठाक (3-2)</strong></td><td>Generic limitations mentioned हैं बिना specifics के</td></tr>
+          <tr class="row-poor"><td><strong>सुधार ज़रूरी (1)</strong></td><td>Basic level &mdash; एक-दो vague limitations</td></tr>
+        </tbody>
+      </table>
+
+      <h4>ऐसी Limitations जो Impress करती हैं</h4>
+      <ul>
+        <li><strong>Quantified costs:</strong> &ldquo;GPT-4o-mini के ~$0.01/1K tokens और 500 queries/day पर, monthly LLM costs &asymp; $150 + vector DB hosting &asymp; $50/month.&rdquo;</li>
+        <li><strong>Specific latency:</strong> &ldquo;Expected response time: 2-4 seconds (embedding 200ms + retrieval 300ms + LLM generation 1.5-3s).&rdquo;</li>
+        <li><strong>Domain risks:</strong> &ldquo;Historical negotiation transcripts में outdated market rates reflect हो सकते हैं, quarterly KB refresh ज़रूरी होगा।&rdquo;</li>
+      </ul>
+
+      <div class="callout strategy">Limitations को &ldquo;Limitation &rarr; Mitigation&rdquo; format में frame करें। यह maturity दिखाता है। Grader देखता है कि आप problem space को deeply समझते हैं, सिर्फ concerns list नहीं कर रहे।</div>
+    </div>
+  </details>
+
+  <!-- Criterion 5 -->
+  <details class="arena-details">
+    <summary><span class="marks">5 अंक</span> &nbsp; Criterion 5: Solution Try करने की कोशिश</summary>
+    <div class="detail-body">
+      <table class="arena-table">
+        <thead><tr><th style="width:20%">स्कोर</th><th>कैसा दिखता है</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td><strong>अच्छा (5-4)</strong></td><td>काफी effort &mdash; working demo, multiple test queries, RAG in action दिखाते screenshots</td></tr>
+          <tr class="row-sat"><td><strong>ठीक-ठाक (3-2)</strong></td><td>Medium effort &mdash; basic ChatGPT conversation या single screenshot</td></tr>
+          <tr class="row-poor"><td><strong>सुधार ज़रूरी (1)</strong></td><td>Basic &mdash; try करने का mention है लेकिन कोई evidence नहीं</td></tr>
+        </tbody>
+      </table>
+
+      <h4>&ldquo;छुपा हुआ 6वां सवाल&rdquo;</h4>
+      <p>यह criterion आपके grade का <strong>20%</strong> है लेकिन students अक्सर इसे afterthought मान लेते हैं। Maximum marks कैसे मिलते हैं:</p>
+      <ul>
+        <li><strong>Option A (सबसे अच्छा):</strong> LangChain/LlamaIndex + कुछ sample KB documents + एक vector store का इस्तेमाल करके एक simple RAG pipeline बनाएं। दिखाएं कि यह आपकी sample queries answer कर रहा है। 2-3 screenshots।</li>
+        <li><strong>Option B (अच्छा):</strong> ChatGPT का इस्तेमाल करें system prompt और KB content as context paste करके। Conversation दिखाएं जिसमें multiple queries handle हो रही हैं।</li>
+        <li><strong>Option C (Minimum):</strong> Azure OpenAI playground या Colab notebook का इस्तेमाल करें। कम से कम एक query-response pair दिखाएं।</li>
+      </ul>
+
+      <div class="callout warning">इसे last page के लिए मत छोड़ें। अपने 3 screenshot pages में से कम से कम 2 इस section के लिए budget करें। अगर actually try करें तो ये easy marks हैं।</div>
+    </div>
+  </details>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 5. STEP-BY-STEP GUIDE -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="section-white" id="guide">
+  <div class="section-title">
+    <span class="section-num">5</span>
+    <h2 style="margin:0;">Step-by-Step Solution गाइड</h2>
+  </div>
+
+  <details class="arena-details" open>
+    <summary><span class="step-badge">1</span> &nbsp; अपनी Job समझदारी से चुनें</summary>
+    <div class="detail-body">
+      <p>सभी jobs के लिए RAG solution design करना equally आसान नहीं है। ऐसी jobs को priority दें जहां:</p>
+      <ul>
+        <li>KB <strong>text-based</strong> हो (transcripts, logs, documents &mdash; videos या images नहीं)</li>
+        <li>Task में <strong>information retrieval और synthesis</strong> शामिल हो (creative generation नहीं)</li>
+        <li>एक clear <strong>expert-to-novice knowledge transfer</strong> story हो</li>
+      </ul>
+
+      <h4>Recommended Picks (RAG Design के लिए सबसे आसान)</h4>
+      <table class="arena-table">
+        <thead><tr><th>Job</th><th>RAG के लिए क्यों अच्छी है</th><th>कठिनाई</th></tr></thead>
+        <tbody>
+          <tr class="row-good"><td>Legal Assistant (#1)</td><td>Text-heavy logs, clear retrieval task, well-defined success criteria</td><td><span class="complexity easy">Easy</span></td></tr>
+          <tr class="row-good"><td>Insurance Underwriter (#4)</td><td>Structured claims data, decision patterns, obvious KB schema</td><td><span class="complexity easy">Easy</span></td></tr>
+          <tr class="row-good"><td>HR Executive (#7)</td><td>Negotiation transcripts, pattern matching, practical sample queries</td><td><span class="complexity medium">Medium</span></td></tr>
+          <tr class="row-sat"><td>Bank Executive (#2)</td><td>Conversation transcripts, FAQ-style retrieval</td><td><span class="complexity easy">Easy</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary><span class="step-badge">2</span> &nbsp; अपना Knowledge Base डिज़ाइन करें</summary>
+    <div class="detail-body">
+      <p>यह Criterion 1 (20%) है। आपका KB design specific और believable होना चाहिए:</p>
+
+      <h4>KB Design Template</h4>
+      <div class="code-block"><span class="comment">// अपना document schema define करें</span>
+<span class="keyword">Document Type:</span> <span class="string">[जैसे "Past search session log"]</span>
+<span class="keyword">Fields:</span>
+  - <span class="string">id</span>: Unique identifier
+  - <span class="string">date</span>: Session कब हुआ
+  - <span class="string">domain_field_1</span>: [Job-specific field]
+  - <span class="string">domain_field_2</span>: [Job-specific field]
+  - <span class="string">expert_notes</span>: Expert के free-text notes
+  - <span class="string">outcome</span>: Success/failure + details
+  - <span class="string">tags</span>: Filtering के लिए categorical labels
+
+<span class="keyword">Volume:</span> <span class="string">~5,000 documents, 50/month बढ़ रहे हैं</span>
+<span class="keyword">Avg Size:</span> <span class="string">500-2,000 words प्रति document</span>
+<span class="keyword">Update Frequency:</span> <span class="string">Weekly batch ingestion</span>
+<span class="keyword">Format:</span> <span class="string">JSON documents [vector DB] में stored</span></div>
+
+      <h4>Sample Queries (3-5 का target रखें)</h4>
+      <p>अपनी queries को type से vary करें:</p>
+      <ul>
+        <li><strong>Simple lookup:</strong> &ldquo;पिछले साल के similar cases दिखाओ।&rdquo;</li>
+        <li><strong>Analytical:</strong> &ldquo;इस तरह के cases में successful outcomes को क्या patterns distinguish करते हैं?&rdquo;</li>
+        <li><strong>Procedural:</strong> &ldquo;एक expert इस type के case को कैसे approach करता, step by step बताओ।&rdquo;</li>
+        <li><strong>Comparative:</strong> &ldquo;यह case [reference case] से कैसे अलग है?&rdquo;</li>
+      </ul>
+
+      <div class="callout strategy">एक ऐसी query include करें जो system के लिए <em>मुश्किल</em> हो &mdash; और बताएं क्यों। यह depth दिखाता है: &ldquo;Query 5 में multiple documents cross-reference करना और temporal reasoning ज़रूरी है, जो single-retrieval RAG की limits को push करता है।&rdquo;</div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary><span class="step-badge">3</span> &nbsp; Sample Queries और Expected Responses डिज़ाइन करें</summary>
+    <div class="detail-body">
+      <p>हर query के लिए sketch करें कि एक <strong>अच्छा response</strong> कैसा दिखेगा। यह grader को दिखाता है कि आपने end-to-end experience सोचा है।</p>
+
+      <div class="example-block">
+        <div class="ex-label">Insurance Underwriter &mdash; Query और Expected Response</div>
+        <strong>Query:</strong> &ldquo;इस तरह के claims के कौन से parts reject होने चाहिए?&rdquo;<br><br>
+        <strong>Expected Response:</strong> &ldquo;हमारे KB में 23 similar claims (property damage, commercial, California jurisdiction) के basis पर:<br>
+        1. <strong>आम तौर पर rejected:</strong> Pre-existing damage claims (similar cases में 78% बार rejected) &mdash; देखें claims #UC-2023-0891, #UC-2023-1204<br>
+        2. <strong>Review के लिए flagged:</strong> Comparable market rates से 150% ज़्यादा excessive repair estimates (45% cases में flagged)<br>
+        3. <strong>Documentation gap:</strong> Vandalism claims के लिए missing police report (policy section 4.2 के अनुसार required)<br>
+        <em>Note: ये historical decisions के patterns हैं। हमेशा current policy guidelines से verify करें।</em>&rdquo;
+      </div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary><span class="step-badge">4</span> &nbsp; RAG Pipeline का Architecture बनाएं</summary>
+    <div class="detail-body">
+      <p>पूरा visual <a href="#rag-primer">Section 6</a> में देखें। यह आपकी component checklist है:</p>
+
+      <h4>Component Selection Guide</h4>
+      <table class="arena-table">
+        <thead><tr><th>Component</th><th>Recommended Choices</th><th>क्यों</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Embedding Model</strong></td><td>OpenAI text-embedding-3-small, या Cohere embed-v3</td><td>Quality और cost का अच्छा balance</td></tr>
+          <tr><td><strong>Vector Database</strong></td><td>Pinecone, Weaviate, Chroma (prototyping के लिए)</td><td>Managed service (Pinecone) या local dev (Chroma)</td></tr>
+          <tr><td><strong>LLM</strong></td><td>GPT-4o-mini, GPT-4o, Claude 3.5 Sonnet</td><td>Cost-effective (mini) या high quality (4o/Sonnet)</td></tr>
+          <tr><td><strong>Orchestration</strong></td><td>LangChain, LlamaIndex</td><td>Mature RAG frameworks जिनमें built-in retrieval chains हैं</td></tr>
+          <tr><td><strong>Chunking Strategy</strong></td><td>Recursive text splitter, 500-1000 tokens, 100 token overlap</td><td>Context completeness और retrieval precision का balance</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout strategy">Assignment कहता है &ldquo;make unambiguous choices for all tools and components.&rdquo; &ldquo;हम Pinecone या Weaviate use कर सकते हैं&rdquo; कहकर hedge मत करें। एक चुनें और justify करें: &ldquo;हमने Pinecone चुना इसकी managed serverless deployment के लिए, जो small team के लिए operational overhead eliminate करता है।&rdquo;</div>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary><span class="step-badge">5</span> &nbsp; Limitations ईमानदारी से Address करें</summary>
+    <div class="detail-body">
+      <p>अपने limitations section को चार columns वाली table के रूप में structure करें:</p>
+
+      <table class="arena-table">
+        <thead><tr><th>Category</th><th>Limitation</th><th>Impact</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Cost</td><td>LLM API costs usage के साथ scale होते हैं</td><td>500 queries/day पर: ~$150-200/month</td><td>Routine queries के लिए GPT-4o-mini; complex के लिए GPT-4o</td></tr>
+          <tr><td>Latency</td><td>Multi-step pipeline delay add करता है</td><td>हर response पर 2-4 seconds</td><td>Frequent queries cache करें; embeddings pre-compute करें</td></tr>
+          <tr><td>Quality</td><td>Hallucination risk</td><td>Plausible लेकिन false claims generate हो सकते हैं</td><td>Source citations ज़रूरी करें; confidence thresholds; human review</td></tr>
+          <tr><td>Data</td><td>KB staleness</td><td>KB refresh न हो तो outdated info</td><td>Automated ingestion pipeline; retrieval में freshness metadata</td></tr>
+          <tr><td>Security</td><td>KB में sensitive data</td><td>LLM के through potential data leak</td><td>Access controls; on-premise deployment; data anonymization</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary><span class="step-badge">6</span> &nbsp; Proof-of-Concept बनाएं</summary>
+    <div class="detail-body">
+      <p>यह Criterion 5 (20%) है। यहां तीन approaches impressiveness के order में दिए गए हैं:</p>
+
+      <h4>Option A: LangChain/LlamaIndex Demo (सबसे अच्छा &mdash; &ldquo;Significant&rdquo; rating target करता है)</h4>
+      <div class="code-block"><span class="comment"># ~20 lines में Minimal LangChain RAG</span>
+<span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> JSONLoader
+<span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
+<span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings
+<span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma
+<span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA
+
+<span class="comment"># अपने KB documents load और chunk करें</span>
+docs = JSONLoader(<span class="string">"kb_samples.json"</span>).load()
+chunks = RecursiveCharacterTextSplitter(
+    chunk_size=<span class="string">500</span>, chunk_overlap=<span class="string">100</span>
+).split_documents(docs)
+
+<span class="comment"># Vector store और retrieval chain बनाएं</span>
+vectorstore = Chroma.from_documents(chunks, OpenAIEmbeddings())
+qa_chain = RetrievalQA.from_chain_type(
+    llm=ChatOpenAI(model=<span class="string">"gpt-4o-mini"</span>),
+    retriever=vectorstore.as_retriever(search_kwargs={<span class="string">"k"</span>: 5}),
+)
+
+<span class="comment"># अपनी sample queries से test करें</span>
+result = qa_chain.invoke(<span class="string">"What parts of claims like this should be rejected?"</span>)
+print(result)</div>
+
+      <h4>Option B: ChatGPT Conversation (अच्छा &mdash; &ldquo;Medium&rdquo; rating target करता है)</h4>
+      <ol>
+        <li>ChatGPT खोलें (free tier काफी है)</li>
+        <li>अपना system prompt + 2-3 sample KB documents context के रूप में paste करें</li>
+        <li>अपनी sample queries एक-एक करके पूछें</li>
+        <li>Conversation का screenshot लें जो दिखाए कि LLM provided context का कैसे इस्तेमाल कर रहा है</li>
+        <li>Annotations add करें जो बताएं कि RAG system scale पर अलग क्या करेगा</li>
+      </ol>
+
+      <h4>Option C: Azure OpenAI Playground (Minimum Viable)</h4>
+      <ol>
+        <li>Azure OpenAI Studio की &ldquo;Add your data&rdquo; feature use करें</li>
+        <li>KB documents का एक छोटा sample upload करें</li>
+        <li>System message configure करें</li>
+        <li>Playground का screenshot लें जिसमें query और response दिखे</li>
+      </ol>
+
+      <div class="callout strategy">Option B भी काफी adequate है। Key है <em>evidence दिखाना</em>। आपके KB content के साथ actual GenAI interactions के screenshots, आप क्या <em>करेंगे</em> describe करने से ज़्यादा valuable हैं। अपने 3 screenshot pages में से 2 इसके लिए budget करें।</div>
+    </div>
+  </details>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 6. RAG ARCHITECTURE PRIMER -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="section-warm" id="rag-primer">
+  <div class="section-title">
+    <span class="section-num">6</span>
+    <h2 style="margin:0;">RAG Architecture Primer</h2>
+  </div>
+  <p>यह section आपको RAG pipeline confident तरीके से design करने की technical foundation देता है। Assignment में अपने architecture diagram के basis के रूप में इसे use करें।</p>
+
+  <h3>Document Ingestion Pipeline</h3>
+
+  <!-- SVG: Ingestion Pipeline — earthy palette -->
+  <svg class="rag-diagram" viewBox="0 0 800 160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#487265"/>
+      </marker>
+    </defs>
+    <rect x="10" y="40" width="130" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="75" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">KB Documents</text>
+    <text x="75" y="90" text-anchor="middle" font-size="11" fill="#6B7280">JSON / PDF / Text</text>
+
+    <rect x="190" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="250" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Chunking</text>
+    <text x="250" y="90" text-anchor="middle" font-size="11" fill="#6B7280">500-1000 tokens</text>
+
+    <rect x="360" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="420" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Embedding</text>
+    <text x="420" y="90" text-anchor="middle" font-size="11" fill="#6B7280">text-embedding-3</text>
+
+    <rect x="530" y="40" width="120" height="70" rx="10" fill="#F7F6F5" stroke="#487265" stroke-width="2"/>
+    <text x="590" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Indexing</text>
+    <text x="590" y="90" text-anchor="middle" font-size="11" fill="#6B7280">Metadata + vectors</text>
+
+    <rect x="700" y="40" width="90" height="70" rx="10" fill="#487265" stroke="#407967" stroke-width="2"/>
+    <text x="745" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#F8F7F6">Vector DB</text>
+    <text x="745" y="90" text-anchor="middle" font-size="11" fill="#DDEFEF">Pinecone</text>
+
+    <line x1="140" y1="75" x2="188" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="310" y1="75" x2="358" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="480" y1="75" x2="528" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+    <line x1="650" y1="75" x2="698" y2="75" stroke="#487265" stroke-width="2" marker-end="url(#arrow1)"/>
+
+    <text x="400" y="145" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Document Ingestion Pipeline (one-time + incremental updates)</text>
+  </svg>
+
+  <h4>Ingestion के लिए Key Decisions</h4>
+  <ul>
+    <li><strong>Chunking strategy:</strong> Recursive character splitting paragraph boundaries preserve करता है। Context boundaries पर lost न हो इसके लिए 500-1000 tokens per chunk 100-token overlap के साथ use करें।</li>
+    <li><strong>Metadata:</strong> Filtered retrieval के लिए हर chunk के साथ document-level metadata (date, category, author) store करें।</li>
+    <li><strong>Embedding model:</strong> OpenAI का <code>text-embedding-3-small</code> (1536 dimensions) $0.02/million tokens पर strong quality offer करता है।</li>
+  </ul>
+
+  <h3>Query Pipeline</h3>
+
+  <!-- SVG: Query Pipeline — earthy palette -->
+  <svg class="rag-diagram" viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#BC976A"/>
+      </marker>
+      <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#AAB788"/>
+      </marker>
+    </defs>
+
+    <rect x="10" y="30" width="140" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="80" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">User Query</text>
+    <text x="80" y="72" text-anchor="middle" font-size="10" fill="#6B7280">"Find related cases..."</text>
+
+    <rect x="200" y="30" width="120" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="260" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Embed Query</text>
+    <text x="260" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Same model as KB</text>
+
+    <rect x="370" y="30" width="130" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="435" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Similarity Search</text>
+    <text x="435" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Top-k retrieval (k=5)</text>
+
+    <rect x="550" y="30" width="110" height="60" rx="10" fill="#F7F6F5" stroke="#BC976A" stroke-width="2"/>
+    <text x="605" y="55" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Re-Rank</text>
+    <text x="605" y="72" text-anchor="middle" font-size="10" fill="#6B7280">Cross-encoder</text>
+
+    <line x1="150" y1="60" x2="198" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="320" y1="60" x2="368" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+    <line x1="500" y1="60" x2="548" y2="60" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+
+    <line x1="605" y1="90" x2="605" y2="140" stroke="#BC976A" stroke-width="2" marker-end="url(#arrow2)"/>
+
+    <rect x="500" y="145" width="210" height="60" rx="10" fill="#F7F6F5" stroke="#AAB788" stroke-width="2"/>
+    <text x="605" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">Context Assembly</text>
+    <text x="605" y="187" text-anchor="middle" font-size="10" fill="#6B7280">System prompt + retrieved chunks</text>
+
+    <rect x="240" y="145" width="210" height="60" rx="10" fill="#F7F6F5" stroke="#AAB788" stroke-width="2"/>
+    <text x="345" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#292C33">LLM Generation</text>
+    <text x="345" y="187" text-anchor="middle" font-size="10" fill="#6B7280">GPT-4o-mini / GPT-4o</text>
+
+    <rect x="10" y="145" width="180" height="60" rx="10" fill="#487265" stroke="#407967" stroke-width="2"/>
+    <text x="100" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#F8F7F6">Response + Citations</text>
+    <text x="100" y="187" text-anchor="middle" font-size="10" fill="#DDEFEF">Grounded in KB evidence</text>
+
+    <line x1="500" y1="175" x2="452" y2="175" stroke="#AAB788" stroke-width="2" marker-end="url(#arrow3)"/>
+    <line x1="240" y1="175" x2="192" y2="175" stroke="#AAB788" stroke-width="2" marker-end="url(#arrow3)"/>
+
+    <text x="400" y="240" text-anchor="middle" font-size="12" fill="#BC976A" font-style="italic">Query Pipeline (हर user interaction पर)</text>
+    <text x="400" y="258" text-anchor="middle" font-size="11" fill="#6B7280">Copper = retrieval phase | Olive = generation phase</text>
+  </svg>
+
+  <h3>RAG Enhancement Strategies</h3>
+  <p>Depth demonstrate करने के लिए (Criterion 3) अपने assignment में इनमें से 2-3 mention करें:</p>
+
+  <div class="card">
+    <h4>1. Hybrid Search (Keyword + Semantic)</h4>
+    <p>Better retrieval के लिए BM25 (keyword matching) को vector similarity के साथ combine करें। तब useful है जब queries में specific IDs, names, या legal terms हों जो pure semantic search miss कर सकता है।</p>
+  </div>
+  <div class="card">
+    <h4>2. Query Expansion</h4>
+    <p>Retrieval से पहले user की query expand करने के लिए LLM use करें: &ldquo;Find related cases&rdquo; &rarr; &ldquo;Find related cases involving patent infringement, software claims, prior art challenges.&rdquo;</p>
+  </div>
+  <div class="card">
+    <h4>3. Re-Ranking</h4>
+    <p>Initial vector search से top-20 results आने के बाद, relevance के लिए उन्हें re-rank करने के लिए cross-encoder model use करें। LLM को ज़्यादा precise top-5 मिलता है, answer quality improve होती है।</p>
+  </div>
+  <div class="card">
+    <h4>4. Metadata Filtering</h4>
+    <p>Vector search से पहले या दौरान metadata (date range, category, jurisdiction) से retrieval filter करें। Noise कम होता है और relevance improve होती है।</p>
+  </div>
+
+  <h3>RAG के लिए Prompt Engineering</h3>
+  <p>आपके system prompt में ये elements शामिल होने चाहिए:</p>
+  <div class="code-block"><span class="comment"># RAG के लिए System Prompt Template</span>
+
+<span class="keyword">ROLE:</span> You are a [job title] assistant helping new employees
+at [company type]. Your role is to [specific task].
+
+<span class="keyword">CONTEXT RULES:</span>
+- Use ONLY the provided context to answer questions
+- If the context doesn't contain relevant information, say so clearly
+- NEVER fabricate information not present in the context
+- Cite specific document IDs when referencing KB content
+
+<span class="keyword">OUTPUT FORMAT:</span>
+- Begin with a direct answer to the query
+- Support with 2-3 specific examples from the KB
+- Include confidence level (high/medium/low)
+- End with suggested next steps for the employee
+
+<span class="keyword">CONSTRAINTS:</span>
+- [Domain-specific guardrails, जैसे "Do not provide legal advice"]
+- [Escalation criteria, जैसे "For queries involving amounts over $X, recommend supervisor review"]</div>
+
+  <div class="callout strategy">Assignment में अपना actual system prompt include करें &mdash; यह prompt engineering skill का tangible evidence है। एक simple, well-structured prompt भी &ldquo;हम appropriate prompting use करेंगे&rdquo; जैसे vague descriptions से ज़्यादा score करता है।</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- 7. SCORING MAXIMIZER -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="section-white" id="maximizer">
+  <div class="section-title">
+    <span class="section-num">7</span>
+    <h2 style="margin:0;">Scoring Maximizer Checklist</h2>
+  </div>
+  <p>Submit करने से पहले यह checklist use करें। हर item उससे map करता है जो rubric reward करता है।</p>
+
+  <details class="arena-details" open>
+    <summary>Criterion 1: KB और Sample Queries <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> 4+ fields वाला clear document schema define किया</li>
+        <li><span class="check-box"></span> एक sample KB document include किया (छोटा JSON/table example भी चलेगा)</li>
+        <li><span class="check-box"></span> KB volume, average document size, और update frequency बताई</li>
+        <li><span class="check-box"></span> 3+ diverse sample queries दिए (simple, analytical, procedural)</li>
+        <li><span class="check-box"></span> बताया कि यह KB format chosen task के लिए क्यों serve करता है</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Criterion 2: Overall Solution Design <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> पूरी RAG pipeline (ingestion + query) draw या describe की</li>
+        <li><span class="check-box"></span> हर component के लिए specific tools name किए (embedding model, vector DB, LLM, framework)</li>
+        <li><span class="check-box"></span> Alternatives (from scratch, fine-tuning, prompting) की जगह RAG क्यों, justify किया</li>
+        <li><span class="check-box"></span> Specific metrics के साथ evaluation methodology describe की</li>
+        <li><span class="check-box"></span> System को कैसे test/validate करेंगे, बताया</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Criterion 3: Prompts और RAG Enhancement <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Actual system prompt include किया (सिर्फ &ldquo;हम एक prompt लिखेंगे&rdquo; नहीं)</li>
+        <li><span class="check-box"></span> 2+ RAG enhancement strategies describe कीं (hybrid search, re-ranking, query expansion, etc.)</li>
+        <li><span class="check-box"></span> Chunk size के reasoning के साथ chunking strategy बताई</li>
+        <li><span class="check-box"></span> Technical flow internally consistent है (docs और queries के लिए same embedding model)</li>
+        <li><span class="check-box"></span> Prompt में few-shot examples या output formatting mention किए</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Criterion 4: Limitations <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> अलग-अलग categories में 4+ specific limitations identify कीं</li>
+        <li><span class="check-box"></span> TCO estimate include किया (approximate भी चलेगा &mdash; &ldquo;500 daily queries के लिए $100-300/month&rdquo;)</li>
+        <li><span class="check-box"></span> Response time estimate include किया (&ldquo;2-4 seconds end-to-end&rdquo;)</li>
+        <li><span class="check-box"></span> Chosen job के domain-specific risks mention किए</li>
+        <li><span class="check-box"></span> हर limitation के लिए mitigations propose किए</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>Criterion 5: Try करके देखें <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> Actually किसी platform पर solution run किया (ChatGPT, Azure OpenAI, Colab, LangChain)</li>
+        <li><span class="check-box"></span> कम से कम 2-3 sample queries से test किया</li>
+        <li><span class="check-box"></span> Interaction दिखाते screenshots include किए</li>
+        <li><span class="check-box"></span> Screenshots पर annotations लगाए जो बताएं कि RAG system हर step पर क्या करता है</li>
+        <li><span class="check-box"></span> 3 available screenshot pages में से 2+ इस section के लिए use किए</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="arena-details">
+    <summary>General Quality</summary>
+    <div class="detail-body">
+      <ul class="checklist">
+        <li><span class="check-box"></span> 7+3 page limit के अंदर रहे</li>
+        <li><span class="check-box"></span> Rubric criteria से match करते clear section headings use किए</li>
+        <li><span class="check-box"></span> सभी assumptions explicitly state किए</li>
+        <li><span class="check-box"></span> Technical accuracy के लिए proofread किया (correct model names, framework APIs)</li>
+        <li><span class="check-box"></span> एक brief intro paragraph include किया जो बताए कि आपने कौन सी job चुनी और क्यों</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="callout golden" style="margin-top: 24px;">अपने assignment को ऐसे section headings से structure करें जो <strong>5 rubric criteria को mirror करते हों</strong>। इससे grader को हर required element ढूंढना और marks देना आसान हो जाता है। उन्हें ढूंढने पर मजबूर मत करें।</div>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <a href="#overview">ऊपर</a> |
+  <a href="#jobs">जॉब्स</a> |
+  <a href="#rubric">रूब्रिक</a> |
+  <a href="#rag-primer">RAG</a> |
+  <a href="#maximizer">मैक्सिमाइज़र</a>
+  <div style="margin-top:12px; font-size:12px;">Assignment 1 Explainer &mdash; Gen AI: Pre-Trained Models &mdash; GGU DBA (upGrad Course 8919)<br>स्टडी गाइड &mdash; GGU या upGrad से संबद्ध नहीं।</div>
+</footer>
+
+</div><!-- /container -->
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+(function() {
+  "use strict";
+
+  // ── Bar Chart ──────────────────────────────────
+  var scoreData = [
+    { label: "KB और Queries", points: 5, color: "#A0C3C4" },
+    { label: "Solution Design", points: 5, color: "#AAB788" },
+    { label: "RAG Enhancement", points: 5, color: "#D4C68B" },
+    { label: "Limitations", points: 5, color: "#BC976A" },
+    { label: "Try करके देखें", points: 5, color: "#CAAB84" }
+  ];
+
+  var chartEl = document.getElementById("barChart");
+  scoreData.forEach(function(c) {
+    var col = document.createElement("div");
+    col.className = "bar-col";
+
+    var val = document.createElement("div");
+    val.className = "bar-value";
+    val.appendChild(document.createTextNode(c.points + " pts"));
+
+    var bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.backgroundColor = c.color;
+    bar.style.height = "140px";
+
+    var lbl = document.createElement("div");
+    lbl.className = "bar-label";
+    lbl.appendChild(document.createTextNode(c.label));
+
+    col.appendChild(val);
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    chartEl.appendChild(col);
+  });
+
+  // ── Job Data ───────────────────────────────────
+  var jobs = [
+    {
+      num: 1, title: "Legal Assistant",
+      task: "नए case के लिए connected / similar past cases ढूंढना",
+      kb: "Past search sessions और outcomes के logs",
+      query: "मुझे नहीं पता कि इस filing के लिए related cases कैसे ढूंढूं। क्या आप कुछ search phrases बताकर शुरू करने में मदद कर सकते हैं?",
+      complexity: "easy",
+      why: "Text-heavy, structured logs जिनमें clear success metrics हैं। Retrieval-augmented search assistance demonstrate करने के लिए perfect। KB में naturally search strategies होती हैं जो new cases से pattern-match हो सकती हैं।",
+      kbHints: "Logs को इन fields से structure करें: case_type, jurisdiction, search_terms_used, cases_found, success_rating, searcher_notes। यह filtered retrieval और pattern analysis के लिए rich metadata देता है।",
+      gotcha: "'Cases ढूंढना' को 'legal advice देना' से मत मिलाएं। आपका RAG system search strategy में मदद करता है, legal reasoning में नहीं।"
+    },
+    {
+      num: 2, title: "Bank Executive",
+      task: "Customers के account-related सवालों के जवाब देना",
+      kb: "Expert executives की past customer conversations के transcripts",
+      query: "इस शहर में new home loan customers आम तौर पर कौन से सवाल पूछते हैं?",
+      complexity: "easy",
+      why: "Conversation transcripts से FAQ-style retrieval। Clear input/output pattern: customer का सवाल से expert का जवाब। ChatGPT से demonstrate करना आसान।",
+      kbHints: "Transcripts को tag करें: product_type (savings, loans, credit), customer_segment (new, existing), city/branch, resolution_type (answered, escalated)। City-specific aspect एक useful metadata filter dimension add करता है।",
+      gotcha: "Banking conversations में PII होता है। अपने limitations section में data anonymization address करें।"
+    },
+    {
+      num: 3, title: "Telemarketer",
+      task: "Prepared script के सभी points cover करते हुए natural conversation करना",
+      kb: "Expert callers की past calls के transcripts",
+      query: "मैं additional shipping और handling charges कैसे justify कर सकता हूं?",
+      complexity: "medium",
+      why: "Retrieval (experts ने objections कैसे handle किए?) और generation (natural-sounding responses बनाना) का interesting blend। RAG + prompt engineering साथ दिखाने के लिए अच्छा।",
+      kbHints: "Transcripts को structure करें: call_outcome (sale, no-sale, callback), objection_type (price, timing, competitor), expert_technique_used, customer_sentiment। Objection-handling patterns पर focus करें।",
+      gotcha: "Telemarketing के ethical dimensions हैं। अपनी limitations में manipulative pattern replication की possibility acknowledge करें।"
+    },
+    {
+      num: 4, title: "Insurance Underwriter",
+      task: "Submitted documents review करना, information gaps list करना",
+      kb: "Past claims और expert underwriters के corresponding decisions",
+      query: "इस तरह के claims के कौन से parts reject होने चाहिए?",
+      complexity: "easy",
+      why: "Clear decision patterns वाला highly structured domain। Claims में defined fields हैं, outcomes documented हैं, और task (gap identification) historical data में pattern matching के लिए well-suited है।",
+      kbHints: "Schema: claim_id, claim_type (property, auto, health), amount, documents_submitted, gaps_identified, decision (approved/rejected/partial), expert_reasoning। RAG के लिए gap identification patterns include करें।",
+      gotcha: "Underwriting decisions के legal और regulatory implications हैं। आपके limitations section में compliance और liability address होनी चाहिए।"
+    },
+    {
+      num: 5, title: "Secondary School Teacher",
+      task: "नया lesson कैसे पढ़ाएं, तैयारी करना",
+      kb: "Lessons से related comprehensive reference materials",
+      query: "San Andreas Fault के बारे में और कौन सी interesting बातें बता सकता हूं?",
+      complexity: "medium",
+      why: "Broad reference materials interesting chunking challenges बनाते हैं। Query style exploratory है: teacher supplementary facts चाहता है, सिर्फ retrieval नहीं।",
+      kbHints: "Organize करें: subject_area, grade_level, topic, difficulty, engagement_type (fact, activity, discussion_prompt)। Diverse content types include करें: background info, common misconceptions, real-world examples, hands-on activities।",
+      gotcha: "Reference materials में age-appropriateness filtering ज़रूरी हो सकती है। KB breadth की वजह से chunking strategy ज़्यादा critical है, इसलिए explicitly discuss करें।"
+    },
+    {
+      num: 6, title: "Sales Copywriter",
+      task: "Existing products research करके new product के लिए key points to pitch ढूंढना",
+      kb: "Past sales copies और उनकी market performance का data",
+      query: "क्या मैं इस sales copy में कुछ add कर सकता हूं जिससे success chances बढ़ें?",
+      complexity: "medium",
+      why: "Retrieval (पहले क्या काम किया?) और analysis (क्यों काम किया?) का combination। Performance data KB में एक quantitative dimension add करता है।",
+      kbHints: "Include करें: product_category, target_audience, copy_text, key_selling_points, channel (email, social, print), performance_metrics (CTR, conversion_rate, revenue_impact)। Performance data evidence-based suggestions enable करता है।",
+      gotcha: "Market conditions बदलती हैं: past performance future success predict नहीं कर सकती। Limitations में temporal relevance address करें।"
+    },
+    {
+      num: 7, title: "HR Executive",
+      task: "Recruit के साथ informed salary negotiation करना",
+      kb: "Expert executives की past salary negotiations के transcripts",
+      query: "क्या किसी recruit को 10% कम static pay accept करवाना possible भी है? दिखाओ कैसे।",
+      complexity: "medium",
+      why: "Rich negotiation transcripts में strategies, counterarguments, और outcomes हैं। Highly practical: हर organization salary negotiation करती है। Sample query specific है और historical patterns से answerable।",
+      kbHints: "Tag करें: role_level (junior, mid, senior), department, final_outcome (accepted, rejected, counter), salary_delta (initial offer से % difference), negotiation_tactics_used, candidate_objections। Successful strategy patterns पर focus करें।",
+      gotcha: "Salary data highly sensitive है। Data anonymization critical है। Market rate staleness भी address करें: पिछले साल के negotiation benchmarks आज apply नहीं हो सकते।"
+    },
+    {
+      num: 8, title: "Graphic Designer",
+      task: "Business brief पर clarification questions पूछना",
+      kb: "Past business briefs और expert designers द्वारा पूछे गए corresponding clarification questions",
+      query: "इस business brief पर सही questions पूछने में मेरी मदद करें।",
+      complexity: "hard",
+      why: "ज़्यादा abstract task: answers generate करने की बजाय questions generate करना। KB interesting है (brief-to-questions mapping) लेकिन output creative/analytical है, जिससे pure retrieval कम straightforward है।",
+      kbHints: "Structure: brief_type (logo, web, print, branding), industry, brief_completeness_score, questions_asked, question_category (scope, audience, technical, timeline, brand), brief_gaps_found।",
+      gotcha: "Design highly subjective है। आपका RAG system brief types pattern-match करके questions suggest कर सकता है, लेकिन visual/aesthetic intent truly समझ नहीं सकता। इस limitation के बारे में honest रहें।"
+    },
+    {
+      num: 9, title: "Receptionist",
+      task: "Pre-plan करना और सभी appointments time पर होना ensure करना",
+      kb: "Pre-planning के बावजूद time पर न हुई past appointments की details",
+      query: "इस हफ्ते की कौन सी appointments सबसे tricky हैं?",
+      complexity: "hard",
+      why: "KB failures (negative examples) पर focus करता है, जो unusual लेकिन interesting angle है। Task में scheduling failures में pattern recognition ज़रूरी है future risks predict करने के लिए।",
+      kbHints: "Include करें: appointment_type, participants, time_of_day, failure_reason (no-show, late, double-booked, room conflict), pre_planning_steps_taken, what_went_wrong। 'Planning के बावजूद क्या गलत हुआ' field key है।",
+      gotcha: "यह task retrieval से ज़्यादा prediction के बारे में है। Pure RAG best fit नहीं हो सकता। आपको address करना होगा कि RAG फिर भी value क्यों add कर सकता है (failure modes pattern-matching)।"
+    },
+    {
+      num: 10, title: "Professional Swimming Coach",
+      task: "Athlete के लिए सही videos collection choose करना",
+      kb: "Past video suggestions, swimmers ने कितना देखा, performance impact के logs",
+      query: "क्या इस athlete profile के लिए कोई must-watch videos miss हो रहे हैं?",
+      complexity: "hard",
+      why: "Multimodal challenge: KB videos (text नहीं) reference करता है। Video content, viewing behavior, और performance impact के बीच connection complex reasoning require करता है।",
+      kbHints: "Include करें: athlete_profile (level, stroke, weakness), video_id, video_topic, watch_completion_rate, pre_video_performance, post_video_performance, coach_rating। Performance impact data evidence-based recommendations enable करता है।",
+      gotcha: "System athlete profiles को historically effective video sets से match कर सकता है, लेकिन video content खुद नहीं समझ सकता। आपकी chunking और retrieval strategy को इस limitation के around काम करना होगा।"
+    }
+  ];
+
+  // Earthy badge colors cycling for job numbers
+  var badgeColors = ["#A0C3C4", "#AAB788", "#D4C68B", "#BC976A", "#CAAB84"];
+
+  function txt(str) {
+    return document.createTextNode(str);
+  }
+
+  function el(tag, className, textContent) {
+    var e = document.createElement(tag);
+    if (className) { e.className = className; }
+    if (textContent) { e.appendChild(txt(textContent)); }
+    return e;
+  }
+
+  // ── Render Job Cards ───────────────────────────
+  var grid = document.getElementById("jobsGrid");
+  var detailDiv = document.getElementById("jobDetail");
+
+  jobs.forEach(function(j) {
+    var card = document.createElement("div");
+    card.className = "job-card";
+    card.setAttribute("data-num", j.num);
+
+    var numSpan = el("span", "job-num job-num-" + j.num, String(j.num));
+    var h4 = el("h4", "", j.title);
+    var taskDiv = el("div", "task", j.task);
+
+    card.appendChild(numSpan);
+    card.appendChild(h4);
+    card.appendChild(taskDiv);
+
+    card.addEventListener("click", function() { selectJob(j); });
+    grid.appendChild(card);
+  });
+
+  function selectJob(j) {
+    // Update active state on cards
+    var cards = document.querySelectorAll(".job-card");
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.remove("active");
+    }
+    var activeCard = document.querySelector('.job-card[data-num="' + j.num + '"]');
+    if (activeCard) { activeCard.classList.add("active"); }
+
+    // Clear detail panel
+    while (detailDiv.firstChild) {
+      detailDiv.removeChild(detailDiv.firstChild);
+    }
+    detailDiv.className = "job-detail visible";
+
+    // Title
+    var titleEl = el("h3", "", j.num + ". " + j.title + ": " + j.task);
+    detailDiv.appendChild(titleEl);
+
+    // KB
+    var kbP = document.createElement("p");
+    var kbLabel = document.createElement("strong");
+    kbLabel.appendChild(txt("KB: "));
+    kbP.appendChild(kbLabel);
+    kbP.appendChild(txt(j.kb));
+    detailDiv.appendChild(kbP);
+
+    // Sample Query
+    var qP = document.createElement("p");
+    var qLabel = document.createElement("strong");
+    qLabel.appendChild(txt("Sample Query: "));
+    qP.appendChild(qLabel);
+    var qEm = document.createElement("em");
+    qEm.appendChild(txt('"' + j.query + '"'));
+    qP.appendChild(qEm);
+    detailDiv.appendChild(qP);
+
+    // Complexity
+    var cP = document.createElement("p");
+    var cLabel = document.createElement("strong");
+    cLabel.appendChild(txt("RAG Complexity: "));
+    cP.appendChild(cLabel);
+    var cSpan = el("span", "complexity " + j.complexity, j.complexity.charAt(0).toUpperCase() + j.complexity.slice(1));
+    cP.appendChild(cSpan);
+    detailDiv.appendChild(cP);
+
+    // Why heading + text
+    var whyH = el("h4", "", "यह Job GenAI के लिए क्यों Interesting है");
+    detailDiv.appendChild(whyH);
+    var whyP = el("p", "", j.why);
+    detailDiv.appendChild(whyP);
+
+    // KB Hints
+    var hintH = el("h4", "", "KB Design Hints");
+    detailDiv.appendChild(hintH);
+    var hintP = el("p", "", j.kbHints);
+    detailDiv.appendChild(hintP);
+
+    // Gotcha callout using warning style
+    var callout = el("div", "callout warning", j.gotcha);
+    callout.style.marginTop = ".75rem";
+    detailDiv.appendChild(callout);
+
+    detailDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+})();
+</script>
+
+</body>
+</html>

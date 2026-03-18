@@ -39,11 +39,33 @@ def extract_query_fields(query: str) -> dict:
         config=types.GenerateContentConfig(
             system_instruction=(
                 "Extract structured fields from a query about Indian disability welfare schemes. "
+                "The query may be in English, Hindi, or mixed (Hinglish). "
+                "ALWAYS return field values in English, regardless of query language.\n\n"
                 "Return a JSON object with these optional keys:\n"
-                '- "disability": disability type (e.g., "locomotor", "visual", "hearing", "autism", "cerebral_palsy", "intellectual", "multiple", "speech")\n'
-                '- "age": integer age of the person\n'
-                '- "state": Indian state name\n'
-                '- "income": annual income in INR (integer)\n'
+                '- "disability": Map to one of these exact IDs:\n'
+                "  visual, hearing, locomotor, intellectual, mental_illness, cerebral_palsy,\n"
+                "  autism, multiple, speech, specific_learning, acid_attack, muscular_dystrophy,\n"
+                "  chronic_neurological, thalassemia\n\n"
+                "  Hindi→English mappings:\n"
+                "  दृष्टि/अंधापन/नज़र → visual\n"
+                "  श्रवण/बहरापन/कान → hearing\n"
+                "  चलने-फिरने/शारीरिक/लोकोमोटर → locomotor\n"
+                "  बौद्धिक/मानसिक मंदता → intellectual\n"
+                "  मानसिक बीमारी/मनोरोग → mental_illness\n"
+                "  सेरेब्रल पाल्सी → cerebral_palsy\n"
+                "  ऑटिज़्म/स्वलीनता → autism\n"
+                "  बहु-विकलांगता → multiple\n"
+                "  वाक्/बोलने → speech\n"
+                "  डिस्लेक्सिया/अधिगम → specific_learning\n"
+                "  तेज़ाब → acid_attack\n"
+                "  मस्कुलर डिस्ट्रॉफी → muscular_dystrophy\n"
+                "  पार्किंसन/तंत्रिका → chronic_neurological\n"
+                "  थैलेसीमिया/रक्त → thalassemia\n\n"
+                '- "age": integer age (e.g., "उम्र 8 साल" → 8, "12 years old" → 12)\n'
+                '- "state": Indian state name IN ENGLISH '
+                '(e.g., "कर्नाटक" → "Karnataka", "उत्तर प्रदेश" → "Uttar Pradesh")\n'
+                '- "income": annual income in INR as integer '
+                '(e.g., "1.2 लाख" → 120000, "₹2,50,000" → 250000)\n\n'
                 "Only include keys that are explicitly mentioned or clearly implied. "
                 "Return {} if no structured fields found. "
                 "Return ONLY valid JSON, no explanation."

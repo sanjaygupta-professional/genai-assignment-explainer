@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="alternate" hreflang="en" href="group-assignment.html">
-<link rel="alternate" hreflang="hi" href="hi/group-assignment.html">
 <title>Group Assignment Explainer — Gen AI: Pre-Trained Models</title>
+<link rel="alternate" hreflang="en" href="../group-assignment.html">
+<link rel="alternate" hreflang="hi" href="group-assignment.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,10 +49,10 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Noto Sans Devanagari', 'Inter', ui-sans-serif, system-ui, sans-serif;
   background: var(--white);
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.8;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
 }
@@ -67,7 +67,7 @@ h1 { font-size: 2.8rem; line-height: 1.05; letter-spacing: -0.05em; }
 h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
 h3 { font-size: 1.25rem; line-height: 1.3; margin: 1.5rem 0 .5rem; }
 h4 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
   font-size: .95rem; font-weight: 600;
   margin: 1.25rem 0 .4rem;
   color: var(--text-primary);
@@ -78,22 +78,6 @@ a:hover { color: var(--teal-dark); }
 
 /* ── Layout ───────────────────────────────────── */
 .container { max-width: var(--max-w); margin: 0 auto; padding: 0 18px; }
-
-/* ── Language Switcher ────────────────────────── */
-.lang-switch {
-  position: fixed; top: 16px; right: 16px;
-  display: flex; gap: 4px; z-index: 200;
-  background: #F7F6F5; border: 1px solid #D9D9D9;
-  border-radius: 40px; padding: 4px;
-}
-.lang-switch a {
-  padding: 6px 14px; border-radius: 40px;
-  font-size: 13px; font-weight: 500; text-decoration: none;
-  color: #6B7280; transition: all .2s;
-  font-family: 'Inter', sans-serif;
-}
-.lang-switch a.active { background: #487265; color: #fff; }
-.lang-switch a:hover:not(.active) { color: #292C33; }
 
 /* ── Fixed Header ─────────────────────────────── */
 header.site-header {
@@ -390,7 +374,7 @@ details.arena-details > .detail-body { padding: 0 18px 18px; }
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--text-primary); color: var(--text-light);
   border: none; border-radius: 50px; padding: 14px 28px;
-  font-size: 16px; font-weight: 400; font-family: 'Inter', sans-serif;
+  font-size: 16px; font-weight: 400; font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
   cursor: pointer; text-decoration: none;
   transition: background .2s cubic-bezier(.4,0,.2,1);
 }
@@ -400,7 +384,7 @@ details.arena-details > .detail-body { padding: 0 18px 18px; }
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--teal-dark); color: var(--text-light);
   border: none; border-radius: 10px; padding: 8px 16px;
-  font-size: 14px; font-family: 'Inter', sans-serif;
+  font-size: 14px; font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
   cursor: pointer; text-decoration: none;
   transition: background .2s;
 }
@@ -422,6 +406,22 @@ footer.site-footer a {
 }
 footer.site-footer a:hover { text-decoration: underline; }
 
+/* ── Language Switcher ────────────────────────── */
+.lang-switch {
+  position: fixed; top: 16px; right: 16px;
+  display: flex; gap: 4px; z-index: 200;
+  background: #F7F6F5; border: 1px solid #D9D9D9;
+  border-radius: 40px; padding: 4px;
+}
+.lang-switch a {
+  padding: 6px 14px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  color: #6B7280; transition: all .2s;
+  font-family: 'Inter', sans-serif;
+}
+.lang-switch a.active { background: #487265; color: #fff; }
+.lang-switch a:hover:not(.active) { color: #292C33; }
+
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 640px) {
   h1 { font-size: 2rem; }
@@ -439,13 +439,15 @@ footer.site-footer a:hover { text-decoration: underline; }
   .hero { padding-top: 24px; }
   details.arena-details[open] > .detail-body { display: block !important; }
   .criterion-card .card-expand { display: block !important; }
+  .lang-switch { display: none; }
 }
 </style>
 </head>
 <body>
+
 <div class="lang-switch">
-  <a href="group-assignment.html" class="active">EN</a>
-  <a href="hi/group-assignment.html">हिन्दी</a>
+  <a href="../group-assignment.html">EN</a>
+  <a href="group-assignment.html" class="active">हिन्दी</a>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -458,8 +460,8 @@ footer.site-footer a:hover { text-decoration: underline; }
       <span class="byline">GenAI Pre-Trained Models</span>
     </div>
     <nav class="header-nav">
-      <a href="#overview">Overview</a>
-      <a href="#criteria" class="active">Criteria</a>
+      <a href="#overview">सारांश</a>
+      <a href="#criteria" class="active">मापदंड</a>
       <a href="#playbook">Playbook</a>
       <a href="#maximizer">Maximizer</a>
     </nav>
@@ -473,26 +475,26 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- ═══════════════════════════════════════════════ -->
 <section class="hero" id="overview">
   <h1>Group Assignment<br>Explainer</h1>
-  <p class="subtitle">Design a Gen AI product that solves a real business problem. From vision to ROI &mdash; this is your startup pitch in academic form.</p>
+  <p class="subtitle">एक ऐसा Gen AI product डिज़ाइन करो जो किसी real business problem को solve करे। Vision से ROI तक &mdash; यह आपका startup pitch है, academic form में।</p>
 
   <div class="pills">
-    <span class="pill"><span class="dot" style="background:var(--sage)"></span> 50 Marks</span>
+    <span class="pill"><span class="dot" style="background:var(--sage)"></span> 50 अंक</span>
     <span class="pill"><span class="dot" style="background:var(--gold)"></span> 40% Weightage</span>
-    <span class="pill"><span class="dot" style="background:var(--olive)"></span> 6 Criteria</span>
+    <span class="pill"><span class="dot" style="background:var(--olive)"></span> 6 मापदंड</span>
     <span class="pill"><span class="dot" style="background:var(--copper)"></span> 10-Slide Pitch</span>
     <span class="pill"><span class="dot" style="background:var(--sage)"></span> Group Work</span>
   </div>
 
   <div class="prompt-box">
-    <div class="prompt-label">The Assignment in One Sentence</div>
-    <div class="prompt-text">&ldquo;Identify a challenging business problem, design a Gen AI solution using techniques from this course, create a product roadmap with ROI analysis, and pitch it in 10 slides as if presenting to a VC.&rdquo;</div>
+    <div class="prompt-label">Assignment एक लाइन में</div>
+    <div class="prompt-text">&ldquo;एक challenging business problem identify करो, इस course की Gen AI techniques से solution design करो, ROI analysis के साथ product roadmap बनाओ, और 10 slides में VC को pitch करो।&rdquo;</div>
     <div class="prompt-meta">
       <span>GGU DBA &mdash; upGrad Course 8919</span>
       <span class="badge">Group Project</span>
     </div>
   </div>
 
-  <a href="#playbook" class="btn-primary">View the Playbook &darr;</a>
+  <a href="#playbook" class="btn-primary">Playbook देखें &darr;</a>
 </section>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -500,13 +502,13 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- ═══════════════════════════════════════════════ -->
 <div class="section-warm">
   <div class="container">
-    <h2>Mark Distribution</h2>
-    <p style="color:var(--text-secondary); margin-bottom: 24px;">Six criteria, weighted unevenly. The solution design, roadmap, and report quality carry the most weight &mdash; 10 points each. The chart below shows where your marks live.</p>
+    <h2>अंक वितरण</h2>
+    <p style="color:var(--text-secondary); margin-bottom: 24px;">छह मापदंड, असमान weightage के साथ। Solution design, roadmap, और report quality सबसे ज़्यादा भारी हैं &mdash; हर एक के 10 अंक। नीचे का chart दिखाता है कि marks कहाँ हैं।</p>
 
     <div class="bar-chart" id="barChart">
       <!-- Rendered by JS -->
     </div>
-    <div style="text-align:center; font-size: 12px; color: var(--warm-gray-dark); margin-top: 4px;">Points out of 50 &mdash; hover for details</div>
+    <div style="text-align:center; font-size: 12px; color: var(--warm-gray-dark); margin-top: 4px;">50 में से अंक &mdash; details के लिए hover करें</div>
   </div>
 </div>
 
@@ -514,8 +516,8 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- SIX CRITERIA -->
 <!-- ═══════════════════════════════════════════════ -->
 <section class="section-white" id="criteria">
-  <h2>The Six Criteria</h2>
-  <p style="color:var(--text-secondary);">Click any criterion to expand the rubric breakdown, scoring guidance, and examples of what &ldquo;Good&rdquo; looks like.</p>
+  <h2>छह मापदंड</h2>
+  <p style="color:var(--text-secondary);">किसी भी criterion पर click करें — rubric breakdown, scoring guidance, और &ldquo;Good&rdquo; level कैसा दिखता है, सब expand हो जाएगा।</p>
 
   <div id="criteriaContainer"></div>
 </section>
@@ -526,50 +528,50 @@ footer.site-footer a:hover { text-decoration: underline; }
 <div class="section-warm">
 <div class="container" id="playbook">
   <h2>The Playbook</h2>
-  <p style="color:var(--text-secondary); margin-bottom: 8px;">Eight steps from blank page to polished submission. Follow this sequence and you will naturally hit every rubric criterion.</p>
+  <p style="color:var(--text-secondary); margin-bottom: 8px;">Blank page से polished submission तक आठ steps। इस sequence को follow करो और आप naturally हर rubric criterion को cover कर लोगे।</p>
 
   <ol class="step-list">
     <li>
       <span class="step-num">1</span>
       <div class="step-content">
-        <h4>Pick a Problem Worth Solving</h4>
-        <p>Choose a business problem where Gen AI creates a <strong>defensible advantage</strong> &mdash; not just automation. The rubric rewards &ldquo;well-defined and complex&rdquo; problems. Think: unstructured data, domain expertise bottleneck, high-volume decisions. Avoid toy problems.</p>
-        <div class="callout strategy">Pick problems where humans currently spend 30+ minutes per decision using scattered information. That's where RAG + LLM creates the most compelling before/after story.</div>
+        <h4>ऐसी Problem चुनो जो Solve करने लायक हो</h4>
+        <p>ऐसी business problem चुनो जहाँ Gen AI एक <strong>defensible advantage</strong> बनाए &mdash; सिर्फ automation नहीं। Rubric &ldquo;well-defined and complex&rdquo; problems को reward करता है। सोचो: unstructured data, domain expertise bottleneck, high-volume decisions। Toy problems से बचो।</p>
+        <div class="callout strategy">ऐसी problems चुनो जहाँ लोग अभी scattered information से हर decision पर 30+ minutes खर्च करते हैं। वहीं RAG + LLM की सबसे compelling before/after story बनती है।</div>
       </div>
     </li>
     <li>
       <span class="step-num">2</span>
       <div class="step-content">
-        <h4>Write Vision &amp; Mission Statements</h4>
-        <p><strong>Vision:</strong> Where the world is going (aspirational, 5-year horizon). <strong>Mission:</strong> What your product does to get there (concrete, measurable). These anchor your entire pitch.</p>
+        <h4>Vision &amp; Mission Statements लिखो</h4>
+        <p><strong>Vision:</strong> दुनिया किस दिशा में जा रही है (aspirational, 5-year horizon)। <strong>Mission:</strong> आपका product वहाँ पहुँचने के लिए क्या करेगा (concrete, measurable)। ये दोनों आपकी पूरी pitch को anchor करते हैं।</p>
         <div class="example-block">
-          <div class="ex-label">Example &mdash; Legal Document Intelligence</div>
-          <strong>Vision:</strong> A world where legal professionals spend their time on strategy and advocacy, not document review.<br>
-          <strong>Mission:</strong> Build an AI-powered document analysis platform that reduces contract review time by 80% while flagging critical risks with 95%+ recall.
+          <div class="ex-label">उदाहरण &mdash; Legal Document Intelligence</div>
+          <strong>Vision:</strong> एक ऐसी दुनिया जहाँ legal professionals अपना समय strategy और advocacy पर लगाएं, document review पर नहीं।<br>
+          <strong>Mission:</strong> एक AI-powered document analysis platform बनाना जो contract review time को 80% कम करे और 95%+ recall के साथ critical risks flag करे।
         </div>
       </div>
     </li>
     <li>
       <span class="step-num">3</span>
       <div class="step-content">
-        <h4>Design the Gen AI Solution</h4>
-        <p>This is <strong>20% of your grade</strong> (10 points). Your solution must clearly use Gen AI techniques from the course: LLMs, prompt engineering, RAG, fine-tuning, embeddings, agents. Name specific models and tools.</p>
-        <div class="callout golden">The rubric says: &ldquo;method of estimating the success of the approach is also clearly stated.&rdquo; This means you MUST include evaluation metrics &mdash; not just architecture. How do you measure if it works?</div>
+        <h4>Gen AI Solution Design करो</h4>
+        <p>यह आपके grade का <strong>20% है</strong> (10 अंक)। आपके solution में course की Gen AI techniques clearly use होनी चाहिए: LLMs, prompt engineering, RAG, fine-tuning, embeddings, agents। Specific models और tools के नाम लो।</p>
+        <div class="callout golden">Rubric कहता है: &ldquo;method of estimating the success of the approach is also clearly stated.&rdquo; मतलब आपको evaluation metrics MUST include करने हैं &mdash; सिर्फ architecture नहीं। यह कैसे measure करोगे कि काम कर रहा है?</div>
       </div>
     </li>
     <li>
       <span class="step-num">4</span>
       <div class="step-content">
-        <h4>Build the Product Roadmap</h4>
-        <p>Another <strong>10 points</strong>. Show a phased plan from MVP to full product. The rubric expects &ldquo;short-term to 3 years&rdquo; and &ldquo;technically correct.&rdquo;</p>
+        <h4>Product Roadmap बनाओ</h4>
+        <p>यह भी <strong>10 अंक</strong> का है। MVP से full product तक phased plan दिखाओ। Rubric &ldquo;short-term to 3 years&rdquo; और &ldquo;technically correct&rdquo; expect करता है।</p>
         <div class="arena-table" style="margin-top: 12px;">
           <table class="arena-table">
-            <thead><tr><th>Phase</th><th>Timeline</th><th>What to Include</th></tr></thead>
+            <thead><tr><th>Phase</th><th>Timeline</th><th>क्या Include करें</th></tr></thead>
             <tbody>
-              <tr><td><strong>MVP</strong></td><td>0-3 months</td><td>Core RAG pipeline, basic UI, 1 use case, internal testing</td></tr>
-              <tr><td><strong>Beta</strong></td><td>3-6 months</td><td>Multi-use-case support, feedback loop, pilot users</td></tr>
-              <tr><td><strong>v1.0</strong></td><td>6-12 months</td><td>Production deployment, integrations, analytics dashboard</td></tr>
-              <tr><td><strong>Scale</strong></td><td>1-3 years</td><td>Multi-tenant, additional domains, agentic workflows, marketplace</td></tr>
+              <tr><td><strong>MVP</strong></td><td>0-3 महीने</td><td>Core RAG pipeline, basic UI, 1 use case, internal testing</td></tr>
+              <tr><td><strong>Beta</strong></td><td>3-6 महीने</td><td>Multi-use-case support, feedback loop, pilot users</td></tr>
+              <tr><td><strong>v1.0</strong></td><td>6-12 महीने</td><td>Production deployment, integrations, analytics dashboard</td></tr>
+              <tr><td><strong>Scale</strong></td><td>1-3 साल</td><td>Multi-tenant, additional domains, agentic workflows, marketplace</td></tr>
             </tbody>
           </table>
         </div>
@@ -579,15 +581,15 @@ footer.site-footer a:hover { text-decoration: underline; }
       <span class="step-num">5</span>
       <div class="step-content">
         <h4>ROI Analysis</h4>
-        <p>Yet another <strong>10 points</strong>. Cover both expense and revenue sides. The grader wants to see you can think about this as a business, not just a technology exercise.</p>
-        <div class="callout warning">Generic statements like &ldquo;AI saves time&rdquo; score poorly. Quantify everything: &ldquo;Contract review currently takes 4 hours &times; $200/hr paralegal cost. Our tool reduces this to 45 minutes, saving $650 per contract. At 200 contracts/month, annual savings = $1.56M.&rdquo;</div>
+        <p>यह भी <strong>10 अंक</strong> का है। Expense और revenue दोनों sides cover करो। Grader यह देखना चाहता है कि आप इसे एक business की तरह सोच सकते हो, सिर्फ एक technology exercise नहीं।</p>
+        <div class="callout warning">&ldquo;AI saves time&rdquo; जैसे generic statements से कम marks आते हैं। सब कुछ quantify करो: &ldquo;Contract review अभी 4 hours &times; $200/hr paralegal cost लेता है। हमारा tool इसे 45 minutes में कर देता है, हर contract पर $650 बचत। 200 contracts/month पर, सालाना बचत = $1.56M।&rdquo;</div>
       </div>
     </li>
     <li>
       <span class="step-num">6</span>
       <div class="step-content">
-        <h4>Build the 10-Slide Elevator Pitch</h4>
-        <p>This is your &ldquo;Quality of Report and Presentation&rdquo; criterion (<strong>10 points</strong>). Ten slides max &mdash; make every one count.</p>
+        <h4>10-Slide Elevator Pitch बनाओ</h4>
+        <p>यह आपका &ldquo;Quality of Report and Presentation&rdquo; criterion है (<strong>10 अंक</strong>)। ज़्यादा से ज़्यादा दस slides &mdash; हर एक को meaningful बनाओ।</p>
         <div class="example-block">
           <div class="ex-label">Recommended Slide Structure</div>
           <strong>1.</strong> Problem &amp; Market Size &nbsp;
@@ -606,16 +608,16 @@ footer.site-footer a:hover { text-decoration: underline; }
     <li>
       <span class="step-num">7</span>
       <div class="step-content">
-        <h4>Highlight Unique Aspects</h4>
-        <p>The final <strong>5 points</strong> reward uniqueness. The rubric explicitly mentions three dimensions: patent potential, publishable quality, and VC-presentable. You don't need all three &mdash; but aim for at least one.</p>
-        <div class="callout strategy">Frame your unique angle explicitly: &ldquo;Our approach to [specific technique] could be filed as a provisional patent because...&rdquo; or &ldquo;This methodology section could be adapted into a conference paper for [venue].&rdquo; Don't leave the grader guessing.</div>
+        <h4>Unique Aspects Highlight करो</h4>
+        <p>आखिरी <strong>5 अंक</strong> uniqueness को reward करते हैं। Rubric explicitly तीन dimensions mention करता है: patent potential, publishable quality, और VC-presentable। तीनों ज़रूरी नहीं &mdash; लेकिन कम से कम एक का aim रखो।</p>
+        <div class="callout strategy">अपना unique angle explicitly frame करो: &ldquo;हमारी [specific technique] पर approach को provisional patent के लिए file किया जा सकता है क्योंकि...&rdquo; या &ldquo;इस methodology section को [venue] की conference paper में adapt किया जा सकता है।&rdquo; Grader को guess मत करने दो।</div>
       </div>
     </li>
     <li>
       <span class="step-num">8</span>
       <div class="step-content">
-        <h4>Polish &amp; Rehearse</h4>
-        <p>Oral presentations happen in Sessions 14-15. The quality of your presentation is scored &mdash; not just the written report. Rehearse as a group. Time your pitch to 10 minutes or less.</p>
+        <h4>Polish करो &amp; Rehearse करो</h4>
+        <p>Oral presentations Sessions 14-15 में होती हैं। Presentation की quality score होती है &mdash; सिर्फ written report नहीं। Group में rehearse करो। अपनी pitch को 10 minutes या उससे कम में time करो।</p>
       </div>
     </li>
   </ol>
@@ -627,7 +629,7 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- ═══════════════════════════════════════════════ -->
 <section class="section-white">
   <h2>Problem Idea Arena</h2>
-  <p style="color:var(--text-secondary); margin-bottom: 20px;">You can choose your own problem or build on the 10 jobs from Assignment 1. Here are high-impact problem spaces that naturally suit Gen AI solutions:</p>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">आप अपनी problem choose कर सकते हो या Assignment 1 की 10 jobs पर build कर सकते हो। यहाँ high-impact problem spaces हैं जो naturally Gen AI solutions के लिए suit करती हैं:</p>
 
   <div id="problemIdeas"></div>
 </section>
@@ -638,29 +640,29 @@ footer.site-footer a:hover { text-decoration: underline; }
 <div class="section-warm">
 <div class="container">
   <h2>ROI Analysis Framework</h2>
-  <p style="color:var(--text-secondary); margin-bottom: 20px;">Structure your ROI as a two-sided balance sheet. The rubric says &ldquo;covering expenses and revenue aspects.&rdquo;</p>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">अपने ROI को two-sided balance sheet की तरह structure करो। Rubric कहता है &ldquo;covering expenses and revenue aspects.&rdquo;</p>
 
   <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
     <div style="background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px;">
-      <h4 style="color:var(--teal-dark); margin-top:0;">Costs (Year 1)</h4>
+      <h4 style="color:var(--teal-dark); margin-top:0;">लागत (Year 1)</h4>
       <ul style="font-size:14px; color:var(--text-secondary); padding-left: 18px;">
         <li>LLM API costs (per-token pricing)</li>
         <li>Vector DB hosting (Pinecone/Weaviate)</li>
         <li>Embedding computation</li>
         <li>Development team (FTEs)</li>
         <li>Cloud infrastructure (compute, storage)</li>
-        <li>KB curation &amp; maintenance</li>
+        <li>Knowledge Base curation &amp; maintenance</li>
         <li>Security &amp; compliance</li>
       </ul>
     </div>
     <div style="background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px;">
       <h4 style="color:var(--teal-dark); margin-top:0;">Value &amp; Revenue</h4>
       <ul style="font-size:14px; color:var(--text-secondary); padding-left: 18px;">
-        <li>Time saved &times; hourly labor cost</li>
+        <li>समय बचत &times; hourly labor cost</li>
         <li>Error reduction &times; cost per error</li>
-        <li>Throughput increase (more decisions/day)</li>
+        <li>Throughput increase (ज़्यादा decisions/day)</li>
         <li>Subscription revenue (SaaS model)</li>
-        <li>Reduced onboarding time for new hires</li>
+        <li>नए hires की onboarding time में कमी</li>
         <li>Competitive advantage / market share</li>
         <li>Data-driven insights (new revenue stream)</li>
       </ul>
@@ -668,14 +670,14 @@ footer.site-footer a:hover { text-decoration: underline; }
   </div>
 
   <div class="example-block" style="margin-top:16px;">
-    <div class="ex-label">Example ROI Summary Table</div>
+    <div class="ex-label">उदाहरण ROI Summary Table</div>
     <table class="arena-table">
-      <thead><tr><th>Item</th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
+      <thead><tr><th>मद</th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
       <tbody>
         <tr><td>Development Cost</td><td>$180K</td><td>$90K</td><td>$90K</td></tr>
         <tr><td>Infrastructure &amp; APIs</td><td>$36K</td><td>$60K</td><td>$84K</td></tr>
-        <tr><td><strong>Total Cost</strong></td><td><strong>$216K</strong></td><td><strong>$150K</strong></td><td><strong>$174K</strong></td></tr>
-        <tr><td>Labor Savings</td><td>$120K</td><td>$480K</td><td>$720K</td></tr>
+        <tr><td><strong>कुल लागत</strong></td><td><strong>$216K</strong></td><td><strong>$150K</strong></td><td><strong>$174K</strong></td></tr>
+        <tr><td>Labor बचत</td><td>$120K</td><td>$480K</td><td>$720K</td></tr>
         <tr><td>New Revenue</td><td>$0</td><td>$200K</td><td>$600K</td></tr>
         <tr><td><strong>Net ROI</strong></td><td style="color:var(--copper)"><strong>-$96K</strong></td><td style="color:var(--teal)"><strong>+$530K</strong></td><td style="color:var(--teal)"><strong>+$1.15M</strong></td></tr>
       </tbody>
@@ -689,90 +691,90 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- ═══════════════════════════════════════════════ -->
 <section class="section-white" id="maximizer">
   <h2>Scoring Maximizer</h2>
-  <p style="color:var(--text-secondary); margin-bottom: 20px;">Check every item before submitting. Each maps directly to rubric language.</p>
+  <p style="color:var(--text-secondary); margin-bottom: 20px;">Submit करने से पहले हर item check करो। हर एक directly rubric language से map करता है।</p>
 
   <details class="arena-details" open>
-    <summary>Problem Definition <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 points</span></summary>
+    <summary>Problem Definition <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Problem is specific and clearly scoped (not vague &ldquo;improve efficiency&rdquo;)</li>
-        <li><span class="check-box"></span> Explained why this problem is suitable for Gen AI specifically</li>
-        <li><span class="check-box"></span> Defined clear objectives with measurable success criteria</li>
-        <li><span class="check-box"></span> Described the current state (how is this done today, what's the pain)</li>
-        <li><span class="check-box"></span> Estimated market size or organizational impact</li>
+        <li><span class="check-box"></span> Problem specific और clearly scoped है (vague &ldquo;improve efficiency&rdquo; नहीं)</li>
+        <li><span class="check-box"></span> बताया है कि यह problem specifically Gen AI के लिए क्यों suitable है</li>
+        <li><span class="check-box"></span> Clear objectives define किए हैं measurable success criteria के साथ</li>
+        <li><span class="check-box"></span> Current state describe किया है (आज यह काम कैसे होता है, pain क्या है)</li>
+        <li><span class="check-box"></span> Market size या organizational impact estimate किया है</li>
       </ul>
     </div>
   </details>
 
   <details class="arena-details">
-    <summary>Gen AI Solution Design <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <summary>Gen AI Solution Design <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Named specific Gen AI techniques used (RAG, fine-tuning, agents, etc.)</li>
-        <li><span class="check-box"></span> Chose specific tools and models (not &ldquo;an LLM&rdquo; but &ldquo;GPT-4o-mini via Azure OpenAI&rdquo;)</li>
-        <li><span class="check-box"></span> Described the full pipeline: data ingestion &rarr; processing &rarr; inference &rarr; output</li>
-        <li><span class="check-box"></span> Included evaluation methodology with specific metrics</li>
-        <li><span class="check-box"></span> Explained why Gen AI vs traditional ML/rule-based approaches</li>
-        <li><span class="check-box"></span> Addressed data requirements (what data, how much, quality needs)</li>
+        <li><span class="check-box"></span> Specific Gen AI techniques के नाम लिए हैं (RAG, fine-tuning, agents, etc.)</li>
+        <li><span class="check-box"></span> Specific tools और models choose किए हैं (सिर्फ &ldquo;an LLM&rdquo; नहीं बल्कि &ldquo;GPT-4o-mini via Azure OpenAI&rdquo;)</li>
+        <li><span class="check-box"></span> Full pipeline describe किया है: data ingestion &rarr; processing &rarr; inference &rarr; output</li>
+        <li><span class="check-box"></span> Evaluation methodology include की है specific metrics के साथ</li>
+        <li><span class="check-box"></span> बताया है कि Gen AI क्यों vs traditional ML/rule-based approaches</li>
+        <li><span class="check-box"></span> Data requirements address किए हैं (कौन सा data, कितना, quality needs)</li>
       </ul>
     </div>
   </details>
 
   <details class="arena-details">
-    <summary>Product Roadmap <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <summary>Product Roadmap <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Phased timeline from MVP to 3-year vision</li>
-        <li><span class="check-box"></span> Each phase has specific deliverables (not vague milestones)</li>
-        <li><span class="check-box"></span> Technical architecture is correct and feasible</li>
-        <li><span class="check-box"></span> Addressed scaling strategy (users, data volume, features)</li>
-        <li><span class="check-box"></span> Included risk mitigation for each phase</li>
-        <li><span class="check-box"></span> Aligned with vision/mission statements</li>
+        <li><span class="check-box"></span> MVP से 3-year vision तक phased timeline है</li>
+        <li><span class="check-box"></span> हर phase में specific deliverables हैं (vague milestones नहीं)</li>
+        <li><span class="check-box"></span> Technical architecture correct और feasible है</li>
+        <li><span class="check-box"></span> Scaling strategy address की है (users, data volume, features)</li>
+        <li><span class="check-box"></span> हर phase के लिए risk mitigation include किया है</li>
+        <li><span class="check-box"></span> Vision/mission statements के साथ aligned है</li>
       </ul>
     </div>
   </details>
 
   <details class="arena-details">
-    <summary>ROI Analysis <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <summary>ROI Analysis <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Quantified costs (development, infrastructure, ongoing operations)</li>
-        <li><span class="check-box"></span> Quantified revenue or value (time saved, error reduction, new revenue)</li>
-        <li><span class="check-box"></span> Multi-year projection (at least 3 years)</li>
-        <li><span class="check-box"></span> Break-even analysis (when does investment pay off?)</li>
-        <li><span class="check-box"></span> Compared ROI to current state / alternative solutions</li>
-        <li><span class="check-box"></span> Stated assumptions clearly</li>
+        <li><span class="check-box"></span> Costs quantify किए हैं (development, infrastructure, ongoing operations)</li>
+        <li><span class="check-box"></span> Revenue या value quantify किया है (time saved, error reduction, new revenue)</li>
+        <li><span class="check-box"></span> Multi-year projection है (कम से कम 3 years)</li>
+        <li><span class="check-box"></span> Break-even analysis है (investment कब वापस आएगा?)</li>
+        <li><span class="check-box"></span> ROI को current state / alternative solutions से compare किया है</li>
+        <li><span class="check-box"></span> Assumptions clearly state किए हैं</li>
       </ul>
     </div>
   </details>
 
   <details class="arena-details">
-    <summary>Report &amp; Presentation Quality <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 points</span></summary>
+    <summary>Report &amp; Presentation Quality <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">10 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Elevator pitch is exactly 10 slides (not more)</li>
-        <li><span class="check-box"></span> Slides are visual, not walls of text</li>
-        <li><span class="check-box"></span> Consistent design theme across all slides</li>
-        <li><span class="check-box"></span> Written report is well-structured with clear sections</li>
-        <li><span class="check-box"></span> Figures and diagrams are labeled and referenced</li>
-        <li><span class="check-box"></span> Group practiced the oral presentation together</li>
+        <li><span class="check-box"></span> Elevator pitch exactly 10 slides है (ज़्यादा नहीं)</li>
+        <li><span class="check-box"></span> Slides visual हैं, text की walls नहीं</li>
+        <li><span class="check-box"></span> सभी slides में consistent design theme है</li>
+        <li><span class="check-box"></span> Written report well-structured है clear sections के साथ</li>
+        <li><span class="check-box"></span> Figures और diagrams labeled और referenced हैं</li>
+        <li><span class="check-box"></span> Group ने oral presentation साथ में practice की है</li>
       </ul>
     </div>
   </details>
 
   <details class="arena-details">
-    <summary>Unique Aspects <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 points</span></summary>
+    <summary>Unique Aspects <span style="margin-left:auto; font-size:13px; color:var(--warm-gray-dark);">5 अंक</span></summary>
     <div class="detail-body">
       <ul class="checklist">
-        <li><span class="check-box"></span> Explicitly stated what makes this unique/novel</li>
-        <li><span class="check-box"></span> Addressed at least one: patent potential, publishable, VC-presentable</li>
-        <li><span class="check-box"></span> Described competitive differentiation (what's new vs existing solutions)</li>
-        <li><span class="check-box"></span> If applicable: described IP or data moat</li>
+        <li><span class="check-box"></span> Explicitly बताया है कि यह unique/novel क्या है</li>
+        <li><span class="check-box"></span> कम से कम एक address किया है: patent potential, publishable, VC-presentable</li>
+        <li><span class="check-box"></span> Competitive differentiation describe किया है (existing solutions से क्या नया है)</li>
+        <li><span class="check-box"></span> अगर applicable हो: IP या data moat describe किया है</li>
       </ul>
     </div>
   </details>
 
-  <div class="callout golden" style="margin-top: 24px;">Structure your report sections to <strong>mirror the 6 rubric criteria</strong> &mdash; Problem Definition, Solution Design, Product Roadmap, ROI Analysis, Unique Aspects. Make the grader's job easy. When they look for &ldquo;ROI Analysis,&rdquo; there should be a section titled exactly that.</div>
+  <div class="callout golden" style="margin-top: 24px;">अपनी report sections को <strong>6 rubric criteria के mirror में structure करो</strong> &mdash; Problem Definition, Solution Design, Product Roadmap, ROI Analysis, Unique Aspects। Grader का काम आसान बनाओ। जब वो &ldquo;ROI Analysis&rdquo; ढूंढें, तो exactly उसी नाम का section होना चाहिए।</div>
 </section>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -781,21 +783,21 @@ footer.site-footer a:hover { text-decoration: underline; }
 <div class="section-warm">
 <div class="container">
   <h2>Assignment 1 vs Group Assignment</h2>
-  <p style="color:var(--text-secondary); margin-bottom: 16px;">These are fundamentally different exercises. Don't reuse your Assignment 1 without rethinking the framing.</p>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">ये fundamentally अलग exercises हैं। अपना Assignment 1 बिना framing बदले reuse मत करो।</p>
 
   <table class="arena-table">
-    <thead><tr><th style="width:25%;">Dimension</th><th>Assignment 1 (25 marks)</th><th>Group Assignment (50 marks)</th></tr></thead>
+    <thead><tr><th style="width:25%;">Dimension</th><th>Assignment 1 (25 अंक)</th><th>Group Assignment (50 अंक)</th></tr></thead>
     <tbody>
-      <tr><td><strong>Scope</strong></td><td>One pre-defined task for one job</td><td>Any business problem (your choice)</td></tr>
+      <tr><td><strong>Scope</strong></td><td>एक job के लिए एक pre-defined task</td><td>कोई भी business problem (आपकी पसंद)</td></tr>
       <tr><td><strong>Focus</strong></td><td>RAG architecture design</td><td>Full product: vision &rarr; roadmap &rarr; ROI</td></tr>
       <tr><td><strong>Output</strong></td><td>7+3 page written note</td><td>Written report + 10-slide pitch + oral presentation</td></tr>
       <tr><td><strong>Evaluation</strong></td><td>Technical correctness</td><td>Business viability + technical design + uniqueness</td></tr>
       <tr><td><strong>Team</strong></td><td>Individual</td><td>Group collaboration</td></tr>
-      <tr><td><strong>Unique angle</strong></td><td>Not scored</td><td>5 points for patent/publishable/VC potential</td></tr>
+      <tr><td><strong>Unique angle</strong></td><td>Score नहीं होता</td><td>Patent/publishable/VC potential के लिए 5 अंक</td></tr>
     </tbody>
   </table>
 
-  <div class="callout strategy" style="margin-top:16px;">You <em>can</em> build on your Assignment 1 job &mdash; but the group assignment demands you go far beyond a RAG pipeline. You need business context (market, competition, revenue model), a roadmap, and ROI. Think of Assignment 1 as the technical kernel inside a much larger business wrapper.</div>
+  <div class="callout strategy" style="margin-top:16px;">आप अपने Assignment 1 job पर <em>build कर सकते हो</em> &mdash; लेकिन group assignment सिर्फ RAG pipeline से बहुत आगे जाने की demand करता है। आपको business context चाहिए (market, competition, revenue model), एक roadmap, और ROI। Assignment 1 को एक technical kernel समझो जो बहुत बड़े business wrapper के अंदर बैठता है।</div>
 </div>
 </div>
 
@@ -803,11 +805,11 @@ footer.site-footer a:hover { text-decoration: underline; }
 <!-- FOOTER -->
 <!-- ═══════════════════════════════════════════════ -->
 <footer class="site-footer">
-  <a href="#overview">Top</a> |
-  <a href="#criteria">Criteria</a> |
+  <a href="#overview">ऊपर</a> |
+  <a href="#criteria">मापदंड</a> |
   <a href="#playbook">Playbook</a> |
   <a href="#maximizer">Maximizer</a>
-  <div style="margin-top:12px; font-size:12px;">Study guide &mdash; not affiliated with GGU or upGrad</div>
+  <div style="margin-top:12px; font-size:12px;">Study guide &mdash; GGU या upGrad से संबद्ध नहीं</div>
 </footer>
 
 </div><!-- /container -->
@@ -860,75 +862,75 @@ footer.site-footer a:hover { text-decoration: underline; }
       title: "Problem Definition",
       marks: "5 pts",
       marksColor: "#A0C3C4",
-      desc: "How well-defined and complex is the problem you chose?",
-      good: "Shortlisted a very good problem with clear objectives that is naturally suited to Gen AI. Stakeholders, pain points, and success metrics are explicit.",
-      sat: "Problem statement is clear but may not be the best fit for Gen AI. Objectives are vague or success criteria are missing.",
-      poor: "Problem statement is unclear. No explanation of why Gen AI is relevant to this problem.",
+      desc: "आपने जो problem चुनी, वो कितनी well-defined और complex है?",
+      good: "बहुत अच्छी problem shortlist की है जिसमें clear objectives हैं और जो naturally Gen AI के लिए suited है। Stakeholders, pain points, और success metrics explicit हैं।",
+      sat: "Problem statement clear है लेकिन Gen AI के लिए best fit शायद नहीं है। Objectives vague हैं या success criteria missing हैं।",
+      poor: "Problem statement unclear है। Gen AI इस problem से कैसे relevant है, इसकी कोई explanation नहीं।",
       tips: [
-        "State the problem in one sentence, then elaborate",
-        "Explain why traditional approaches fall short",
-        "Quantify the current pain (cost, time, error rate)",
-        "Show why Gen AI is the right fit (unstructured data, knowledge synthesis, natural language)"
+        "Problem को एक sentence में state करो, फिर elaborate करो",
+        "बताओ कि traditional approaches क्यों कम पड़ रहे हैं",
+        "Current pain को quantify करो (cost, time, error rate)",
+        "दिखाओ कि Gen AI सही fit क्यों है (unstructured data, knowledge synthesis, natural language)"
       ]
     },
     {
       title: "Gen AI Solution Design",
       marks: "10 pts",
       marksColor: "#AAB788",
-      desc: "Is the approach clearly described? Is the evaluation method stated?",
-      good: "Architecture is clearly described with specific models, tools, and pipeline. Method of evaluating success is explicitly stated with metrics.",
-      sat: "Either the solution description or the evaluation methodology is unclear. Technical choices are vague.",
-      poor: "Neither the solution architecture nor how to evaluate it is described clearly.",
+      desc: "Approach clearly describe किया है? Evaluation method stated है?",
+      good: "Architecture clearly describe किया है specific models, tools, और pipeline के साथ। Success evaluate करने का method explicitly stated है metrics के साथ।",
+      sat: "Solution description या evaluation methodology में से कोई एक unclear है। Technical choices vague हैं।",
+      poor: "न solution architecture और न evaluation method clearly describe किया है।",
       tips: [
-        "Name every component: embedding model, vector DB, LLM, framework",
-        "Include an architecture diagram (even hand-drawn is fine)",
-        "CRITICAL: State your evaluation methodology with specific metrics",
-        "Reference course concepts: RAG, prompt engineering, fine-tuning, agents"
+        "हर component का नाम लो: embedding model, vector DB, LLM, framework",
+        "Architecture diagram include करो (hand-drawn भी चलेगा)",
+        "CRITICAL: Evaluation methodology specific metrics के साथ state करो",
+        "Course concepts reference करो: RAG, prompt engineering, fine-tuning, agents"
       ]
     },
     {
       title: "Product Roadmap",
       marks: "10 pts",
       marksColor: "#D4C68B",
-      desc: "Clear short-to-long-term plan? Technically correct and implementable?",
-      good: "Clear phased roadmap from MVP to 3 years. Each phase has specific deliverables. Solution is technically correct and implementable.",
-      sat: "Some gaps in the technical plan. Roadmap exists but phases are vague or the solution has feasibility questions.",
-      poor: "Solution is not technically correct. Roadmap is unconvincing or missing.",
+      desc: "Clear short-to-long-term plan है? Technically correct और implementable है?",
+      good: "MVP से 3 years तक clear phased roadmap। हर phase में specific deliverables हैं। Solution technically correct और implementable है।",
+      sat: "Technical plan में कुछ gaps हैं। Roadmap है लेकिन phases vague हैं या solution की feasibility पर सवाल हैं।",
+      poor: "Solution technically correct नहीं है। Roadmap unconvincing या missing है।",
       tips: [
-        "Use a 4-phase structure: MVP (0-3mo), Beta (3-6mo), v1.0 (6-12mo), Scale (1-3yr)",
-        "Each phase should have concrete deliverables, not just goals",
-        "Address technical risks at each phase",
-        "Show how user feedback loops into the next phase"
+        "4-phase structure use करो: MVP (0-3 महीने), Beta (3-6 महीने), v1.0 (6-12 महीने), Scale (1-3 साल)",
+        "हर phase में concrete deliverables होने चाहिए, सिर्फ goals नहीं",
+        "हर phase पर technical risks address करो",
+        "दिखाओ कि user feedback अगले phase में कैसे feed होता है"
       ]
     },
     {
       title: "ROI Analysis",
       marks: "10 pts",
       marksColor: "#BC976A",
-      desc: "Quantified costs and revenue? Clear investment rationale?",
-      good: "Clearly stated analysis covering both expense and revenue aspects. Specific numbers, multi-year projections, break-even timeline.",
-      sat: "Satisfactory analysis covering all aspects but lacking specificity or missing key cost/revenue items.",
-      poor: "Basic level of analysis. Vague statements about saving time or money without numbers.",
+      desc: "Costs और revenue quantify किए हैं? Clear investment rationale है?",
+      good: "Clearly stated analysis जिसमें expense और revenue दोनों aspects covered हैं। Specific numbers, multi-year projections, break-even timeline।",
+      sat: "Satisfactory analysis जो सब aspects cover करती है लेकिन specificity कम है या key cost/revenue items missing हैं।",
+      poor: "Basic level analysis। बिना numbers के time या money save होने के vague statements।",
       tips: [
-        "Build a 3-year cost table (development, infrastructure, operations)",
-        "Quantify value: time saved x hourly rate x volume",
-        "Show break-even point clearly",
-        "Compare ROI to doing nothing or using non-AI alternatives"
+        "3-year cost table बनाओ (development, infrastructure, operations)",
+        "Value quantify करो: time saved x hourly rate x volume",
+        "Break-even point clearly दिखाओ",
+        "ROI को कुछ न करने या non-AI alternatives से compare करो"
       ]
     },
     {
       title: "Report & Presentation Quality",
       marks: "10 pts",
       marksColor: "#CAAB84",
-      desc: "Well-structured report and compelling 10-slide elevator pitch?",
-      good: "Very good report with clear structure. Presentation is compelling, visual, and well-rehearsed. Slides are not text-heavy.",
-      sat: "Decent report and presentation. Some structural issues or slides are too dense.",
-      poor: "Basic report and presentation. Hard to follow or poorly organized.",
+      desc: "Well-structured report और compelling 10-slide elevator pitch है?",
+      good: "बहुत अच्छी report जिसमें clear structure है। Presentation compelling, visual, और well-rehearsed है। Slides text-heavy नहीं हैं।",
+      sat: "Decent report और presentation। कुछ structural issues हैं या slides बहुत dense हैं।",
+      poor: "Basic report और presentation। Follow करना मुश्किल है या poorly organized है।",
       tips: [
-        "Limit slides to 10 (the rubric says 'limited to 10 slides')",
-        "One key message per slide with supporting visuals",
-        "Written report sections should mirror the 6 rubric criteria",
-        "Practice the oral presentation as a group — timing and transitions matter"
+        "Slides 10 तक रखो (rubric कहता है 'limited to 10 slides')",
+        "हर slide पर एक key message supporting visuals के साथ",
+        "Written report sections 6 rubric criteria के mirror होने चाहिए",
+        "Oral presentation group में practice करो — timing और transitions matter करती हैं"
       ]
     },
     {
@@ -936,14 +938,14 @@ footer.site-footer a:hover { text-decoration: underline; }
       marks: "5 pts",
       marksColor: "#DBD6D2",
       desc: "Patent potential? Publishable? VC-presentable?",
-      good: "Significant uniqueness — could be filed as a patent, published as a paper, or presented to a VC for funding.",
-      sat: "Medium level of uniqueness. Some novel elements but not fully developed.",
-      poor: "Basic solution with no distinguishing novel aspects.",
+      good: "Significant uniqueness — patent file हो सकता है, paper publish हो सकता है, या VC को funding के लिए present किया जा सकता है।",
+      sat: "Medium level uniqueness। कुछ novel elements हैं लेकिन fully developed नहीं।",
+      poor: "Basic solution जिसमें कोई distinguishing novel aspects नहीं।",
       tips: [
-        "Explicitly state your novel contribution in one paragraph",
-        "Address at least one of: patent potential, publishable methodology, VC pitch-readiness",
-        "Describe competitive differentiation — what's new vs. existing tools",
-        "If applicable: describe your data advantage or IP moat"
+        "अपना novel contribution एक paragraph में explicitly state करो",
+        "कम से कम एक address करो: patent potential, publishable methodology, VC pitch-readiness",
+        "Competitive differentiation describe करो — existing tools से क्या नया है",
+        "अगर applicable हो: अपना data advantage या IP moat describe करो"
       ]
     }
   ];
@@ -1002,7 +1004,7 @@ footer.site-footer a:hover { text-decoration: underline; }
 
     // Tips
     var tipsH = document.createElement("h4");
-    tipsH.appendChild(document.createTextNode("How to Score Maximum"));
+    tipsH.appendChild(document.createTextNode("Maximum Score कैसे लाएं"));
     tipsH.style.marginTop = "16px";
     expandEl.appendChild(tipsH);
 
@@ -1041,40 +1043,40 @@ footer.site-footer a:hover { text-decoration: underline; }
       category: "Legal & Compliance",
       color: "#A0C3C4",
       ideas: [
-        { name: "Contract Risk Analyzer", desc: "RAG-based tool that reviews contracts, flags risky clauses, and suggests amendments based on historical legal outcomes." },
-        { name: "Regulatory Change Tracker", desc: "Agent that monitors regulatory updates, assesses impact on existing policies, and drafts compliance action items." }
+        { name: "Contract Risk Analyzer", desc: "RAG-based tool जो contracts review करे, risky clauses flag करे, और historical legal outcomes के basis पर amendments suggest करे।" },
+        { name: "Regulatory Change Tracker", desc: "Agent जो regulatory updates monitor करे, existing policies पर impact assess करे, और compliance action items draft करे।" }
       ]
     },
     {
       category: "Healthcare",
       color: "#AAB788",
       ideas: [
-        { name: "Clinical Trial Matcher", desc: "Match patients to eligible clinical trials using medical records + trial criteria. RAG over medical literature for context." },
-        { name: "Medical Report Summarizer", desc: "Generate patient-friendly summaries of complex medical reports with accuracy verification." }
+        { name: "Clinical Trial Matcher", desc: "Medical records + trial criteria use करके patients को eligible clinical trials से match करें। Context के लिए medical literature पर RAG।" },
+        { name: "Medical Report Summarizer", desc: "Complex medical reports के patient-friendly summaries generate करें accuracy verification के साथ।" }
       ]
     },
     {
       category: "Finance & Insurance",
       color: "#D4C68B",
       ideas: [
-        { name: "Claims Processing Copilot", desc: "Automate document review, gap detection, and decision recommendations for insurance claims." },
-        { name: "Financial Advisory RAG", desc: "Personalized investment advice grounded in market data, regulations, and client risk profiles." }
+        { name: "Claims Processing Copilot", desc: "Insurance claims के लिए document review, gap detection, और decision recommendations automate करें।" },
+        { name: "Financial Advisory RAG", desc: "Market data, regulations, और client risk profiles पर grounded personalized investment advice।" }
       ]
     },
     {
       category: "Education & Training",
       color: "#BC976A",
       ideas: [
-        { name: "Adaptive Learning Companion", desc: "AI tutor that adapts explanations to student's learning style using RAG over curriculum materials." },
-        { name: "Corporate Onboarding Agent", desc: "New employee assistant that answers role-specific questions from company knowledge bases." }
+        { name: "Adaptive Learning Companion", desc: "AI tutor जो student की learning style के हिसाब से explanations adapt करे, curriculum materials पर RAG use करके।" },
+        { name: "Corporate Onboarding Agent", desc: "New employee assistant जो company knowledge bases से role-specific questions के answers दे।" }
       ]
     },
     {
       category: "Sales & Marketing",
       color: "#CAAB84",
       ideas: [
-        { name: "Proposal Generator", desc: "Generate tailored client proposals by retrieving past winning proposals and adapting to new requirements." },
-        { name: "Competitive Intelligence Bot", desc: "Monitor competitor activity, synthesize insights, and generate briefings for sales teams." }
+        { name: "Proposal Generator", desc: "Past winning proposals retrieve करके और new requirements के हिसाब से adapt करके tailored client proposals generate करें।" },
+        { name: "Competitive Intelligence Bot", desc: "Competitor activity monitor करे, insights synthesize करे, और sales teams के लिए briefings generate करे।" }
       ]
     }
   ];

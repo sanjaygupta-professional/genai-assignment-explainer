@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment 1 वर्कबुक — Legal Assistant</title>
+<link rel="alternate" hreflang="en" href="../legal-assistant-workbook.html">
+<link rel="alternate" hreflang="hi" href="legal-assistant-workbook.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../workbook-shared.css">
+<style>
+.lang-switch {
+  position: fixed; top: 16px; right: 16px;
+  display: flex; gap: 4px; z-index: 200;
+  background: #F7F6F5; border: 1px solid #D9D9D9;
+  border-radius: 40px; padding: 4px;
+}
+.lang-switch a {
+  padding: 6px 14px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  color: #6B7280; transition: all .2s;
+  font-family: 'Inter', sans-serif;
+}
+.lang-switch a.active { background: #487265; color: #fff; }
+.lang-switch a:hover:not(.active) { color: #292C33; }
+</style>
+</head>
+<body>
+
+<div class="lang-switch">
+  <a href="../legal-assistant-workbook.html">EN</a>
+  <a href="legal-assistant-workbook.html" class="active">हिन्दी</a>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FIXED HEADER -->
+<!-- ════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <a href="#" class="logo">Assignment 1 वर्कबुक</a>
+      <span class="byline">Legal Assistant &bull; Job #1</span>
+    </div>
+    <div class="header-actions">
+      <a href="../assignment1.html">&#8592; Explainer पर वापस जाएँ</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress Bar ──────────────────────────────── -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="globalProgressBar"></div>
+</div>
+<div class="progress-label" id="globalProgressLabel">0 / 9 सेक्शन</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ── Sidebar ──────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-label">सेक्शन</div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="#s1" data-sec="1"><span class="sn-badge">1</span>Job का चुनाव<span class="section-check"></span></a></li>
+      <li><a href="#s2" data-sec="2"><span class="sn-badge">2</span>GenAI क्षमता<span class="section-check"></span></a></li>
+      <li><a href="#s3" data-sec="3"><span class="sn-badge">3</span>Knowledge Base<span class="section-check"></span></a></li>
+      <li><a href="#s4" data-sec="4"><span class="sn-badge">4</span>Build Approach<span class="section-check"></span></a></li>
+      <li><a href="#s5" data-sec="5"><span class="sn-badge">5</span>RAG Architecture<span class="section-check"></span></a></li>
+      <li><a href="#s6" data-sec="6"><span class="sn-badge">6</span>Prompts &amp; Enhancements<span class="section-check"></span></a></li>
+      <li><a href="#s7" data-sec="7"><span class="sn-badge">7</span>सीमाएँ &amp; जोखिम<span class="section-check"></span></a></li>
+      <li><a href="#s8" data-sec="8"><span class="sn-badge">8</span>Hands-On Tryout<span class="section-check"></span></a></li>
+      <li><a href="#s9" data-sec="9"><span class="sn-badge">9</span>अंतिम असेंबली<span class="section-check"></span></a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label" style="margin-top:4px;">अंक</div>
+    <div style="padding: 0 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.7; font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;">
+      <div>C1 KB Design &mdash; <strong>5</strong></div>
+      <div>C2 RAG Architecture &mdash; <strong>5</strong></div>
+      <div>C3 Prompts &mdash; <strong>5</strong></div>
+      <div>C4 सीमाएँ &mdash; <strong>5</strong></div>
+      <div>C5 Tryout &mdash; <strong>5</strong></div>
+      <div style="margin-top:6px; padding-top:6px; border-top:1px solid var(--cream-darker); font-weight:600; color:var(--text-primary);">कुल &mdash; 25</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────── -->
+  <main class="main-content" style="font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;">
+
+    <!-- ── Hero Strip ──────────────────────────────── -->
+    <div class="hero-strip">
+      <h1>Legal Assistant<br><span style="font-size:1.5rem; color:var(--text-secondary);">Assignment 1 वर्किंग नोटबुक</span></h1>
+      <p class="subtitle">RAG-based GenAI legal search assistant डिज़ाइन करने के लिए आपका वर्किंग डॉक्यूमेंट। Assignment पर काम करते हुए हर सेक्शन भरते जाएँ।</p>
+      <div class="hero-pills">
+        <span class="pill"><span class="dot" style="background:var(--sage)"></span> 25 अंक</span>
+        <span class="pill"><span class="dot" style="background:var(--gold)"></span> अधिकतम 10 पेज</span>
+        <span class="pill"><span class="dot" style="background:var(--olive)"></span> 5 Criteria</span>
+        <span class="pill"><span class="dot" style="background:var(--bronze)"></span> Job #1 Customized</span>
+        <span class="pill"><span class="dot" style="background:var(--teal)"></span> RAG Pipeline</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 1: Job Choice & Justification -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-header-text">
+          <h2>Job का चुनाव &amp; औचित्य</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">सीधे ग्रेड नहीं होता &mdash; सभी criteria की नींव रखता है</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal Assistant वकीलों को नई फाइलिंग के लिए जुड़े हुए या समान पुराने cases खोजने में मदद करता है। KB में पिछले search sessions के logs होते हैं &mdash; क्या search किया गया, क्या मिला, और results कितने उपयोगी थे। यह मूल रूप से <strong>search strategy assistance</strong> का काम है, legal reasoning का नहीं। RAG system अनुभवी searchers के सिद्ध search patterns को सामने लाने में मदद करता है।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>आपका customization विश्वसनीय और specific होना चाहिए &mdash; "Legal Assistant" के लिए case search से जुड़ा एक ठोस task description ज़रूरी है, सिर्फ job title नहीं।</li>
+          <li>स्पष्ट रूप से बताएँ कि आपने assignment में से <em>कौन सा</em> Job # चुना और case search logs RAG को क्यों compelling बनाते हैं।</li>
+          <li>Graders यहाँ clarity को reward करते हैं: एक साफ़ एक-पैराग्राफ का justification दिखाता है कि student assignment structure समझता है।</li>
+        </ul>
+      </div>
+
+      <div class="callout strategy">Job #1 है "Legal Assistant" &mdash; पिछले search session logs से related cases ढूँढना। यह एक natural RAG fit है: KB text-heavy है, well-structured है (case_type, jurisdiction, search_terms), और काम proven search patterns को retrieve करना है, legal opinions देना नहीं। आप clear retrieval-to-answer mappings demonstrate कर सकते हैं।</div>
+
+      <details class="arena-details">
+        <summary>Context: यह job RAG के लिए क्यों अच्छी है?</summary>
+        <div class="detail-body">
+          <p>Legal assistant का search log KB RAG के लिए बेहद उपयुक्त है:</p>
+          <ul>
+            <li>Structured metadata (<code>case_type</code>, <code>jurisdiction</code>, <code>search_terms_used</code>, <code>success_rating</code>)</li>
+            <li>Clear query-to-document mapping (नया case &rarr; समान पुराने search sessions)</li>
+            <li>Measurable success metrics (पुराली searches पर <code>success_rating</code>)</li>
+            <li>Case types के across pattern-matchable search strategies</li>
+            <li>Rich searcher notes जो बताते हैं कि certain approaches क्यों काम आए</li>
+          </ul>
+          <p>सबसे ज़रूरी बात: आपका system <strong>search strategy</strong> में मदद करता है, <strong>legal advice</strong> में नहीं। यह साफ़ boundary scope को manageable और evaluation को crisp रखती है।</p>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 1
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: 2&ndash;3 पैराग्राफ। (a) Job #1 चुना, (b) task description: search logs से related cases ढूँढना, (c) KB की structured प्रकृति और retrieval-to-answer clarity को देखते हुए यह RAG को compelling क्यों बनाता है।</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 2: GenAI Capability Assessment -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-header-text">
+          <h2>GenAI क्षमता मूल्यांकन</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Criteria 1&ndash;4 में जाता है</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal assistant का मुख्य काम वकीलों को related cases खोजने में मदद करना है &mdash; कानून की व्याख्या करना नहीं। इसे एक search librarian समझिए, legal advisor नहीं। यह scoping सीधे तय करता है कि GenAI कौन से sub-tasks handle कर सकता है।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q1</strong> (Fully/Mostly/Partly/Hardly): एक level चुनें और task decomposition से justify करें &mdash; सिर्फ assertion से नहीं।</li>
+          <li><strong>Q2</strong> (Can vs. Can't table): Specific और symmetric रखें &mdash; हर "can" के साथ एक paired "limitation" होनी चाहिए। "GenAI वकीलों की मदद कर सकता है" जैसी vague entries से बचें।</li>
+          <li>Table एक key grading artifact है; इसे substantive बनाएँ (कम से कम 4&ndash;6 rows)।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q1: GenAI एक Legal Assistant की कितनी मदद कर सकता है?</summary>
+        <div class="detail-body">
+          <p>अपना level चुनें और legal assistant के tasks को decompose करके justify करें:</p>
+          <table class="arena-table">
+            <thead><tr><th>Sub-Task</th><th>GenAI की क्षमता</th><th>तर्क</th></tr></thead>
+            <tbody>
+              <tr><td>नए case type के लिए search terms suggest करना</td><td style="color:var(--teal-dark); font-weight:500;">उच्च (85%+)</td><td>RAG समान case types के लिए पिछले सफल search terms retrieve करता है</td></tr>
+              <tr><td>Relevant पुराने search sessions identify करना</td><td style="color:var(--teal-dark); font-weight:500;">उच्च (90%+)</td><td>case_type और jurisdiction के आधार पर search logs पर semantic search</td></tr>
+              <tr><td>Jurisdiction-specific search strategies recommend करना</td><td style="color:var(--sand); font-weight:500;">मध्यम (65%)</td><td>Specific jurisdictions की KB coverage पर निर्भर करता है</td></tr>
+              <tr><td>Case merits पर legal opinions देना</td><td style="color:var(--copper); font-weight:500;">कम (5%)</td><td>पूरी तरह scope से बाहर &mdash; यह legal reasoning है, search नहीं</td></tr>
+              <tr><td>Case types के across search approaches की तुलना करना</td><td style="color:var(--teal-dark); font-weight:500;">उच्च (80%)</td><td>Multiple search log entries को cross-reference करना</td></tr>
+            </tbody>
+          </table>
+          <div class="callout golden">Case search पर focused Legal Assistant के लिए, <strong>"Mostly (80%+)"</strong> defensible है। ज़्यादातर tasks structured logs से search-pattern retrieval हैं। Legal reasoning और advice इंसानों के लिए ही रहेगी।</div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Q2: Can vs. Can't Table (scaffold दिया गया है)</summary>
+        <div class="detail-body">
+          <p>Legal search context के लिए आपका two-column analysis:</p>
+          <table class="arena-table">
+            <thead><tr><th style="width:50%">GenAI <em>कर सकता है</em></th><th>GenAI <em>नहीं कर सकता</em></th></tr></thead>
+            <tbody>
+              <tr><td>समान case types के लिए पिछले sessions से सफल search terms retrieve करना</td><td>Legal opinions देना कि cases वास्तव में filing के लिए relevant हैं या नहीं</td></tr>
+              <tr><td>case_type और jurisdiction के आधार पर नए case को पुराने search sessions से match करना</td><td>किसी case argument की legal strength या weakness assess करना</td></tr>
+              <tr><td>पुरानी searches को सफल बनाने वाले patterns (high success_rating) surface करना</td><td>Guarantee करना कि मिले हुए cases अभी भी good law हैं (overruled नहीं हुए)</td></tr>
+              <tr><td>समान sessions के searcher_notes के आधार पर alternative search phrases suggest करना</td><td>Search strategy पर एक अनुभवी legal researcher के judgment की जगह लेना</td></tr>
+              <tr><td>Multiple jurisdictions में search strategies को cross-reference करना</td><td>Search logs process करते समय attorney-client privilege की boundaries बनाए रखना</td></tr>
+              <tr><td>पुराने search approaches को success_rating scores के अनुसार rank करना</td><td>उस procedural context को समझना जो certain case citations को appropriate बनाता है</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 2 (Q1 + Q2)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) ऊपर दिए गए task decomposition के reference में 2&ndash;3 वाक्यों के justification के साथ अपना Q1 choice बताएँ। (b) Legal search context के लिए specific 5&ndash;7 rows के साथ अपनी Can/Can't table पूरी करें। लक्ष्य: 0.5&ndash;1 पेज।</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 3: Knowledge Base Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-header-text">
+          <h2>Knowledge Base Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 1</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal search assistant के लिए KB <strong>पिछले search sessions के logs</strong> से बनता है &mdash; structured records कि वकीलों ने क्या search किया, क्या मिला, और वो results कितने उपयोगी थे। इसे search expertise की institutional memory समझिए।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>अपने KB का <strong>schema</strong> describe करें: document types, metadata fields, documents को कैसे chunk और index किया जाएगा।</li>
+          <li><strong>3&ndash;5 sample documents</strong> दें (realistic titles, sizes, formats) &mdash; legal assistant के लिए ये specific search session logs होने चाहिए, generic documents नहीं।</li>
+          <li><strong>3&ndash;5 sample queries</strong> include करें जो एक वकील वास्तव में type करेगा, साथ में बताएँ कि कौन से KB documents retrieve होंगे।</li>
+          <li>Graders check करते हैं: क्या KB इतना specific है कि विश्वसनीय लगे? क्या इस corpus पर retrieval वास्तव में काम करेगा?</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>KB Schema &mdash; Search Session Log Design</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Field</th><th>Type</th><th>Example Value</th><th>उद्देश्य</th></tr></thead>
+            <tbody>
+              <tr><td><code>log_id</code></td><td>string</td><td>sess_2024_0342</td><td>Unique session identifier</td></tr>
+              <tr><td><code>case_type</code></td><td>enum</td><td>breach_of_contract</td><td>Practice area के अनुसार filter करना</td></tr>
+              <tr><td><code>jurisdiction</code></td><td>string</td><td>California, 9th Circuit</td><td>Jurisdictional filtering</td></tr>
+              <tr><td><code>search_terms_used</code></td><td>string[]</td><td>["breach of contract", "software licensing", "SaaS agreement"]</td><td>Core retrieval target</td></tr>
+              <tr><td><code>cases_found</code></td><td>object[]</td><td>[{name: "Oracle v. Google", citation: "593 U.S. 1"}]</td><td>Proven results</td></tr>
+              <tr><td><code>success_rating</code></td><td>int (1&ndash;5)</td><td>4</td><td>High-quality patterns को filter करना</td></tr>
+              <tr><td><code>searcher_notes</code></td><td>text</td><td>"Start broad with contract type, then narrow by industry..."</td><td>Strategy narrative</td></tr>
+              <tr><td><code>date_searched</code></td><td>date</td><td>2024-03-15</td><td>Recency filter</td></tr>
+              <tr><td><code>filing_context</code></td><td>string</td><td>motion_to_dismiss</td><td>Search किसके लिए किया गया</td></tr>
+              <tr><td><code>chunk_text</code></td><td>text</td><td>[embedded text for semantic search]</td><td>Retrieved passage</td></tr>
+              <tr><td><code>embedding</code></td><td>float[1536]</td><td>[0.021, -0.034, ...]</td><td>Semantic search vector</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:13px; color:var(--text-secondary); margin-top:8px;">Chunk strategy: हर search session log 1&ndash;3 chunks बनता है। <code>searcher_notes</code> field primary retrieval target है (rich narrative)। <code>cases_found</code> को filtering के लिए structured metadata के रूप में index किया जाता है।</p>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Documents (5 realistic उदाहरण)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Doc 1 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "Breach of Contract &mdash; Software Licensing (California)"<br>
+            <strong>Format:</strong> Structured log, 2 pages, success_rating 4/5<br>
+            <strong>KB Role:</strong> Searcher ने Oracle v. Google सहित 8 relevant cases ढूँढे; notes में recommend किया कि broad contract type से शुरू करें, फिर industry से narrow करें
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 2 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "IP Dispute &mdash; Patent Infringement (Federal, CAFC)"<br>
+            <strong>Format:</strong> Structured log, 3 pages, success_rating 5/5<br>
+            <strong>KB Role:</strong> Comprehensive patent search strategy; IP practice area के लिए corpus में highest-rated session
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 3 &mdash; Jurisdiction Index</div>
+            <strong>Title:</strong> "California State Courts &mdash; Practice Area Coverage Map"<br>
+            <strong>Format:</strong> Reference document, 1 page<br>
+            <strong>KB Role:</strong> Map करता है कि किन case types में California में strong precedent है; jurisdictional match quality के आधार पर sessions pre-filter करने में काम आता है
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 4 &mdash; Search Session Log</div>
+            <strong>Title:</strong> "Employment Discrimination &mdash; Wrongful Termination (New York)"<br>
+            <strong>Format:</strong> Structured log, 2 pages, success_rating 3/5<br>
+            <strong>KB Role:</strong> Notes में recent precedent खोजने की चुनौतियाँ highlighted हैं; jurisdiction के लिए cautionary example के रूप में उपयोगी
+          </div>
+          <div class="example-block">
+            <div class="ex-label">Doc 5 &mdash; Search Strategy Guide</div>
+            <strong>Title:</strong> "Best Practices for Multi-Jurisdiction Case Research"<br>
+            <strong>Format:</strong> Internal guide, 5 pages<br>
+            <strong>KB Role:</strong> General search methodology; case types के across broad strategy questions के लिए retrieve होता है
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Sample Queries &amp; Retrieval Targets</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Sample Query</th><th>Retrieved Doc(s)</th><th>Expected Response Type</th></tr></thead>
+            <tbody>
+              <tr><td>"California में software licensing से जुड़े breach of contract जैसे cases ढूँढो"</td><td>CA breach of contract के session logs, Doc 1</td><td>Search terms + मिले cases + strategy notes</td></tr>
+              <tr><td>"Federal courts में patent infringement के लिए कौन से search terms काम करते हैं?"</td><td>Doc 2 (patent search log), Doc 5 (strategy guide)</td><td>Success ratings के साथ ranked search terms</td></tr>
+              <tr><td>"Successful searchers employment discrimination cases कैसे approach करते हैं?"</td><td>Doc 4, समान employment session logs</td><td>Search strategies का pattern analysis</td></tr>
+              <tr><td>"SaaS contract disputes के लिए किन jurisdictions में सबसे ज़्यादा precedent है?"</td><td>Doc 3 (jurisdiction index), multiple session logs</td><td>Case counts के साथ jurisdiction comparison</td></tr>
+              <tr><td>"Breach of contract के motion to dismiss research करते समय दूसरे attorneys ने कौन से cases ढूँढे?"</td><td>filing_context=motion_to_dismiss से filter किए हुए session logs</td><td>Strategy notes के साथ citation list</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 3 (Criterion 1, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) अपने चुने हुए metadata fields के साथ KB schema table, (b) realistic details के साथ 4&ndash;5 sample search session documents, (c) retrieval mappings के साथ 4&ndash;5 sample queries। लक्ष्य: 1.0&ndash;1.5 पेज।</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 1</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 4: Build Approach -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-header-text">
+          <h2>Build Approach &mdash; RAG क्यों?</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Q3 &mdash; Criterion 2 का framework</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Case law databases लगातार update होते रहते हैं जैसे-जैसे नए decisions filed होते हैं। नए cases precedent set करने के साथ search strategies भी evolve होती हैं। एक static model नई rulings के कुछ ही हफ्तों में outdated हो जाएगा।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q3</strong> आपसे कम से कम 3 approaches की तुलना करने को कहता है: from-scratch training, fine-tuning, pure prompting, और RAG। आपको argue करना होगा कि <em>RAG क्यों जीतता है</em> आपकी specific job के लिए।</li>
+          <li>अपने KB से जुड़े ठोस कारण दें &mdash; जैसे, "हफ्ते में नए cases file होते हैं जो tuning को जल्दी stale बना देते हैं" "RAG flexible है" से ज़्यादा strong है।</li>
+          <li>एक comparison table structure के लिए clear marks दिलाती है।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q3: Approach Comparison Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Approach</th><th>Legal KB के लिए Feasibility</th><th>मुख्य सीमा</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Train from Scratch</strong></td><td style="color:var(--copper);">Feasible नहीं</td><td>KB में ~500 search session logs हैं। इतने छोटे corpus पर model scratch से train करने का कोई justification नहीं।</td></tr>
+              <tr><td><strong>Fine-Tuning</strong></td><td style="color:var(--sand);">आंशिक रूप से feasible</td><td>Search logs पर fine-tune कर सकते हैं, लेकिन हफ्ते में नए cases file होते हैं जो tuning को जल्दी stale बना देते हैं। हर update पर re-tuning महँगा और धीमा है।</td></tr>
+              <tr><td><strong>Pure Prompting</strong></td><td style="color:var(--sand);">आंशिक रूप से feasible</td><td>Context window एक बार में कुछ search logs रख सकता है, लेकिन सैकड़ों sessions तक scale नहीं कर सकता। Jurisdiction या case_type से filter करने की capability खो जाती है।</td></tr>
+              <tr><td><strong>RAG (चुना गया)</strong></td><td style="color:var(--teal-dark); font-weight:600;">सर्वोत्तम</td><td>Query time पर dynamically relevant search sessions retrieve करता है। नए logs सिर्फ re-indexing से जुड़ जाते हैं। Metadata filtering से jurisdiction-specific retrieval संभव। Source sessions का पूरा citation provenance।</td></tr>
+            </tbody>
+          </table>
+          <div class="callout strategy">Legal assistant context के लिए, RAG का killer argument है <strong>metadata-filtered retrieval</strong>: वकीलों को jurisdiction, case_type, और success_rating से filter किए results चाहिए &mdash; ये capabilities pure prompting और fine-tuning बस provide नहीं कर सकते। RAG के vector store metadata filters इसे natural बनाते हैं।</div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 4 (Q3)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) Legal-domain-specific reasoning के साथ आपकी Q3 comparison table, (b) RAG सही choice क्यों है, इसके लिए 2&ndash;3 पैराग्राफ argument, जिसमें case law की freshness, metadata filtering needs, और citation traceability का ज़िक्र हो। लक्ष्य: 0.5&ndash;0.75 पेज।</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 5: RAG Architecture Design -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-header-text">
+          <h2>RAG Architecture Design</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 2</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal search में एक unique requirement है: <strong>precision, recall से ज़्यादा matter करती है</strong>। एक वकील को <em>सही</em> cases चाहिए, सिर्फ ढेर सारे vaguely related cases नहीं। यह हमारी retrieval strategy को hybrid search (BM25 + dense) और re-ranking की ओर shape करता है।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>Q4</strong> में एक पूरे RAG pipeline का description चाहिए: ingestion, chunking, embedding, vector store, retrieval, augmentation, generation, और output।</li>
+          <li>हर stage पर अपने चुने हुए tools/models का नाम बताएँ (जैसे, "embeddings के लिए OpenAI text-embedding-3-small, vector store के लिए Pinecone")।</li>
+          <li>अपनी <strong>evaluation methodology</strong> include करें: RAG system काम कर रहा है, यह कैसे मापेंगे? कम से कम 2 metrics mention करें।</li>
+          <li>एक flow diagram या numbered pipeline steps clarity marks दिलाते हैं।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Q4: पूरा RAG Pipeline &mdash; 8-Stage Architecture</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 1 &mdash; Document Ingestion</h4>
+            <p style="font-size:13.5px; margin:0;">Source formats: text logs (structured JSON/CSV), PDF case briefs, internal strategy guides (DOCX)। Tools: session logs के लिए custom JSON parser, PDF guides के लिए <code>pypdf2</code>, DOCX के लिए <code>python-docx</code>। Output: metadata के साथ structured text।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 2 &mdash; Legal-Aware Chunking</h4>
+            <p style="font-size:13.5px; margin:0;">Strategy: session logs को whole entries के रूप में chunk करना (प्रति session 1&ndash;3 chunks, ~300&ndash;500 tokens)। Strategy guides को section heading से chunk करना। <code>searcher_notes</code> को atomic chunks के रूप में रखना (mid-strategy कभी split नहीं करना)। तर्क: search strategies chunks में बँटने पर अपना अर्थ खो देती हैं।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 3 &mdash; Embedding</h4>
+            <p style="font-size:13.5px; margin:0;">Model: <code>text-embedding-3-small</code> (OpenAI, 1536 dimensions)। हर chunk embedded। Cost: ~$0.02/million tokens। Legal terminology general-purpose embeddings से अच्छी तरह capture होती है क्योंकि search logs natural language use करते हैं।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 4 &mdash; Vector Store</h4>
+            <p style="font-size:13.5px; margin:0;">Platform: Pinecone (या local के लिए Chroma)। Index: cosine similarity। Metadata filters: <code>case_type</code>, <code>jurisdiction</code>, <code>success_rating</code>, <code>filing_context</code>, <code>date_searched</code>। Scoped retrieval के लिए practice area के अनुसार namespace।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 5 &mdash; Hybrid Retrieval (BM25 + Dense)</h4>
+            <p style="font-size:13.5px; margin:0;">Query को same model से embed करना। Hybrid search: exact legal terms (case names, statutes) के लिए BM25 + semantic similarity के लिए dense। दोनों से top-k=8, merge और deduplicate। तर्क: legal search terms precise होते हैं (statute numbers, case names) जहाँ keyword matching pure semantic search से बेहतर perform करता है।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 6 &mdash; Context Augmentation</h4>
+            <p style="font-size:13.5px; margin:0;">Retrieved chunks को source metadata के साथ format करना: <code>[Source: Session sess_2024_0342, Case Type: breach_of_contract, Jurisdiction: CA, Success: 4/5]</code>। System prompt model को session IDs cite करने का निर्देश देता है। कुल context budget: ~4,000 tokens।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 7 &mdash; Generation</h4>
+            <p style="font-size:13.5px; margin:0;">LLM: Azure के ज़रिए <code>gpt-4o</code>। Temperature: 0.2 (factual retrieval task)। Max tokens: 600। Model को instruction दिया गया है कि retrieved sessions के आधार पर search strategies suggest करे, source sessions cite करे, और legal advice requests refuse करे।</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-top:0; color:var(--teal-dark);">Stage 8 &mdash; Output &amp; Evaluation</h4>
+            <p style="font-size:13.5px; margin:0;">Response में session citations शामिल। Evaluation: (a) <strong>Faithfulness</strong> &mdash; क्या suggested search terms retrieved session logs से match करते हैं? (b) <strong>Relevance</strong> &mdash; क्या response specific case type और jurisdiction को address करता है? (c) <strong>Usefulness</strong> &mdash; क्या एक वकील suggested search strategy को actionable पाएगा? Tools: practicing attorneys के साथ manual evaluation + automated RAGAS metrics।</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 5 (Criterion 2, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) Specific tool choices के साथ आपकी 8-stage pipeline, (b) एक simple flow diagram (optional पर recommended), (c) कम से कम 2 metrics के साथ evaluation methodology। लक्ष्य: 1.5&ndash;2 पेज।</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 2</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 6: Prompts & RAG Enhancements -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-header-text">
+          <h2>Prompts &amp; RAG Enhancements</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 3</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        System prompt को एक sharp line draw करनी चाहिए: आप <strong>search strategy</strong> में मदद करते हैं, <strong>legal advice</strong> में नहीं। यह distinction एक ethical guardrail भी है और practical scope limiter भी, जो RAG system को focused रखता है।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>अपना actual <strong>system prompt</strong> दें (verbatim, code block में) &mdash; यह legal-search-specific होना चाहिए, generic नहीं।</li>
+          <li>1&ndash;2 <strong>few-shot examples</strong> include करें जो exact input/output format दिखाएँ &mdash; एक success case और एक legal advice refusal।</li>
+          <li>कम से कम 2 <strong>RAG optimization strategies</strong> describe करें जो legal domain से जुड़ी हों (जैसे, jurisdiction pre-filtering, success-weighted re-ranking)।</li>
+          <li>Graders specificity को reward करते हैं: legal advice boundary prompt में explicitly enforced होनी चाहिए, assumed नहीं।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>System Prompt (Reference Version)</summary>
+        <div class="detail-body">
+          <div class="code-block"><span class="comment"># System Prompt: Legal Case Search Assistant</span>
+
+You are a legal research search assistant that helps lawyers find related cases by leveraging past search session logs.
+
+<span class="keyword">Your role:</span>
+- Help lawyers develop search strategies for finding related cases, based on ONLY the retrieved search session logs provided below.
+- Always cite the source session ID for every recommendation (format: [Source: Session sess_XXXX_XXXX]).
+- Suggest search terms, case names, and search strategies that were successful in similar past searches.
+- If the retrieved context does not contain relevant search sessions, say: "I don't have matching search session logs for this case type/jurisdiction. Consider consulting your firm's research librarian."
+
+<span class="keyword">Critical boundary:</span>
+- You are a SEARCH STRATEGY assistant, NOT a legal advisor.
+- NEVER provide legal opinions, case merit assessments, or filing recommendations.
+- If asked for legal advice, respond: "I can help you find related cases, but legal analysis and advice should come from a qualified attorney. Would you like me to suggest search strategies instead?"
+- Do not assess whether found cases support or undermine a legal argument.
+
+<span class="keyword">Format:</span>
+- Organize suggestions by: (1) Recommended search terms, (2) Similar cases found in past sessions, (3) Strategy notes from experienced searchers.
+- Include the success_rating from source sessions so lawyers can prioritize proven strategies.
+- Keep responses under 500 words unless the query requires multi-jurisdiction comparison.
+
+<span class="keyword">Context passages will be injected below by the system.</span></div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>Few-Shot Examples (2 pairs)</summary>
+        <div class="detail-body">
+          <div class="example-block">
+            <div class="ex-label">Few-Shot Example 1 &mdash; सफल Search Strategy</div>
+            <strong>Query:</strong> "मुझे California में SaaS agreement से जुड़े breach of contract से related cases ढूँढने हैं।"<br><br>
+            <strong>Expected Response:</strong> "समान cases के लिए पिछले search sessions के आधार पर, यहाँ recommended strategies हैं: <strong>Search Terms:</strong> 'breach of contract SaaS', 'software licensing agreement breach California', 'cloud services contract dispute' [Source: Session sess_2024_0342, Success: 4/5]। <strong>मिले हुए Similar Cases:</strong> पिछले searchers ने software contract disputes के लिए <em>Oracle v. Google</em> (593 U.S. 1) और <em>Versata Software v. SAP</em> relevant पाए [Source: Session sess_2024_0342]। <strong>Strategy Notes:</strong> 'Broad contract terms से शुरू करें, फिर industry (software/SaaS) और state से narrow करें। California में tech contract disputes का strong precedent है।' [Source: Session sess_2024_0342, searcher_notes]।"
+          </div>
+          <div class="example-block" style="margin-top:10px;">
+            <div class="ex-label">Few-Shot Example 2 &mdash; Legal Advice Refusal</div>
+            <strong>Query:</strong> "क्या मुझे यह case federal court में file करना चाहिए या state court में?"<br><br>
+            <strong>Expected Response:</strong> "मैं related cases ढूँढने में मदद कर सकता हूँ, लेकिन legal analysis और advice &mdash; jurisdictional filing decisions सहित &mdash; एक qualified attorney से आनी चाहिए। क्या आप चाहेंगे कि मैं इसके बजाय समान case types के लिए अलग-अलग jurisdictions में file किए गए cases ढूँढने की search strategies suggest करूँ?"
+          </div>
+        </div>
+      </details>
+
+      <details class="arena-details">
+        <summary>RAG Optimization Strategies</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Strategy 1: Jurisdiction Pre-Filtering</h4>
+            <p style="font-size:13.5px; margin:0;">Query embed करने से पहले, jurisdiction mentions (state names, circuit numbers, "federal") detect करें और matching sessions तक retrieval narrow करने के लिए metadata filter लगाएँ। California searches को New York results return करने से रोकता है जहाँ legal standards काफ़ी अलग हैं।</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 2: Legal Term Expansion</h4>
+            <p style="font-size:13.5px; margin:0;">एक lightweight LLM call से legal search queries को related terms से expand करें। "breach of contract" &rarr; "contract violation", "material breach", "anticipatory breach" भी search करें। Legal terminology में कई synonyms होते हैं जो pure embedding similarity से miss हो सकते हैं।</p>
+          </div>
+          <div class="card">
+            <h4>Strategy 3: Success-Weighted Re-Ranking</h4>
+            <p style="font-size:13.5px; margin:0;">Initial retrieval के बाद, <code>success_rating &ge; 4</code> वाले sessions के chunks को boost करें। एक search strategy जो काम कर चुकी है (high rating) उससे ज़्यादा valuable है जो नहीं किया। Weight formula: <code>score &times; (0.5 + 0.1 &times; success_rating)</code>।</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 6 (Criterion 3, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) Legal advice boundary explicitly stated के साथ code block में आपका verbatim system prompt, (b) 2 few-shot examples जो एक successful search strategy response और एक legal advice refusal दिखाएँ, (c) Rationale के साथ 2&ndash;3 RAG optimization strategies। लक्ष्य: 1.0&ndash;1.5 पेज।</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 3</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 7: Limitations & Risks -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-header-text">
+          <h2>सीमाएँ &amp; जोखिम</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 4</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Legal technology में liability, confidentiality, और professional ethics से जुड़े unique risks होते हैं। यहाँ तक कि एक "search assistance" tool भी एक heavily regulated domain में operate करता है जहाँ errors के गंभीर परिणाम हो सकते हैं।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li><strong>4 risk categories</strong> cover करें: TCO/cost, latency, quality/hallucination, और domain-specific risks।</li>
+          <li>हर limitation के साथ एक paired <strong>mitigation strategy</strong> होनी चाहिए &mdash; सिर्फ problems की list नहीं।</li>
+          <li>Legal के लिए domain-specific risks: अगर search suggestions से cases miss हो जाएँ तो liability, search logs में attorney-client privilege, case law currency, jurisdictional accuracy, hallucinated citations।</li>
+          <li>Consequences के बारे में specific रहें: एक legal brief में "hallucinated case citation" court sanctions का कारण बन सकता है।</li>
+        </ul>
+      </div>
+
+      <details class="arena-details" open>
+        <summary>Risk Matrix &mdash; Legal Domain Reference Table</summary>
+        <div class="detail-body">
+          <table class="arena-table">
+            <thead><tr><th>Risk Category</th><th>Specific Risk</th><th>गंभीरता</th><th>Mitigation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Cost (TCO)</strong></td>
+                <td>High query volume के साथ API costs: 500 queries/day at ~$0.01 = $150/month</td>
+                <td style="color:var(--sand);">मध्यम</td>
+                <td>Frequent jurisdiction-specific queries cache करें; term expansion के लिए smaller model use करें; per-user rate limits set करें</td>
+              </tr>
+              <tr>
+                <td><strong>Latency</strong></td>
+                <td>Hybrid retrieval (BM25 + dense) + re-ranking प्रति query 3&ndash;6 seconds जोड़ता है</td>
+                <td style="color:var(--olive);">कम&ndash;मध्यम</td>
+                <td>BM25 indices pre-compute करें; generation tokens stream करें; async re-ranking</td>
+              </tr>
+              <tr>
+                <td><strong>Hallucinated Citations</strong></td>
+                <td>LLM एक ऐसा case citation fabricate कर दे (जैसे, "Johnson v. Smith, 2019") जो exist नहीं करता &mdash; इसे legal brief में cite करने पर court sanctions हो सकते हैं</td>
+                <td style="color:var(--copper);">उच्च</td>
+                <td>Strict system prompt: सिर्फ retrieved session logs से cite करें; सभी case names को KB में known <code>cases_found</code> से validate करें; unretrieved citations वाली generation को flag करें</td>
+              </tr>
+              <tr>
+                <td><strong>Case Law Currency</strong></td>
+                <td>पुराने search sessions ऐसे cases reference कर सकते हैं जो search के बाद से overruled या modified हो चुके हैं</td>
+                <td style="color:var(--copper);">उच्च</td>
+                <td>KB entries में <code>last_verified</code> date जोड़ें; system prompt में Shepard's या KeyCite से verify करने का disclaimer include करें; quarterly KB review cycle</td>
+              </tr>
+              <tr>
+                <td><strong>Attorney-Client Privilege</strong></td>
+                <td>Search session logs में client matters, case strategy, या privileged communications की details हो सकती हैं</td>
+                <td style="color:var(--copper);">उच्च</td>
+                <td>KB ingestion से पहले सभी client-identifying information anonymize करें; practice group के अनुसार access restrict करें; role-based access controls implement करें; anonymization process की legal review</td>
+              </tr>
+              <tr>
+                <td><strong>Jurisdictional Accuracy</strong></td>
+                <td>System एक jurisdiction की search strategies दूसरी jurisdiction के case के लिए suggest कर सकता है, जहाँ laws काफ़ी अलग हैं</td>
+                <td style="color:var(--sand);">मध्यम</td>
+                <td>Retrieval time पर jurisdiction metadata filtering; system prompt हर recommendation के साथ jurisdiction बताने की requirement रखे; cross-jurisdiction results return होने पर user को warn करें</td>
+              </tr>
+              <tr>
+                <td><strong>Over-Reliance</strong></td>
+                <td>वकील search suggestions पर बिना independent verification के भरोसा कर लें, KB में नहीं मिलने वाले important cases miss हो जाएँ</td>
+                <td style="color:var(--sand);">मध्यम</td>
+                <td>System prompt में disclaimer include करें कि suggestions comprehensive नहीं हो सकते; practice area और jurisdiction के अनुसार KB coverage metrics display करें</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 7 (Criterion 4, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) TCO, latency, quality, और legal-specific risks (privilege, hallucinated citations, case currency) cover करते हुए 5&ndash;7 rows की limitations table, (b) सबसे critical risk (hallucinated citations) और उसे कैसे address करेंगे, इस पर 2&ndash;3 पैराग्राफ narrative। लक्ष्य: 1.0&ndash;1.5 पेज।</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 4</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 8: Hands-On Tryout -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-header-text">
+          <h2>Hands-On Tryout</h2>
+          <div class="section-header-meta">
+            <span class="criterion-badge">Criterion 5</span>
+            <span class="marks-badge">5 अंक</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="domain-context">
+        <div class="dc-label">Legal Domain Context</div>
+        Tryout के लिए, आप ChatGPT में अपना system prompt और sample search session logs paste करके legal search assistant simulate करेंगे। तीन scenarios test करें: एक successful case search, एक out-of-scope legal advice request, और एक multi-jurisdiction comparison।
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>इस criterion की value 20% है और सबसे commonly underweighted है। एक basic ChatGPT conversation भी count होती है &mdash; इसे skip मत करें।</li>
+          <li>कम से कम <strong>3 interactions</strong> दिखाएँ: एक successful case search, एक legal advice refusal, और एक sessions के across synthesis।</li>
+          <li>Screenshots या pasted conversation logs include करें। उन्हें annotate करें: क्या काम किया, क्या नहीं किया, और क्या improve करेंगे।</li>
+          <li>Legal advice refusal test Job #1 के लिए unique है &mdash; सुनिश्चित करें कि आपके system prompt की boundary clearly demonstrate हो।</li>
+        </ul>
+      </div>
+
+      <div class="callout warning">इस assignment के लिए पूरा production RAG deployment मत करें। एक ChatGPT session जहाँ आप अपना system prompt + sample search session excerpts paste करें, पूरी तरह पर्याप्त है। Point interaction pattern demonstrate करना है, engineering perfection नहीं।</div>
+
+      <details class="arena-details" open>
+        <summary>सुझाया गया Tryout Protocol</summary>
+        <div class="detail-body">
+          <div class="card">
+            <h4>Step 1: Mini-KB context तैयार करें</h4>
+            <p style="font-size:13.5px; margin:0;">अपने sample documents से 2&ndash;3 search session log excerpts (प्रत्येक 150&ndash;200 शब्द) copy करें। Session IDs, search terms, मिले cases, और searcher notes include करें।</p>
+          </div>
+          <div class="card">
+            <h4>Step 2: ChatGPT या Azure OpenAI खोलें</h4>
+            <p style="font-size:13.5px; margin:0;">एक नई conversation शुरू करें। पहले अपना system prompt paste करें, फिर context passages, फिर अपने queries पूछें।</p>
+          </div>
+          <div class="card">
+            <h4>Step 3: 3 test interactions चलाएँ</h4>
+            <ul style="font-size:13.5px;">
+              <li><strong>Test A (Success):</strong> "California में software licensing से जुड़े breach of contract जैसे cases ढूँढो" &rarr; Relevant search logs retrieve करनी चाहिए, search terms suggest करने चाहिए, session IDs cite करने चाहिए।</li>
+              <li><strong>Test B (Boundary &mdash; Legal Advice Refusal):</strong> "क्या मुझे यह case federal court में file करना चाहिए या state court में?" &rarr; Gracefully refuse करे: "मैं search strategies में मदद कर सकता हूँ, लेकिन filing decisions legal advice हैं..."</li>
+              <li><strong>Test C (Synthesis):</strong> "Successful searchers ने IP disputes vs. contract disputes के लिए precedent कैसे ढूँढा, तुलना करो" &rarr; Multiple search logs cross-reference करे और strategies compare करे।</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Step 4: Screenshot लें और annotate करें</h4>
+            <p style="font-size:13.5px; margin:0;">तीनों conversations के screenshots लें। अपने write-up में, हर एक को briefly annotate करें: model ने क्या अच्छा किया? क्या गलत किया? v2 में क्या fix करेंगे?</p>
+          </div>
+        </div>
+      </details>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 8 (Criterion 5, 5 अंक)
+        </div>
+        <div class="your-work-placeholder">
+          [ जब आप हर step पर काम करें तब यहाँ content आएगा ]<br><br>
+          <em>सुझाया गया content: (a) 3 tryout interactions के screenshots या pasted conversation logs, (b) प्रति interaction 2&ndash;3 वाक्य annotation (क्या काम किया, क्या fail हुआ, क्या improve करेंगे), (c) Overall tryout findings का 1-paragraph summary। यह section आपके page budget के 3 pages तक use करता है &mdash; screenshots efficiently use करें। लक्ष्य: 1.5&ndash;3 पेज।</em>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <span style="font-weight:600; color:var(--text-primary);">Criterion 5</span>
+        <div class="pb-bar-wrap"><div class="pb-bar" style="width:0%"></div></div>
+        <span>0 / 5 अंक</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTION 9: Final Assembly & Page Budget -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="wb-section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-header-text">
+          <h2>अंतिम असेंबली &amp; पेज बजट</h2>
+          <div class="section-header-meta">
+            <span class="ungraded-badge">Submission checklist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-reminder">
+        <div class="rubric-label">Rubric Reminder</div>
+        <ul>
+          <li>कुल page budget: <strong>अधिकतम 10 pages</strong> (7 pages content + 3 pages screenshots/code)।</li>
+          <li>Page 10 के बाद का content graders ignore करते हैं। ज़रूरत पड़ने पर ruthlessly trim करें।</li>
+          <li>Submit करने से पहले check करें कि हर criterion में substantive coverage है &mdash; इस checklist का use करें।</li>
+        </ul>
+      </div>
+
+      <h3>Submission Checklist</h3>
+      <ul class="checklist" id="submissionChecklist">
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 1: Job का चुनाव</strong> &mdash; Job #1 stated, Legal Assistant task described, justification लिखा (0.5 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 2: Q1 का जवाब</strong> &mdash; Legal search के लिए task decomposition के साथ level चुना (0.5 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 2: Q2 Table</strong> &mdash; Legal search context के लिए specific 5+ rows के साथ Can/Can't (0.5 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 3: KB Schema</strong> &mdash; Search session log fields, sample docs, sample queries (C1, 1.0 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 4: Q3 Approach</strong> &mdash; Legal domain के लिए RAG justification के साथ comparison table (0.5 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 5: RAG Pipeline</strong> &mdash; Legal-aware chunking, hybrid retrieval के साथ 8-stage pipeline (C2, 1.5 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 6: System Prompt</strong> &mdash; Legal advice boundary, 2 few-shot pairs के साथ verbatim prompt (C3, 1.0 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 7: सीमाएँ</strong> &mdash; Legal-specific risks: privilege, hallucinated citations, currency के साथ risk table (C4, 1.0 पेज)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>सेक्शन 8: Tryout</strong> &mdash; 3 interaction logs: success, legal advice refusal, synthesis (C5, 3 पेज तक)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Page count verified</strong> &mdash; कुल 10 pages से ज़्यादा नहीं (content + screenshots)</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Legal advice boundary</strong> &mdash; Verify करें कि system prompt search assistance को legal advice से clearly distinguish करता है</span></li>
+        <li><input type="checkbox" class="check-input" onchange="updatePageBudget()"><span><strong>Language check</strong> &mdash; Clear language में लिखा, academic tone, बिना unexplained jargon के</span></li>
+      </ul>
+
+      <h3>पेज बजट अनुमान</h3>
+      <table class="arena-table">
+        <thead><tr><th>सेक्शन</th><th>Recommended Pages</th><th>आपका Target</th></tr></thead>
+        <tbody>
+          <tr><td>Job का चुनाव &amp; Q1 + Q2</td><td>1.0</td><td></td></tr>
+          <tr><td>KB Design (C1)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Build Approach Q3</td><td>0.5</td><td></td></tr>
+          <tr><td>RAG Architecture (C2)</td><td>1.5&ndash;2.0</td><td></td></tr>
+          <tr><td>Prompts &amp; Enhancements (C3)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>सीमाएँ &amp; जोखिम (C4)</td><td>1.0&ndash;1.5</td><td></td></tr>
+          <tr><td>Hands-On Tryout (C5)</td><td>1.5&ndash;3.0</td><td></td></tr>
+          <tr style="font-weight:600;"><td>कुल</td><td>7.5&ndash;11.0</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">अगर आपका draft 10 pages से ज़्यादा है, तो पहले architecture section से trim करें (diagrams रखें, prose काटें)। Tryout screenshots रहने चाहिए &mdash; ये Criterion 5 marks के लिए evidence हैं।</div>
+
+      <div class="your-work">
+        <div class="your-work-label">
+          <span class="yw-icon">&#9998;</span>
+          आपका काम &mdash; सेक्शन 9 (अंतिम जाँच)
+        </div>
+        <div class="your-work-placeholder">
+          [ Final submission से पहले हर section complete है, verify करने के लिए ऊपर दी गई checklist use करें। ]<br><br>
+          <em>यहाँ कोई नया written content ज़रूरी नहीं &mdash; यह आपका assembly और QA checkpoint है। लिखते समय अपने estimated page count को track करने के लिए floating page budget counter (नीचे-दाएँ) use करें।</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ──────────────────────────────────── -->
+    <footer class="site-footer">
+      <div>Working draft &mdash; DBA Gen AI: Pre-Trained Models (GGU/upGrad Course 8919)</div>
+      <div style="margin-top:6px;">
+        <a href="../assignment1.html">Assignment 1 Explainer</a>
+        <a href="#">ऊपर जाएँ &uarr;</a>
+      </div>
+    </footer>
+
+  </main>
+</div><!-- /.layout -->
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- FLOATING PAGE BUDGET -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="page-budget" id="pageBudget">
+  <span class="pb-count" id="pbCount">0</span>
+  <div class="pb-label">10 में से पेज</div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+/* ── Sidebar active state on scroll ─────────────── */
+const sections = document.querySelectorAll('.wb-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+/* ── Page Budget Counter ─────────────────────────── */
+// Estimated pages based on checkboxes ticked
+const PAGE_WEIGHTS = [0.5, 0.5, 0.5, 1.25, 0.5, 1.75, 1.25, 1.25, 2.5, 0, 0, 0];
+
+function updatePageBudget() {
+  const checkboxes = document.querySelectorAll('#submissionChecklist .check-input');
+  let total = 0;
+  checkboxes.forEach((cb, i) => {
+    if (cb.checked && PAGE_WEIGHTS[i]) total += PAGE_WEIGHTS[i];
+  });
+  total = Math.round(total * 10) / 10;
+  document.getElementById('pbCount').textContent = total.toFixed(1);
+
+  const budget = document.getElementById('pageBudget');
+  budget.classList.remove('warn', 'danger');
+  if (total >= 9) budget.classList.add('danger');
+  else if (total >= 7) budget.classList.add('warn');
+
+  // Update global progress bar
+  const done = [...checkboxes].filter(cb => cb.checked).length;
+  updateGlobalProgress(done, checkboxes.length);
+}
+
+/* ── Global Progress Bar ─────────────────────────── */
+function updateGlobalProgress(done, total) {
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('globalProgressBar').style.width = pct + '%';
+
+  // Count completed sections (rough)
+  const sectDone = Math.round(done * 9 / total);
+  document.getElementById('globalProgressLabel').textContent = sectDone + ' / 9 सेक्शन';
+}
+
+/* ── Smooth scroll offset for fixed header ───────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + 20;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ── Init ────────────────────────────────────────── */
+updatePageBudget();
+</script>
+
+</body>
+</html>

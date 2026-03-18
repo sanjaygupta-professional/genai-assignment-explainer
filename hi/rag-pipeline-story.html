@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="alternate" hreflang="en" href="rag-pipeline-story.html">
-<link rel="alternate" hreflang="hi" href="hi/rag-pipeline-story.html">
-<title>SamarthSchool RAG + KG Pipeline — The Full Story</title>
+<title>SamarthSchool RAG + KG Pipeline — पूरी कहानी</title>
+<link rel="alternate" hreflang="en" href="../rag-pipeline-story.html">
+<link rel="alternate" hreflang="hi" href="rag-pipeline-story.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -53,10 +53,10 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Noto Sans Devanagari', 'Inter', ui-sans-serif, system-ui, sans-serif;
   background: var(--white);
   color: var(--text-primary);
-  line-height: 1.75;
+  line-height: 1.8;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
 }
@@ -70,7 +70,7 @@ h1 { font-size: 2.8rem; line-height: 1.08; letter-spacing: -0.04em; }
 h2 { font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
 h3 { font-size: 1.25rem; line-height: 1.3; margin: 1.75rem 0 .5rem; }
 h4 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
   font-size: .95rem; font-weight: 600;
   margin: 1.25rem 0 .4rem;
 }
@@ -89,7 +89,7 @@ code {
 
 .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
 
-/* ── Language Switcher ────────────────────────── */
+/* ── Language Switcher ─────────────────────── */
 .lang-switch {
   position: fixed; top: 16px; right: 16px;
   display: flex; gap: 4px; z-index: 200;
@@ -195,11 +195,11 @@ header.site-header {
   font-size: 14.5px; line-height: 1.7; border: 1px solid;
 }
 .callout.insight { background: var(--teal-light); border-color: var(--teal-border); }
-.callout.insight::before { content: 'Key Insight  '; font-weight: 600; color: var(--deep-teal); }
+.callout.insight::before { content: 'मुख्य बात  '; font-weight: 600; color: var(--deep-teal); }
 .callout.decision { background: var(--marigold-light); border-color: var(--marigold); }
 .callout.decision::before { content: 'Design Decision  '; font-weight: 600; color: var(--earth); }
 .callout.problem { background: var(--terracotta-light); border-color: var(--terracotta); }
-.callout.problem::before { content: 'The Problem  '; font-weight: 600; color: var(--terracotta); }
+.callout.problem::before { content: 'समस्या  '; font-weight: 600; color: var(--terracotta); }
 
 /* ── Comparison Table ────────────────────────── */
 .cmp-table {
@@ -262,7 +262,7 @@ header.site-header {
 }
 .file-tree .dir { color: var(--deep-teal); font-weight: 600; }
 .file-tree .file { color: var(--text-primary); }
-.file-tree .desc { color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 12px; }
+.file-tree .desc { color: var(--text-muted); font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; font-size: 12px; }
 
 /* ── Demo Box ────────────────────────────────── */
 .demo-box {
@@ -274,7 +274,7 @@ header.site-header {
   font-style: italic; font-size: 14.5px; line-height: 1.6;
 }
 .demo-query::before {
-  content: 'Query '; font-style: normal; font-weight: 600;
+  content: 'सवाल '; font-style: normal; font-weight: 600;
   color: var(--terracotta); font-size: 11px; text-transform: uppercase;
   letter-spacing: .08em; display: block; margin-bottom: 4px;
 }
@@ -282,7 +282,7 @@ header.site-header {
   padding: 16px 20px; font-size: 13px;
 }
 .demo-result::before {
-  content: 'KG Result '; font-weight: 600;
+  content: 'KG परिणाम '; font-weight: 600;
   color: var(--deep-teal); font-size: 11px; text-transform: uppercase;
   letter-spacing: .08em; display: block; margin-bottom: 6px;
 }
@@ -358,35 +358,36 @@ footer {
 </style>
 </head>
 <body>
+
 <div class="lang-switch">
-  <a href="rag-pipeline-story.html" class="active">EN</a>
-  <a href="hi/rag-pipeline-story.html">हिन्दी</a>
+  <a href="../rag-pipeline-story.html">EN</a>
+  <a href="rag-pipeline-story.html" class="active">हिन्दी</a>
 </div>
 
 <header class="site-header">
   <div class="header-inner">
     <div class="header-brand">
-      <a href="index.html" class="logo">SamarthSchool</a>
+      <a href="../index.html" class="logo">SamarthSchool</a>
       <span class="byline">RAG + Knowledge Graph Pipeline</span>
     </div>
     <nav class="header-nav">
-      <a href="index.html">Home</a>
-      <a href="group-assignment.html">Assignment</a>
+      <a href="../index.html">होम</a>
+      <a href="../group-assignment.html">असाइनमेंट</a>
     </nav>
   </div>
 </header>
 
 <nav class="section-nav" id="section-nav">
   <div class="section-nav-inner">
-    <a href="#problem">Problem</a>
-    <a href="#ideation">Ideation</a>
-    <a href="#architecture">Architecture</a>
-    <a href="#choices">Choices</a>
+    <a href="#problem">समस्या</a>
+    <a href="#ideation">विचार</a>
+    <a href="#architecture">आर्किटेक्चर</a>
+    <a href="#choices">चुनाव</a>
     <a href="#kg">Knowledge Graph</a>
-    <a href="#pipeline">Build</a>
+    <a href="#pipeline">निर्माण</a>
     <a href="#query-flow">Query Flow</a>
-    <a href="#demo">Demo</a>
-    <a href="#roadmap">Roadmap</a>
+    <a href="#demo">डेमो</a>
+    <a href="#roadmap">रोडमैप</a>
   </div>
 </nav>
 
@@ -394,8 +395,8 @@ footer {
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="hero">
-  <h1>Building a Hybrid RAG +<br>Knowledge Graph Pipeline</h1>
-  <p class="subtitle">From problem to working prototype — the full story of designing SamarthSchool's disability welfare scheme navigator for Indian families.</p>
+  <h1>Hybrid RAG + Knowledge<br>Graph Pipeline बनाना</h1>
+  <p class="subtitle">समस्या से लेकर काम करते prototype तक — SamarthSchool के दिव्यांग कल्याण योजना navigator को design करने की पूरी कहानी, भारतीय परिवारों के लिए।</p>
   <div class="pills">
     <span class="pill"><span class="dot" style="background:var(--deep-teal)"></span> Gemini Embedding 2</span>
     <span class="pill"><span class="dot" style="background:var(--sage)"></span> Kuzu Knowledge Graph</span>
@@ -407,13 +408,13 @@ footer {
 
 <!-- ═══════════ §1 THE PROBLEM ═══════════ -->
 <section class="section" id="problem">
-  <div class="section-label">Chapter 1</div>
-  <h2>Navigating Disability Benefits in India</h2>
+  <div class="section-label">अध्याय 1</div>
+  <h2>भारत में दिव्यांग लाभ ढूंढना</h2>
 
-  <p>India recognizes <strong>21 types of disabilities</strong> under the RPwD Act 2016. Hundreds of government schemes exist across central and state levels — each with different eligibility criteria for disability type, age, income, and geography. For a family with a child who has cerebral palsy, finding the right schemes means navigating mountains of bureaucratic PDFs in languages they may not speak fluently.</p>
+  <p>भारत RPwD Act 2016 के तहत <strong>21 प्रकार की दिव्यांगताओं</strong> को मान्यता देता है। केंद्र और राज्य स्तर पर सैकड़ों सरकारी योजनाएं हैं — हर एक के लिए दिव्यांगता प्रकार, उम्र, आय और भूगोल के अलग-अलग eligibility criteria हैं। Cerebral palsy वाले बच्चे के परिवार को सही योजनाएं खोजने के लिए ऐसी भाषा में लिखे गए बहुत सारे सरकारी PDFs को पढ़ना पड़ता है जो शायद उन्हें पूरी तरह समझ न आए।</p>
 
   <div class="callout problem">
-  A mother in Karnataka asks: <em>"My daughter is 12 with locomotor disability. Our income is Rs 1.2 lakh/year. Which schemes can she get?"</em> Today, answering this requires reading 6+ government PDFs, understanding eligibility matrices, and cross-referencing criteria manually. Most families give up.
+  कर्नाटक में एक माँ पूछती हैं: <em>"मेरी बेटी 12 साल की है, उसे locomotor disability है। हमारी आय 1.2 लाख रुपये सालाना है। उसे कौन सी योजनाएं मिल सकती हैं?"</em> आज इसका जवाब देने के लिए 6+ सरकारी PDFs पढ़ने, eligibility matrices समझने और criteria को manually cross-reference करने की ज़रूरत है। ज़्यादातर परिवार हार मान लेते हैं।
   </div>
 
   <!-- SVG: Problem Illustration -->
@@ -427,9 +428,9 @@ footer {
       <rect width="800" height="280" rx="16" fill="#FBF9F7"/>
       <!-- Family question -->
       <rect x="20" y="60" width="220" height="160" rx="14" fill="url(#g-warm)" stroke="#C47B5A" stroke-width="1.5"/>
-      <text x="130" y="95" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">Family's Question</text>
-      <text x="130" y="122" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#6B7280"><tspan x="130" dy="0">"My daughter is 12,</tspan><tspan x="130" dy="16">locomotor disability,</tspan><tspan x="130" dy="16">Karnataka, income 1.2L.</tspan><tspan x="130" dy="16">What schemes for her?"</tspan></text>
-      <text x="130" y="202" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#C47B5A" font-weight="600">4 criteria to cross-reference</text>
+      <text x="130" y="95" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">परिवार का सवाल</text>
+      <text x="130" y="122" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#6B7280"><tspan x="130" dy="0">"मेरी बेटी 12 साल की है,</tspan><tspan x="130" dy="16">locomotor disability,</tspan><tspan x="130" dy="16">कर्नाटक, आय 1.2L.</tspan><tspan x="130" dy="16">कौन सी योजनाएं हैं?"</tspan></text>
+      <text x="130" y="202" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#C47B5A" font-weight="600">4 criteria को cross-reference करना</text>
       <!-- Arrow -->
       <path d="M250 140 L310 140" stroke="#D9D9D9" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#arrowGray)"/>
       <defs><marker id="arrowGray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#D9D9D9"/></marker></defs>
@@ -437,54 +438,54 @@ footer {
       <g transform="translate(320,30)">
         <rect x="0" y="20" width="100" height="70" rx="8" fill="#E8F4F0" stroke="#7AAFA0" stroke-width="1" transform="rotate(-5,50,55)"/>
         <text x="50" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2D6A5A" transform="rotate(-5,50,55)">RPwD Act</text>
-        <text x="50" y="70" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(-5,50,55)">106 pages</text>
+        <text x="50" y="70" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(-5,50,55)">106 पृष्ठ</text>
 
         <rect x="80" y="50" width="100" height="70" rx="8" fill="#FDF5E0" stroke="#D4A843" stroke-width="1" transform="rotate(3,130,85)"/>
         <text x="130" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8B7355" transform="rotate(3,130,85)">ADIP Scheme</text>
-        <text x="130" y="100" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(3,130,85)">21 pages</text>
+        <text x="130" y="100" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(3,130,85)">21 पृष्ठ</text>
 
         <rect x="30" y="110" width="100" height="70" rx="8" fill="#EDE8F5" stroke="#7C6FAB" stroke-width="1" transform="rotate(-2,80,145)"/>
         <text x="80" y="145" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#7C6FAB" transform="rotate(-2,80,145)">Compendium</text>
-        <text x="80" y="160" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(-2,80,145)">90 pages</text>
+        <text x="80" y="160" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(-2,80,145)">90 पृष्ठ</text>
 
         <rect x="140" y="130" width="100" height="70" rx="8" fill="#FAE8EC" stroke="#C26B7A" stroke-width="1" transform="rotate(4,190,165)"/>
         <text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#C26B7A" transform="rotate(4,190,165)">Niramaya</text>
-        <text x="190" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(4,190,165)">12 pages</text>
+        <text x="190" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(4,190,165)">12 पृष्ठ</text>
 
         <rect x="170" y="10" width="100" height="70" rx="8" fill="#E5F0EA" stroke="#8DB5A0" stroke-width="1" transform="rotate(6,220,45)"/>
         <text x="220" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2D6A5A" transform="rotate(6,220,45)">Umbrella 2024</text>
-        <text x="220" y="57" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(6,220,45)">374 pages</text>
+        <text x="220" y="57" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#8C8580" transform="rotate(6,220,45)">374 पृष्ठ</text>
       </g>
       <!-- Arrow -->
       <path d="M580 140 L640 140" stroke="#D9D9D9" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#arrowGray)"/>
       <!-- Confusion -->
       <rect x="650" y="70" width="130" height="140" rx="14" fill="#FAE8EC" stroke="#C26B7A" stroke-width="1.5"/>
       <text x="715" y="110" text-anchor="middle" font-size="36">&#x1F615;</text>
-      <text x="715" y="142" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#2D2926">Overwhelmed</text>
-      <text x="715" y="162" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6B7280">1,089 pages</text>
-      <text x="715" y="177" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6B7280">6 different PDFs</text>
-      <text x="715" y="192" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#C26B7A" font-weight="500">Most give up</text>
+      <text x="715" y="142" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" font-weight="600" fill="#2D2926">परेशान</text>
+      <text x="715" y="162" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#6B7280">1,089 पृष्ठ</text>
+      <text x="715" y="177" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#6B7280">6 अलग-अलग PDFs</text>
+      <text x="715" y="192" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#C26B7A" font-weight="500">ज़्यादातर हार मानते हैं</text>
     </svg>
   </div>
 
-  <h3>Why Standard RAG Falls Short</h3>
-  <p>A pure RAG system embeds document chunks and searches by semantic similarity. It works for open-ended questions but fails on structured eligibility queries with multiple conjunctive filters:</p>
+  <h3>सामान्य RAG क्यों काम नहीं करता</h3>
+  <p>एक pure RAG system document chunks को embed करता है और semantic similarity से search करता है। यह open-ended सवालों के लिए ठीक काम करता है लेकिन multiple conjunctive filters वाले structured eligibility queries पर fail हो जाता है:</p>
 
   <div class="dual-cards">
     <div class="dual-card" style="border-color:var(--teal-border);">
-      <h4 style="color:var(--deep-teal)">Vector Search Handles Well</h4>
+      <h4 style="color:var(--deep-teal)">Vector Search अच्छा काम करता है</h4>
       <ul style="font-size:14px;color:var(--text-secondary);">
-        <li>"What are common disability schemes?"</li>
-        <li>"How does Niramaya insurance work?"</li>
-        <li>"Explain the UDID card process"</li>
+        <li>"दिव्यांग योजनाएं कौन-कौन सी हैं?"</li>
+        <li>"Niramaya insurance कैसे काम करता है?"</li>
+        <li>"UDID card प्रक्रिया समझाइए"</li>
       </ul>
     </div>
     <div class="dual-card" style="border-color:var(--terracotta);">
-      <h4 style="color:var(--terracotta)">Vector Search Struggles With</h4>
+      <h4 style="color:var(--terracotta)">Vector Search यहाँ फेल होता है</h4>
       <ul style="font-size:14px;color:var(--text-secondary);">
-        <li>"Schemes for locomotor, age 12, Karnataka, income &lt; 1.5L"</li>
-        <li>"Schemes covering both autism and cerebral palsy"</li>
-        <li>"All schemes needing only Aadhaar + disability cert"</li>
+        <li>"Locomotor, उम्र 12, कर्नाटक, आय &lt; 1.5L के लिए योजनाएं"</li>
+        <li>"Autism और cerebral palsy दोनों cover करने वाली योजनाएं"</li>
+        <li>"सिर्फ आधार + disability cert चाहिए वाली सभी योजनाएं"</li>
       </ul>
     </div>
   </div>
@@ -493,10 +494,10 @@ footer {
 <!-- ═══════════ §2 IDEATION ═══════════ -->
 <section class="section-warm" id="ideation">
   <div class="container">
-  <div class="section-label">Chapter 2</div>
-  <h2>The Hybrid Approach</h2>
+  <div class="section-label">अध्याय 2</div>
+  <h2>Hybrid Approach</h2>
 
-  <p>The core insight: <strong>use two complementary retrieval paths</strong>, each doing what it's best at, then merge the results.</p>
+  <p>मूल विचार: <strong>दो complementary retrieval paths इस्तेमाल करो</strong>, हर एक वो करे जिसमें वो best है, फिर results को merge करो।</p>
 
   <!-- SVG: Two Paths -->
   <div class="svg-container">
@@ -504,7 +505,7 @@ footer {
       <rect width="800" height="340" rx="16" fill="var(--white)"/>
       <!-- Center question -->
       <rect x="280" y="12" width="240" height="56" rx="28" fill="#FBF9F7" stroke="#E2DDD7" stroke-width="1.5"/>
-      <text x="400" y="45" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="500" fill="#2D2926">User's Question</text>
+      <text x="400" y="45" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" font-weight="500" fill="#2D2926">यूज़र का सवाल</text>
       <!-- Split arrows -->
       <path d="M340 68 L200 110" stroke="#5B9EC4" stroke-width="2" fill="none"/>
       <path d="M460 68 L600 110" stroke="#8DB5A0" stroke-width="2" fill="none"/>
@@ -512,19 +513,19 @@ footer {
       <rect x="50" y="110" width="300" height="170" rx="14" fill="#E3F0F8" stroke="#5B9EC4" stroke-width="1.5"/>
       <rect x="66" y="120" width="268" height="28" rx="14" fill="#5B9EC4"/>
       <text x="200" y="139" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="white">Path A &mdash; Semantic Vector Search</text>
-      <text x="78" y="170" font-family="Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">What it does:</tspan> Finds document chunks</text>
-      <text x="78" y="188" font-family="Inter,sans-serif" font-size="12" fill="#2D2926">semantically similar to the query</text>
-      <text x="78" y="212" font-family="Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">Good for:</tspan> Open-ended questions,</text>
-      <text x="78" y="230" font-family="Inter,sans-serif" font-size="12" fill="#2D2926">concept explanations, finding passages</text>
+      <text x="78" y="170" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">क्या करता है:</tspan> Query से semantically</text>
+      <text x="78" y="188" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926">मिलते-जुलते document chunks ढूंढता है</text>
+      <text x="78" y="212" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">अच्छा है:</tspan> Open-ended सवालों,</text>
+      <text x="78" y="230" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926">concept explanations, passages ढूंढने में</text>
       <text x="78" y="258" font-family="JetBrains Mono,monospace" font-size="11" fill="#5B9EC4" font-weight="500">Qdrant + Gemini Embedding 2</text>
       <!-- Path B: KG -->
       <rect x="450" y="110" width="300" height="170" rx="14" fill="#E5F0EA" stroke="#8DB5A0" stroke-width="1.5"/>
       <rect x="466" y="120" width="268" height="28" rx="14" fill="#2D6A5A"/>
       <text x="600" y="139" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="white">Path B &mdash; Knowledge Graph</text>
-      <text x="478" y="170" font-family="Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">What it does:</tspan> Traverses structured</text>
-      <text x="478" y="188" font-family="Inter,sans-serif" font-size="12" fill="#2D2926">relationships for exact criteria matching</text>
-      <text x="478" y="212" font-family="Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">Good for:</tspan> Multi-criteria eligibility,</text>
-      <text x="478" y="230" font-family="Inter,sans-serif" font-size="12" fill="#2D2926">structured questions, exploring relations</text>
+      <text x="478" y="170" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">क्या करता है:</tspan> Structured</text>
+      <text x="478" y="188" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926">relationships traverse करके exact criteria match</text>
+      <text x="478" y="212" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926"><tspan font-weight="600">अच्छा है:</tspan> Multi-criteria eligibility,</text>
+      <text x="478" y="230" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926">structured सवाल, relations explore करने में</text>
       <text x="478" y="258" font-family="JetBrains Mono,monospace" font-size="11" fill="#2D6A5A" font-weight="500">Kuzu + Cypher queries</text>
       <!-- Merge arrows -->
       <path d="M200 280 L350 310" stroke="#5B9EC4" stroke-width="2" fill="none"/>
@@ -536,14 +537,14 @@ footer {
   </div>
 
   <div class="callout insight">
-  Neither path alone is sufficient. Vectors can't do conjunctive filtering (<em>"locomotor AND age 12 AND Karnataka AND income &lt; 1.5L"</em>). Graphs can't do semantic similarity (<em>"tell me about schemes for children who can't walk"</em>). Together they cover both modes of information seeking.
+  अकेला कोई भी path काफ़ी नहीं है। Vectors conjunctive filtering नहीं कर सकते (<em>"locomotor AND उम्र 12 AND कर्नाटक AND आय &lt; 1.5L"</em>)। Graphs semantic similarity नहीं कर सकते (<em>"ऐसे बच्चों के लिए योजनाएं बताओ जो चल नहीं सकते"</em>)। दोनों मिलकर information खोजने के दोनों तरीके cover करते हैं।
   </div>
   </div>
 </section>
 
 <!-- ═══════════ §3 ARCHITECTURE ═══════════ -->
 <section class="section" id="architecture">
-  <div class="section-label">Chapter 3</div>
+  <div class="section-label">अध्याय 3</div>
   <h2>System Architecture</h2>
 
   <!-- SVG: Full Architecture -->
@@ -561,8 +562,8 @@ footer {
 
       <!-- Source PDFs -->
       <rect x="275" y="40" width="250" height="52" rx="12" fill="var(--white)" stroke="#E2DDD7" stroke-width="1.5"/>
-      <text x="400" y="62" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">6 Government PDFs</text>
-      <text x="400" y="80" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">1,089 pages from gov.in</text>
+      <text x="400" y="62" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">6 सरकारी PDFs</text>
+      <text x="400" y="80" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">gov.in से 1,089 पृष्ठ</text>
 
       <!-- Split arrows -->
       <line x1="340" y1="92" x2="200" y2="130" stroke="#898584" stroke-width="1.5" marker-end="url(#a1)"/>
@@ -574,7 +575,7 @@ footer {
 
       <rect x="70" y="170" width="260" height="42" rx="10" fill="var(--white)" stroke="#5B9EC4" stroke-width="1"/>
       <text x="200" y="189" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#2D2926">PDF Chunking</text>
-      <text x="200" y="204" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">5 pages/chunk, 1-page overlap</text>
+      <text x="200" y="204" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">5 पृष्ठ/chunk, 1-पृष्ठ overlap</text>
       <line x1="200" y1="212" x2="200" y2="230" stroke="#5B9EC4" stroke-width="1.5" marker-end="url(#a1)"/>
 
       <rect x="70" y="230" width="260" height="42" rx="10" fill="var(--white)" stroke="#5B9EC4" stroke-width="1"/>
@@ -584,7 +585,7 @@ footer {
 
       <rect x="70" y="290" width="260" height="52" rx="10" fill="var(--white)" stroke="#5B9EC4" stroke-width="1.5"/>
       <text x="200" y="312" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500" fill="#5B9EC4">Qdrant</text>
-      <text x="200" y="330" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">267 vectors, COSINE distance, file-persisted</text>
+      <text x="200" y="330" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">267 vectors, COSINE distance, file-persisted</text>
 
       <!-- Path B: Knowledge Graph -->
       <rect x="440" y="130" width="320" height="260" rx="14" fill="#E5F0EA" stroke="#8DB5A0" stroke-width="1"/>
@@ -592,17 +593,17 @@ footer {
 
       <rect x="470" y="170" width="260" height="42" rx="10" fill="var(--white)" stroke="#8DB5A0" stroke-width="1"/>
       <text x="600" y="189" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#2D2926">Metadata Extraction</text>
-      <text x="600" y="204" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">Eligibility criteria from PDFs</text>
+      <text x="600" y="204" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">PDFs से eligibility criteria निकालना</text>
       <line x1="600" y1="212" x2="600" y2="230" stroke="#8DB5A0" stroke-width="1.5" marker-end="url(#a1)"/>
 
       <rect x="470" y="230" width="260" height="42" rx="10" fill="var(--white)" stroke="#8DB5A0" stroke-width="1"/>
       <text x="600" y="249" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#2D2926">Schema Definition</text>
-      <text x="600" y="264" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">6 node types, 5 relationship types</text>
+      <text x="600" y="264" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">6 node types, 5 relationship types</text>
       <line x1="600" y1="272" x2="600" y2="290" stroke="#8DB5A0" stroke-width="1.5" marker-end="url(#a1)"/>
 
       <rect x="470" y="290" width="260" height="52" rx="10" fill="var(--white)" stroke="#2D6A5A" stroke-width="1.5"/>
       <text x="600" y="312" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="500" fill="#2D6A5A">Kuzu Graph DB</text>
-      <text x="600" y="330" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">59 nodes, 116 relationships, Cypher queries</text>
+      <text x="600" y="330" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">59 nodes, 116 relationships, Cypher queries</text>
 
       <!-- Phase label: Retrieval -->
       <text x="400" y="415" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#C47B5A" letter-spacing="1.5">RETRIEVAL PHASE</text>
@@ -614,7 +615,7 @@ footer {
       <!-- Hybrid Retriever -->
       <rect x="240" y="430" width="320" height="52" rx="14" fill="#FDF5E0" stroke="#D4A843" stroke-width="1.5"/>
       <text x="400" y="453" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">Hybrid Retriever</text>
-      <text x="400" y="472" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8B7355">KG-confirmed results get +0.1 score boost</text>
+      <text x="400" y="472" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8B7355">KG-confirmed results को +0.1 score boost मिलता है</text>
 
       <!-- Arrow down -->
       <line x1="400" y1="482" x2="400" y2="510" stroke="#898584" stroke-width="1.5" marker-end="url(#a1)"/>
@@ -625,13 +626,13 @@ footer {
       <!-- Generator -->
       <rect x="220" y="540" width="360" height="60" rx="14" fill="#FCF0EA" stroke="#C47B5A" stroke-width="1.5"/>
       <text x="400" y="565" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="#2D2926">Gemini 2.0 Flash</text>
-      <text x="400" y="586" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#C47B5A">SamarthSchool prompt &middot; multilingual &middot; empathetic &middot; cited &middot; disclaimered</text>
+      <text x="400" y="586" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#C47B5A">SamarthSchool prompt &middot; बहुभाषी &middot; संवेदनशील &middot; cited &middot; disclaimered</text>
     </svg>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Government PDFs</div></div>
-    <div class="stat"><div class="stat-num">1,089</div><div class="stat-label">Total Pages</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">सरकारी PDFs</div></div>
+    <div class="stat"><div class="stat-num">1,089</div><div class="stat-label">कुल पृष्ठ</div></div>
     <div class="stat"><div class="stat-num">267</div><div class="stat-label">Embedded Chunks</div></div>
     <div class="stat"><div class="stat-num">59</div><div class="stat-label">KG Nodes</div></div>
     <div class="stat"><div class="stat-num">116</div><div class="stat-label">KG Relationships</div></div>
@@ -642,35 +643,35 @@ footer {
 <!-- ═══════════ §4 DESIGN CHOICES ═══════════ -->
 <section class="section-warm" id="choices">
   <div class="container">
-  <div class="section-label">Chapter 4</div>
+  <div class="section-label">अध्याय 4</div>
   <h2>Design Choices &amp; Trade-offs</h2>
 
   <table class="cmp-table">
-    <thead><tr><th>Decision</th><th>Choice</th><th>Why</th></tr></thead>
+    <thead><tr><th>फ़ैसला</th><th>चुनाव</th><th>क्यों</th></tr></thead>
     <tbody>
-      <tr><td>Embedding model</td><td class="choice">Gemini Embedding 2</td><td class="why">Native PDF embedding, multilingual (Hindi), Matryoshka dims, $0.25/M tokens</td></tr>
-      <tr><td>Embedding dims</td><td class="choice">768 (not 3072)</td><td class="why">Matryoshka support: 4x memory savings, ~2% quality loss, sufficient for PoC scale</td></tr>
-      <tr><td>Vector DB</td><td class="choice">Qdrant (file-persisted)</td><td class="why">No Docker or server. Single <code>pip install</code>. Production-ready API.</td></tr>
-      <tr><td>Graph DB</td><td class="choice">Kuzu (embedded)</td><td class="why">Same Cypher as Neo4j (skills transfer). <code>pip install kuzu</code>. No Docker/Java.</td></tr>
-      <tr><td>Retrieval</td><td class="choice">Hybrid (KG + Vector)</td><td class="why">KG handles structured eligibility filtering. Vectors handle semantic similarity.</td></tr>
-      <tr><td>Chunking</td><td class="choice">5 pages, 1-page overlap</td><td class="why">Fits Gemini Embedding 2's ~6-page limit. Overlap preserves boundary context.</td></tr>
-      <tr><td>Query parsing</td><td class="choice">Gemini Flash extraction</td><td class="why">Zero-shot structured extraction for KG Cypher queries. No training data needed.</td></tr>
-      <tr><td>Data</td><td class="choice">Authentic gov.in only</td><td class="why">Real documents for real families. No synthetic data. Trust and credibility.</td></tr>
+      <tr><td>Embedding model</td><td class="choice">Gemini Embedding 2</td><td class="why">Native PDF embedding, बहुभाषी (हिंदी), Matryoshka dims, $0.25/M tokens</td></tr>
+      <tr><td>Embedding dims</td><td class="choice">768 (3072 नहीं)</td><td class="why">Matryoshka support: 4x memory बचत, ~2% quality loss, PoC scale के लिए काफ़ी</td></tr>
+      <tr><td>Vector DB</td><td class="choice">Qdrant (file-persisted)</td><td class="why">Docker या server नहीं चाहिए। बस <code>pip install</code>। Production-ready API।</td></tr>
+      <tr><td>Graph DB</td><td class="choice">Kuzu (embedded)</td><td class="why">Neo4j जैसा Cypher (skills transfer)। <code>pip install kuzu</code>। Docker/Java नहीं चाहिए।</td></tr>
+      <tr><td>Retrieval</td><td class="choice">Hybrid (KG + Vector)</td><td class="why">KG structured eligibility filtering करता है। Vectors semantic similarity करते हैं।</td></tr>
+      <tr><td>Chunking</td><td class="choice">5 पृष्ठ, 1-पृष्ठ overlap</td><td class="why">Gemini Embedding 2 की ~6-पृष्ठ limit में fit। Overlap boundary context preserve करता है।</td></tr>
+      <tr><td>Query parsing</td><td class="choice">Gemini Flash extraction</td><td class="why">KG Cypher queries के लिए zero-shot structured extraction। Training data ज़रूरत नहीं।</td></tr>
+      <tr><td>Data</td><td class="choice">सिर्फ़ असली gov.in</td><td class="why">असली परिवारों के लिए असली दस्तावेज़। कोई synthetic data नहीं। भरोसा और विश्वसनीयता।</td></tr>
     </tbody>
   </table>
 
   <div class="callout decision">
-  <strong>Kuzu vs Neo4j:</strong> The original design specified Neo4j. For this PoC we use Kuzu — same Cypher, installs via <code>pip</code>, no server. For production, swap to Neo4j Aura (free tier: 200K nodes). Zero code changes in queries.
+  <strong>Kuzu vs Neo4j:</strong> Original design में Neo4j था। इस PoC के लिए हमने Kuzu इस्तेमाल किया — वही Cypher, <code>pip</code> से install, कोई server नहीं। Production में Neo4j Aura (free tier: 200K nodes) पर switch करो। Queries में zero code changes।
   </div>
   </div>
 </section>
 
 <!-- ═══════════ §5 KNOWLEDGE GRAPH ═══════════ -->
 <section class="section" id="kg">
-  <div class="section-label">Chapter 5</div>
-  <h2>The Knowledge Graph</h2>
+  <div class="section-label">अध्याय 5</div>
+  <h2>Knowledge Graph</h2>
 
-  <p>The KG encodes <strong>structured eligibility metadata</strong> extracted from the government PDFs. It answers what vector search cannot: <em>"Which schemes cover locomotor disability, are available in Karnataka, for age 12, with income below Rs 1.5 lakh?"</em></p>
+  <p>KG सरकारी PDFs से निकाला गया <strong>structured eligibility metadata</strong> encode करता है। यह वो जवाब देता है जो vector search नहीं दे सकता: <em>"कौन सी योजनाएं locomotor disability cover करती हैं, कर्नाटक में उपलब्ध हैं, उम्र 12 के लिए, आय 1.5 लाख से कम?"</em></p>
 
   <!-- SVG: KG Schema -->
   <div class="svg-container">
@@ -686,7 +687,7 @@ footer {
       <rect x="40" y="40" width="180" height="80" rx="12" fill="#E3F0F8" stroke="#5B9EC4" stroke-width="1.5"/>
       <text x="130" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#2D2926">DisabilityCategory</text>
       <text x="130" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="600" fill="#5B9EC4">14</text>
-      <text x="130" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">visual, hearing, locomotor...</text>
+      <text x="130" y="106" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">दृष्टि, श्रवण, locomotor...</text>
       <!-- Edge -->
       <line x1="220" y1="100" x2="342" y2="175" stroke="#5B9EC4" stroke-width="1.5"/>
       <text x="260" y="130" font-family="JetBrains Mono,monospace" font-size="10" fill="#5B9EC4" transform="rotate(-24,260,130)">COVERS</text>
@@ -695,7 +696,7 @@ footer {
       <rect x="580" y="40" width="180" height="80" rx="12" fill="#E5F0EA" stroke="#8DB5A0" stroke-width="1.5"/>
       <text x="670" y="68" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#2D2926">State</text>
       <text x="670" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="600" fill="#2D6A5A">17</text>
-      <text x="670" y="106" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">All India, Karnataka, TN...</text>
+      <text x="670" y="106" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">अखिल भारत, कर्नाटक, TN...</text>
       <line x1="580" y1="100" x2="458" y2="175" stroke="#8DB5A0" stroke-width="1.5"/>
       <text x="540" y="130" font-family="JetBrains Mono,monospace" font-size="10" fill="#2D6A5A" transform="rotate(24,540,130)">AVAILABLE_IN</text>
 
@@ -703,7 +704,7 @@ footer {
       <rect x="40" y="340" width="180" height="80" rx="12" fill="#FCF0EA" stroke="#C47B5A" stroke-width="1.5"/>
       <text x="130" y="368" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#2D2926">AgeGroup</text>
       <text x="130" y="388" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="600" fill="#C47B5A">6</text>
-      <text x="130" y="406" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">0-5, 6-14, 6-18, all ages...</text>
+      <text x="130" y="406" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">0-5, 6-14, 6-18, सभी उम्र...</text>
       <line x1="220" y1="360" x2="342" y2="270" stroke="#C47B5A" stroke-width="1.5"/>
       <text x="260" y="326" font-family="JetBrains Mono,monospace" font-size="10" fill="#C47B5A" transform="rotate(24,260,326)">FOR_AGE_GROUP</text>
 
@@ -711,7 +712,7 @@ footer {
       <rect x="580" y="340" width="180" height="80" rx="12" fill="#FDF5E0" stroke="#D4A843" stroke-width="1.5"/>
       <text x="670" y="368" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#2D2926">IncomeLevel</text>
       <text x="670" y="388" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="600" fill="#D4A843">5</text>
-      <text x="670" y="406" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#8C8580">BPL, EWS, mid, no limit...</text>
+      <text x="670" y="406" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="10" fill="#8C8580">BPL, EWS, mid, कोई सीमा नहीं...</text>
       <line x1="580" y1="360" x2="458" y2="270" stroke="#D4A843" stroke-width="1.5"/>
       <text x="540" y="326" font-family="JetBrains Mono,monospace" font-size="10" fill="#8B7355" transform="rotate(-24,540,326)">HAS_INCOME_LIMIT</text>
 
@@ -723,11 +724,11 @@ footer {
       <text x="415" y="340" font-family="JetBrains Mono,monospace" font-size="10" fill="#7C6FAB">REQUIRES_DOCUMENT</text>
 
       <!-- Totals -->
-      <text x="400" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#8C8580">59 nodes &middot; 116 relationships &middot; Cypher query language</text>
+      <text x="400" y="22" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" font-weight="600" fill="#8C8580">59 nodes &middot; 116 relationships &middot; Cypher query language</text>
     </svg>
   </div>
 
-  <h3>Example Cypher Query</h3>
+  <h3>Cypher Query का उदाहरण</h3>
   <div class="code-block"><span class="cm">-- Find schemes for a 12-year-old with locomotor disability in Karnataka</span>
 <span class="kw">MATCH</span> (<span class="var">s</span>:<span class="fn">Scheme</span>)-[:<span class="str">COVERS</span>]->(<span class="var">d</span>:<span class="fn">DisabilityCategory</span>),
       (<span class="var">s</span>)-[:<span class="str">AVAILABLE_IN</span>]->(<span class="var">st</span>:<span class="fn">State</span>),
@@ -738,13 +739,13 @@ footer {
 <span class="kw">RETURN</span> <span class="var">s</span>.name, <span class="var">s</span>.benefit_type, <span class="var">s</span>.benefit_value_inr</div>
 
   <div class="demo-box">
-    <div class="demo-query">My daughter is 12 years old with locomotor disability. We live in Karnataka and our family income is Rs 1.2 lakh per year.</div>
+    <div class="demo-query">मेरी बेटी 12 साल की है, उसे locomotor disability है। हम कर्नाटक में रहते हैं और हमारी पारिवारिक आय 1.2 लाख रुपये सालाना है।</div>
     <div class="demo-result">
       <span class="scheme-tag">ADIP Scheme</span>
       <span class="scheme-tag">Pre-Matric Scholarship</span>
       <span class="scheme-tag">DDRS</span>
       <span class="scheme-tag">SIPDA</span>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">4 schemes matched — all 4 criteria (disability + age + state + income) resolved via single Cypher query</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">4 योजनाएं match हुईं — सभी 4 criteria (दिव्यांगता + उम्र + राज्य + आय) एक ही Cypher query से resolve हुए</div>
     </div>
   </div>
 </section>
@@ -752,19 +753,19 @@ footer {
 <!-- ═══════════ §6 BUILD ═══════════ -->
 <section class="section-warm" id="pipeline">
   <div class="container">
-  <div class="section-label">Chapter 6</div>
-  <h2>Building the Pipeline</h2>
+  <div class="section-label">अध्याय 6</div>
+  <h2>Pipeline बनाना</h2>
 
   <div class="file-tree">
 <span class="dir">rag-pipeline/</span>
   <span class="dir">data/</span>
-    <span class="dir">schemes/</span> <span class="desc">&larr; 6 authentic gov.in PDFs (1,089 pages)</span>
+    <span class="dir">schemes/</span> <span class="desc">&larr; 6 असली gov.in PDFs (1,089 पृष्ठ)</span>
     <span class="dir">qdrant_db/</span> <span class="desc">&larr; persisted vector store (gitignored)</span>
     <span class="file">kuzu_db</span> <span class="desc">&larr; persisted graph database (gitignored)</span>
   <span class="dir">src/</span>
     <span class="file">config.py</span> <span class="desc">&larr; API keys, model IDs, paths</span>
     <span class="file">schema.py</span> <span class="desc">&larr; Scheme, Chunk, QueryResult dataclasses</span>
-    <span class="file">chunker.py</span> <span class="desc">&larr; PDF &rarr; 5-page chunks with 1-page overlap</span>
+    <span class="file">chunker.py</span> <span class="desc">&larr; PDF &rarr; 5-पृष्ठ chunks, 1-पृष्ठ overlap</span>
     <span class="file">embedder.py</span> <span class="desc">&larr; Gemini Embedding 2 (text + PDF modes)</span>
     <span class="file">vectorstore.py</span> <span class="desc">&larr; Qdrant COSINE search + filtered search</span>
     <span class="file">knowledge_graph.py</span> <span class="desc">&larr; Kuzu schema, population, Cypher queries</span>
@@ -772,20 +773,20 @@ footer {
     <span class="file">generator.py</span> <span class="desc">&larr; Gemini 2.0 Flash + SamarthSchool prompt</span>
     <span class="file">pipeline.py</span> <span class="desc">&larr; Orchestrator</span>
   <span class="dir">scripts/</span>
-    <span class="file">download_schemes.py</span> <span class="desc">&larr; Download official government PDFs</span>
-    <span class="file">ingest.py</span> <span class="desc">&larr; Embed + store + build KG</span>
-    <span class="file">query.py</span> <span class="desc">&larr; CLI and interactive REPL</span>
-    <span class="file">demo.py</span> <span class="desc">&larr; 5 pre-scripted demo queries</span>
+    <span class="file">download_schemes.py</span> <span class="desc">&larr; आधिकारिक सरकारी PDFs download करना</span>
+    <span class="file">ingest.py</span> <span class="desc">&larr; Embed + store + KG बनाना</span>
+    <span class="file">query.py</span> <span class="desc">&larr; CLI और interactive REPL</span>
+    <span class="file">demo.py</span> <span class="desc">&larr; 5 पहले से तैयार demo queries</span>
   </div>
 
-  <h3>Build Timeline</h3>
+  <h3>निर्माण Timeline</h3>
   <div class="timeline">
-    <div class="timeline-item done"><div class="timeline-phase">Phase 1</div><div class="timeline-title">Foundation &mdash; config, schemas, scaffolding</div><div class="timeline-desc">Centralized config.py, dataclasses, .gitignore, requirements.txt</div></div>
-    <div class="timeline-item done"><div class="timeline-phase">Phase 2</div><div class="timeline-title">Data curation &mdash; 6 authentic government PDFs</div><div class="timeline-desc">Compendium, ADIP, RPwD Act, Umbrella Scheme, Niramaya, Social Welfare Statistics. All from gov.in domains.</div></div>
-    <div class="timeline-item done"><div class="timeline-phase">Phase 3</div><div class="timeline-title">Knowledge Graph &mdash; 59 nodes, 116 relationships</div><div class="timeline-desc">Kuzu schema with 6 node types, 5 relationship types. Structured metadata extracted from PDFs.</div></div>
-    <div class="timeline-item done"><div class="timeline-phase">Phase 4</div><div class="timeline-title">Embedding pipeline &mdash; 267 chunks embedded</div><div class="timeline-desc">PyMuPDF chunking, Gemini Embedding 2 (768d), Qdrant file-persisted. Both text and PDF modes.</div></div>
-    <div class="timeline-item done"><div class="timeline-phase">Phase 5</div><div class="timeline-title">Hybrid retrieval + generation</div><div class="timeline-desc">5-step retriever: parse &rarr; KG query &rarr; embed &rarr; vector search &rarr; merge. Gemini 2.0 Flash generator.</div></div>
-    <div class="timeline-item done"><div class="timeline-phase">Phase 6</div><div class="timeline-title">Demo &amp; verification &mdash; 5 queries tested</div><div class="timeline-desc">English, multi-criteria, Hindi, out-of-scope, graph exploration. All correct and grounded.</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 1</div><div class="timeline-title">नींव &mdash; config, schemas, scaffolding</div><div class="timeline-desc">Centralized config.py, dataclasses, .gitignore, requirements.txt</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 2</div><div class="timeline-title">Data curation &mdash; 6 असली सरकारी PDFs</div><div class="timeline-desc">Compendium, ADIP, RPwD Act, Umbrella Scheme, Niramaya, Social Welfare Statistics। सभी gov.in domains से।</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 3</div><div class="timeline-title">Knowledge Graph &mdash; 59 nodes, 116 relationships</div><div class="timeline-desc">6 node types, 5 relationship types के साथ Kuzu schema। PDFs से structured metadata निकाला गया।</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 4</div><div class="timeline-title">Embedding pipeline &mdash; 267 chunks embedded</div><div class="timeline-desc">PyMuPDF chunking, Gemini Embedding 2 (768d), Qdrant file-persisted। Text और PDF दोनों modes।</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 5</div><div class="timeline-title">Hybrid retrieval + generation</div><div class="timeline-desc">5-step retriever: parse &rarr; KG query &rarr; embed &rarr; vector search &rarr; merge। Gemini 2.0 Flash generator।</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">Phase 6</div><div class="timeline-title">Demo &amp; verification &mdash; 5 queries test की गईं</div><div class="timeline-desc">अंग्रेज़ी, multi-criteria, हिंदी, out-of-scope, graph exploration। सभी सही और grounded।</div></div>
   </div>
 
   <h3>Data Source Distribution</h3>
@@ -802,8 +803,8 @@ footer {
 
 <!-- ═══════════ §7 QUERY FLOW ═══════════ -->
 <section class="section" id="query-flow">
-  <div class="section-label">Chapter 7</div>
-  <h2>How a Question Gets Answered</h2>
+  <div class="section-label">अध्याय 7</div>
+  <h2>एक सवाल का जवाब कैसे मिलता है</h2>
 
   <!-- SVG: Query Flow -->
   <div class="svg-container">
@@ -815,14 +816,14 @@ footer {
 
       <!-- Input query -->
       <rect x="100" y="16" width="600" height="48" rx="24" fill="#FCF0EA" stroke="#C47B5A" stroke-width="1.5"/>
-      <text x="400" y="46" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#2D2926" font-style="italic">"My daughter is 12 with locomotor disability in Karnataka, income 1.2L"</text>
+      <text x="400" y="46" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="12" fill="#2D2926" font-style="italic">"मेरी बेटी 12 साल की है, locomotor disability, कर्नाटक, आय 1.2L"</text>
       <line x1="400" y1="64" x2="400" y2="88" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
 
       <!-- Step 1: Parse -->
       <rect x="150" y="90" width="500" height="72" rx="12" fill="#FDF5E0" stroke="#D4A843" stroke-width="1.5"/>
       <circle cx="180" cy="112" r="16" fill="#D4A843"/><text x="180" y="117" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">1</text>
-      <text x="210" y="112" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Query Parsing</text>
-      <text x="210" y="130" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Gemini Flash extracts structured fields</text>
+      <text x="210" y="112" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Query Parsing</text>
+      <text x="210" y="130" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">Gemini Flash structured fields निकालता है</text>
       <rect x="210" y="138" width="410" height="18" rx="4" fill="#FAF0D4"/>
       <text x="218" y="152" font-family="JetBrains Mono,monospace" font-size="10" fill="#8B7355">{disability: "locomotor", age: 12, state: "Karnataka", income: 120000}</text>
       <line x1="400" y1="162" x2="400" y2="186" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
@@ -830,42 +831,42 @@ footer {
       <!-- Step 2: KG -->
       <rect x="150" y="188" width="500" height="72" rx="12" fill="#E5F0EA" stroke="#8DB5A0" stroke-width="1.5"/>
       <circle cx="180" cy="210" r="16" fill="#2D6A5A"/><text x="180" y="215" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">2</text>
-      <text x="210" y="212" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Knowledge Graph Traversal</text>
-      <text x="210" y="230" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Cypher query filters by all 4 criteria simultaneously</text>
+      <text x="210" y="212" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Knowledge Graph Traversal</text>
+      <text x="210" y="230" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">Cypher query सभी 4 criteria को एक साथ filter करता है</text>
       <text x="210" y="250" font-family="JetBrains Mono,monospace" font-size="11" fill="#2D6A5A" font-weight="500">Eligible: [ADIP, Pre-Matric Scholarship, DDRS, SIPDA]</text>
       <line x1="400" y1="260" x2="400" y2="284" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
 
       <!-- Step 3: Embed -->
       <rect x="150" y="286" width="500" height="56" rx="12" fill="#E3F0F8" stroke="#5B9EC4" stroke-width="1.5"/>
       <circle cx="180" cy="314" r="16" fill="#5B9EC4"/><text x="180" y="319" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">3</text>
-      <text x="210" y="312" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Query Embedding</text>
-      <text x="210" y="330" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Gemini Embedding 2 &rarr; 768-dim vector (RETRIEVAL_QUERY task type)</text>
+      <text x="210" y="312" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Query Embedding</text>
+      <text x="210" y="330" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">Gemini Embedding 2 &rarr; 768-dim vector (RETRIEVAL_QUERY task type)</text>
       <line x1="400" y1="342" x2="400" y2="366" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
 
       <!-- Step 4: Vector Search -->
       <rect x="150" y="368" width="500" height="88" rx="12" fill="#E3F0F8" stroke="#5B9EC4" stroke-width="1.5"/>
       <circle cx="180" cy="390" r="16" fill="#5B9EC4"/><text x="180" y="395" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">4</text>
-      <text x="210" y="392" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Two-Pass Vector Search</text>
-      <text x="210" y="414" font-family="Inter,sans-serif" font-size="11" fill="#5B9EC4" font-weight="500">Pass 1:</text>
-      <text x="258" y="414" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Qdrant search filtered to KG-eligible scheme IDs only</text>
-      <text x="210" y="434" font-family="Inter,sans-serif" font-size="11" fill="#5B9EC4" font-weight="500">Pass 2:</text>
-      <text x="258" y="434" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Broad search across all 267 chunks (catches edge cases)</text>
-      <text x="210" y="450" font-family="Inter,sans-serif" font-size="11" fill="#D4A843" font-weight="500">KG-confirmed results get +0.1 score boost</text>
+      <text x="210" y="392" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Two-Pass Vector Search</text>
+      <text x="210" y="414" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#5B9EC4" font-weight="500">Pass 1:</text>
+      <text x="258" y="414" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">सिर्फ़ KG-eligible scheme IDs में Qdrant search</text>
+      <text x="210" y="434" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#5B9EC4" font-weight="500">Pass 2:</text>
+      <text x="258" y="434" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">सभी 267 chunks में broad search (edge cases पकड़ने के लिए)</text>
+      <text x="210" y="450" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#D4A843" font-weight="500">KG-confirmed results को +0.1 score boost मिलता है</text>
       <line x1="400" y1="456" x2="400" y2="480" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
 
       <!-- Step 5: Generate -->
       <rect x="150" y="482" width="500" height="88" rx="12" fill="#FCF0EA" stroke="#C47B5A" stroke-width="1.5"/>
       <circle cx="180" cy="504" r="16" fill="#C47B5A"/><text x="180" y="509" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">5</text>
-      <text x="210" y="506" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Response Generation</text>
-      <text x="210" y="526" font-family="Inter,sans-serif" font-size="11" fill="#8C8580">Gemini 2.0 Flash with SamarthSchool system prompt receives:</text>
-      <text x="220" y="544" font-family="Inter,sans-serif" font-size="11" fill="#2D2926">&bull; Vector-retrieved text chunks (with source citations)</text>
-      <text x="220" y="560" font-family="Inter,sans-serif" font-size="11" fill="#2D2926">&bull; KG-structured eligibility data (scheme details, docs required)</text>
+      <text x="210" y="506" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="13" font-weight="600" fill="#2D2926">Response Generation</text>
+      <text x="210" y="526" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8C8580">SamarthSchool system prompt के साथ Gemini 2.0 Flash को मिलता है:</text>
+      <text x="220" y="544" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#2D2926">&bull; Vector-retrieved text chunks (source citations के साथ)</text>
+      <text x="220" y="560" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#2D2926">&bull; KG-structured eligibility data (योजना विवरण, ज़रूरी दस्तावेज़)</text>
       <line x1="400" y1="570" x2="400" y2="594" stroke="#898584" stroke-width="1.5" marker-end="url(#af)"/>
 
       <!-- Output -->
       <rect x="160" y="596" width="480" height="68" rx="14" fill="#2D6A5A"/>
-      <text x="400" y="621" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">Empathetic, Multilingual Response</text>
-      <text x="400" y="644" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#8DB5A0">Cited schemes &middot; eligibility details &middot; required documents &middot; mandatory disclaimer</text>
+      <text x="400" y="621" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" font-weight="600" fill="white">संवेदनशील, बहुभाषी जवाब</text>
+      <text x="400" y="644" text-anchor="middle" font-family="Noto Sans Devanagari,Inter,sans-serif" font-size="11" fill="#8DB5A0">Cited योजनाएं &middot; eligibility विवरण &middot; ज़रूरी दस्तावेज़ &middot; अनिवार्य disclaimer</text>
     </svg>
   </div>
 </section>
@@ -873,48 +874,48 @@ footer {
 <!-- ═══════════ §8 DEMO ═══════════ -->
 <section class="section-warm" id="demo">
   <div class="container">
-  <div class="section-label">Chapter 8</div>
+  <div class="section-label">अध्याय 8</div>
   <h2>Demo Results</h2>
 
-  <p>Five queries verified end-to-end, each testing a different capability:</p>
+  <p>पाँच queries end-to-end verify की गईं, हर एक अलग capability test करती है:</p>
 
   <div class="demo-box" style="margin-bottom:16px;">
-    <div class="demo-query">What government schemes are available for children with autism in India?</div>
+    <div class="demo-query">भारत में autism वाले बच्चों के लिए कौन सी सरकारी योजनाएं उपलब्ध हैं?</div>
     <div class="demo-result">
       <span class="scheme-tag">Niramaya Insurance</span><span class="scheme-tag">Pre-Matric Scholarship</span><span class="scheme-tag">DDRS</span><span class="scheme-tag">SIPDA</span><span class="scheme-tag">Early Intervention</span>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Simple English &mdash; KG found 5 eligible schemes, vector search added context from Central Sector Umbrella Scheme</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">सरल अंग्रेज़ी &mdash; KG ने 5 eligible योजनाएं ढूंढीं, vector search ने Central Sector Umbrella Scheme से context जोड़ा</div>
     </div>
   </div>
 
   <div class="demo-box" style="margin-bottom:16px;">
-    <div class="demo-query">My daughter is 12 years old with locomotor disability. We live in Karnataka and our family income is Rs 1.2 lakh per year.</div>
+    <div class="demo-query">मेरी बेटी 12 साल की है, उसे locomotor disability है। हम कर्नाटक में रहते हैं और हमारी पारिवारिक आय 1.2 लाख रुपये सालाना है।</div>
     <div class="demo-result">
       <span class="scheme-tag">ADIP Scheme</span><span class="scheme-tag">Pre-Matric Scholarship</span><span class="scheme-tag">DDRS</span><span class="scheme-tag">SIPDA</span>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Multi-criteria KG filtering &mdash; 4 conjunctive filters resolved via Cypher traversal</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Multi-criteria KG filtering &mdash; 4 conjunctive filters Cypher traversal से resolve हुए</div>
     </div>
   </div>
 
   <div class="demo-box" style="margin-bottom:16px;">
     <div class="demo-query" style="font-style:normal;">&#x092E;&#x0947;&#x0930;&#x0947; &#x092C;&#x0947;&#x091F;&#x0947; &#x0915;&#x094B; &#x0938;&#x0947;&#x0930;&#x0947;&#x092C;&#x094D;&#x0930;&#x0932; &#x092A;&#x093E;&#x0932;&#x094D;&#x0938;&#x0940; &#x0939;&#x0948;, &#x0909;&#x092E;&#x094D;&#x0930; 8 &#x0938;&#x093E;&#x0932;&#x0964; &#x0915;&#x094C;&#x0928; &#x0938;&#x0940; &#x0938;&#x0930;&#x0915;&#x093E;&#x0930;&#x0940; &#x092F;&#x094B;&#x091C;&#x0928;&#x093E;&#x090F;&#x0902;?</div>
     <div class="demo-result">
-      <div style="font-size:13px;">Full response generated in Hindi with cerebral palsy scheme details, eligibility criteria, and application steps</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Multilingual &mdash; responds in same language as query. Extracted: {disability: "cerebral_palsy", age: 8}</div>
+      <div style="font-size:13px;">Cerebral palsy योजना विवरण, eligibility criteria, और आवेदन steps के साथ पूरा जवाब हिंदी में generate हुआ</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">बहुभाषी &mdash; query की भाषा में जवाब देता है। निकाले गए: {disability: "cerebral_palsy", age: 8}</div>
     </div>
   </div>
 
   <div class="demo-box" style="margin-bottom:16px;">
-    <div class="demo-query">What is the best restaurant in Mumbai?</div>
+    <div class="demo-query">मुंबई का सबसे अच्छा restaurant कौन सा है?</div>
     <div class="demo-result">
-      <div style="font-size:13px;font-style:italic;">"I am designed to provide information about Indian disability welfare schemes. I cannot recommend restaurants."</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Guardrails &mdash; no structured fields extracted, low vector scores (0.52), politely redirected</div>
+      <div style="font-size:13px;font-style:italic;">"मैं भारतीय दिव्यांग कल्याण योजनाओं के बारे में जानकारी देने के लिए बना हूँ। मैं restaurants recommend नहीं कर सकता।"</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Guardrails &mdash; कोई structured fields extract नहीं हुए, low vector scores (0.52), विनम्रता से redirect किया गया</div>
     </div>
   </div>
 
   <div class="demo-box">
-    <div class="demo-query">Show me all government schemes that cover hearing impairment disability. What are the benefits and documents required?</div>
+    <div class="demo-query">Hearing impairment disability cover करने वाली सभी सरकारी योजनाएं दिखाओ। Benefits और ज़रूरी documents क्या हैं?</div>
     <div class="demo-result">
       <span class="scheme-tag">ADIP</span><span class="scheme-tag">Pre-Matric</span><span class="scheme-tag">NHFDC Loan</span><span class="scheme-tag">DDRS</span><span class="scheme-tag">Post-Matric</span><span class="scheme-tag">SIPDA</span>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Graph exploration &mdash; KG identified all 6 schemes covering hearing impairment, vector search enriched with benefits and documents</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Graph exploration &mdash; KG ने hearing impairment cover करने वाली सभी 6 योजनाएं identify कीं, vector search ने benefits और documents से enrich किया</div>
     </div>
   </div>
   </div>
@@ -922,27 +923,27 @@ footer {
 
 <!-- ═══════════ §9 ROADMAP ═══════════ -->
 <section class="section" id="roadmap">
-  <div class="section-label">Chapter 9</div>
-  <h2>Roadmap: From PoC to Production</h2>
+  <div class="section-label">अध्याय 9</div>
+  <h2>रोडमैप: PoC से Production तक</h2>
 
   <div class="timeline">
-    <div class="timeline-item done"><div class="timeline-phase">Completed</div><div class="timeline-title">Working PoC with hybrid retrieval</div><div class="timeline-desc">6 documents, 8 schemes in KG, text-mode embeddings, CLI + REPL, 5 verified demo queries.</div></div>
-    <div class="timeline-item current"><div class="timeline-phase">Next</div><div class="timeline-title">PDF-native embeddings via Gemini Embedding 2</div><div class="timeline-desc">Switch from text-mode to raw PDF byte embedding. Preserves layout, tables, and visual structure.</div></div>
-    <div class="timeline-item future"><div class="timeline-phase">Enhancement</div><div class="timeline-title">Expand KG with 200+ state-level schemes</div><div class="timeline-desc">Scrape state disability department portals for structured metadata. Scale KG to ~500 schemes across all states.</div></div>
-    <div class="timeline-item future"><div class="timeline-phase">Enhancement</div><div class="timeline-title">WhatsApp/Telegram bot for real families</div><div class="timeline-desc">Voice-to-text input for accessibility. Inline eligibility forms that auto-populate KG query parameters.</div></div>
-    <div class="timeline-item future"><div class="timeline-phase">Production</div><div class="timeline-title">Migrate to Neo4j Aura + Qdrant Cloud</div><div class="timeline-desc">Neo4j Aura free tier (200K nodes). Qdrant Cloud managed hosting. Auth, rate limiting, monitoring.</div></div>
-    <div class="timeline-item future"><div class="timeline-phase">Research</div><div class="timeline-title">Agentic document update pipeline</div><div class="timeline-desc">Agent monitors gov.in feeds, detects scheme changes, re-embeds affected chunks, updates KG nodes automatically.</div></div>
+    <div class="timeline-item done"><div class="timeline-phase">पूरा हुआ</div><div class="timeline-title">Hybrid retrieval वाला काम करता PoC</div><div class="timeline-desc">6 documents, KG में 8 schemes, text-mode embeddings, CLI + REPL, 5 verified demo queries।</div></div>
+    <div class="timeline-item current"><div class="timeline-phase">अगला</div><div class="timeline-title">Gemini Embedding 2 से PDF-native embeddings</div><div class="timeline-desc">Text-mode से raw PDF byte embedding में switch। Layout, tables, और visual structure preserve होता है।</div></div>
+    <div class="timeline-item future"><div class="timeline-phase">सुधार</div><div class="timeline-title">200+ राज्य-स्तरीय योजनाओं से KG expand करना</div><div class="timeline-desc">Structured metadata के लिए राज्य दिव्यांग विभाग portals scrape करना। सभी राज्यों में ~500 योजनाओं तक KG scale करना।</div></div>
+    <div class="timeline-item future"><div class="timeline-phase">सुधार</div><div class="timeline-title">असली परिवारों के लिए WhatsApp/Telegram bot</div><div class="timeline-desc">Accessibility के लिए voice-to-text input। Inline eligibility forms जो KG query parameters auto-populate करें।</div></div>
+    <div class="timeline-item future"><div class="timeline-phase">Production</div><div class="timeline-title">Neo4j Aura + Qdrant Cloud पर migrate करना</div><div class="timeline-desc">Neo4j Aura free tier (200K nodes)। Qdrant Cloud managed hosting। Auth, rate limiting, monitoring।</div></div>
+    <div class="timeline-item future"><div class="timeline-phase">Research</div><div class="timeline-title">Agentic document update pipeline</div><div class="timeline-desc">Agent gov.in feeds monitor करता है, योजना changes detect करता है, affected chunks re-embed करता है, KG nodes automatically update करता है।</div></div>
   </div>
 
   <div class="callout insight">
-  The hybrid architecture was designed for extensibility. Adding a new scheme requires only: (1) download the PDF and run <code>ingest.py</code> for vector embeddings, (2) add structured metadata to the KG. The retrieval and generation layers need zero changes.
+  Hybrid architecture extensibility के लिए design किया गया था। नई योजना जोड़ने के लिए बस: (1) PDF download करो और vector embeddings के लिए <code>ingest.py</code> चलाओ, (2) KG में structured metadata जोड़ो। Retrieval और generation layers में zero changes।
   </div>
 </section>
 
 </div>
 
 <footer>
-  <div class="container">SamarthSchool RAG + KG Pipeline &middot; Built for DBA Gen AI Course 8919 &middot; Group Assignment PoC</div>
+  <div class="container">SamarthSchool RAG + KG Pipeline &middot; DBA Gen AI Course 8919 के लिए बनाया गया &middot; Group Assignment PoC</div>
 </footer>
 
 <script>
