@@ -1,0 +1,45 @@
+graph TD
+    subgraph "Authentication"
+        AUTH["Azure AD B2C\nOAuth 2.0 + MFA"]
+    end
+
+    subgraph "CDN + Security"
+        FRONT["Azure Front Door\nCDN + WAF + DDoS Protection"]
+    end
+
+    subgraph "Application Tier"
+        AKS["Azure Kubernetes Service\nAuto-scaling Containers"]
+        API["FastAPI Gateway\nRate Limiting + Logging"]
+    end
+
+    subgraph "Caching Layer"
+        REDIS["Azure Redis Cache\nQuery Caching\nSession Management"]
+    end
+
+    subgraph "AI Services"
+        AOAI["Azure OpenAI\nGPT-5.2 + Embeddings"]
+        BENCH["International\nBenchmarking Layer\nUSA / UK / Canada Standards"]
+    end
+
+    subgraph "Data Tier"
+        COSMOS["Azure Cosmos DB\nMulti-region Replication\nStudent + IEP Data"]
+        CHROMA["ChromaDB\nVector Store"]
+        BLOB["Azure Blob Storage\nDocuments + Exports"]
+    end
+
+    subgraph "Learning Loop"
+        LOOP["Feedback Aggregator\nTeacher Ratings\nModel Fine-tuning Queue"]
+    end
+
+    AUTH --> FRONT
+    FRONT --> AKS
+    AKS --> API
+    API --> REDIS
+    REDIS --> AOAI
+    API --> AOAI
+    AOAI --> BENCH
+    API --> COSMOS
+    API --> CHROMA
+    COSMOS --> BLOB
+    API --> LOOP
+    LOOP --> AOAI

@@ -1,0 +1,24 @@
+graph LR
+    subgraph "Stage 1: Query Expansion"
+        A["Teacher Query"] --> B["GPT-5.2\nQuery Expansion"]
+        B --> C["Expanded Query\n+ Synonyms"]
+    end
+
+    subgraph "Stage 2: Hybrid Retrieval"
+        C --> D["Semantic Search\ntext-embedding-ada-002\nWeight: 1.0"]
+        C --> E["Keyword Search\nBM25\nWeight: 0.5"]
+        D --> F["ChromaDB\nVector Store"]
+        E --> F
+        F --> G["Ranked Results\nWeighted Fusion"]
+    end
+
+    subgraph "Stage 3: Context Assembly"
+        G --> H["Top-K Chunks\nk=5"]
+        H --> I["Context Window\nAssembly"]
+        I --> J["Source Citations\nAttached"]
+    end
+
+    subgraph "Stage 4: Response Generation"
+        J --> K["GPT-5.2\nResponse Generation"]
+        K --> L["Structured IEP\nOutput with Citations"]
+    end

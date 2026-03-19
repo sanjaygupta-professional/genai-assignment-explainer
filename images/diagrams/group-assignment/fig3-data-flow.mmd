@@ -1,0 +1,20 @@
+graph TD
+    A["Teacher Input\nStudent details + IEP query"] --> B["Input Validation\n+ Sanitization"]
+    B --> C{"Query Type?"}
+
+    C -->|"Keyword Match"| D["Keyword Matching\nRPWD Act, NEP 2020\nPolicy Lookup"]
+    C -->|"Semantic Query"| E["RAG Retrieval\nEmbedding + ChromaDB\nTop-K Chunks"]
+
+    D --> F["Context Merger\nPolicy + Semantic Results"]
+    E --> F
+
+    F --> G["LLM Generation\nGPT-5.2\nStructured Prompt"]
+    G --> H["Response Assembly"]
+
+    H --> I["Citation Injection\nSource Documents\nPage References"]
+    H --> J["Compliance Check\nRPWD Act Alignment\nNEP 2020 Standards"]
+
+    I --> K["Final Response\nIEP Recommendations\nwith Citations"]
+    J --> K
+
+    K --> L["Teacher Review\nEdit / Accept / Refine"]

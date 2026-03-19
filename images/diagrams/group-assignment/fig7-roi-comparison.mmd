@@ -1,0 +1,17 @@
+graph TD
+    subgraph "Per-School Annual Cost Comparison"
+        M["Manual IEP Process\n5 teachers x 45 hrs/yr x 1200/hr\n= 2,70,000 per year"]
+        AI["IEP Architect\nPlatform: 30,000/yr\nAzure AI: 13,500/yr\n= 43,500 per year"]
+        SAV["Savings per School\n2,26,500 per year\n84% Cost Reduction"]
+    end
+
+    subgraph "3-Year Investment Analysis"
+        INV["Total Investment\n2.97 Crore over 3 years\nDev + Infra + Support"]
+        RET["Total Savings\n20.27 Crore over 3 years\nAcross 1000 schools"]
+        ROI["ROI: 582%\nPayback Period: 7 months"]
+    end
+
+    M -->|"vs"| AI
+    AI --> SAV
+    INV -->|"generates"| RET
+    RET --> ROI

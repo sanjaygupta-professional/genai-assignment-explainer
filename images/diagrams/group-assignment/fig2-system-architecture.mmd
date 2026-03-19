@@ -1,0 +1,35 @@
+graph TD
+    subgraph "User Layer"
+        U["Teacher / Browser"]
+    end
+
+    subgraph "Edge Layer"
+        CDN["Azure Front Door\nCDN + WAF"]
+    end
+
+    subgraph "Application Layer"
+        APP["Azure App Service\nStreamlit UI + FastAPI Backend"]
+    end
+
+    subgraph "AI Services"
+        AOAI["Azure OpenAI\nGPT-5.2"]
+        EMBED["Azure OpenAI\ntext-embedding-ada-002"]
+    end
+
+    subgraph "Data Layer"
+        CHROMA["ChromaDB\nVector Store"]
+        COSMOS["Azure Cosmos DB\nStudent Records + IEP History"]
+    end
+
+    subgraph "Storage Layer"
+        BLOB["Azure Blob Storage\nDocuments, PDFs, Exports"]
+    end
+
+    U --> CDN
+    CDN --> APP
+    APP --> AOAI
+    APP --> EMBED
+    EMBED --> CHROMA
+    APP --> COSMOS
+    COSMOS --> BLOB
+    APP --> BLOB

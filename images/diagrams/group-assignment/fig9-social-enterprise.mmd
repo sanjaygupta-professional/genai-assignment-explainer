@@ -1,0 +1,37 @@
+graph TD
+    subgraph "Revenue Sources"
+        PRIV["Private Schools\nPaid Subscriptions\n30,000 per school/year"]
+        CSR["CSR Partnerships\nCorporate Social Responsibility\nFunding from IT companies"]
+        IMPACT["Impact Investors\nSocial Impact Funds\nBlended finance"]
+    end
+
+    subgraph "Platform"
+        PLAT["IEP Architect Platform\nCross-Subsidization Engine"]
+        POOL["Revenue Pool"]
+    end
+
+    subgraph "Beneficiaries"
+        GOV["Government Schools\nFree Access\nFully subsidized"]
+        TRAIN["Teacher Training\nFree workshops\nOnboarding support"]
+    end
+
+    subgraph "Impact Formula"
+        FORMULA["For every 1 rupee from private schools\n0.60 rupees cross-subsidizes\n3 government school teachers"]
+    end
+
+    subgraph "Scale Targets"
+        T1["Year 1: 100 private + 300 government schools"]
+        T2["Year 2: 250 private + 750 government schools"]
+        T3["Year 3: 500 private + 1500 government schools"]
+    end
+
+    PRIV --> POOL
+    CSR --> POOL
+    IMPACT --> POOL
+    POOL --> PLAT
+    PLAT -->|"60% of revenue"| GOV
+    PLAT --> TRAIN
+    PLAT --> FORMULA
+    FORMULA --> T1
+    T1 --> T2
+    T2 --> T3
