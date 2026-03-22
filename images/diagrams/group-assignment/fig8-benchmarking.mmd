@@ -1,45 +1,38 @@
 graph TD
-    subgraph "International IEP Benchmarking"
-        TITLE["Comparison Across 4 Countries"]
+    subgraph "Competitive Landscape: Disability Benefits Navigation in India"
+        TITLE["Who helps families find disability schemes?"]
     end
 
-    subgraph "India - Current State"
-        IN1["IEP Completion Rate: 12%"]
-        IN2["Legal Compliance: RPWD Act 2016\nPartial enforcement"]
-        IN3["Teacher Training: 4 hrs/year"]
-        IN4["AI Adoption: Emerging"]
-        IN5["Parent Involvement: Low\n15% participation"]
-        IN6["Multi-disciplinary Team: Rare\nSingle-teacher model"]
+    subgraph "MyScheme - myscheme.gov.in"
+        MS1["Type: Rule-based eligibility checker"]
+        MS2["Strengths: Free, government-run, covers all welfare"]
+        MS3["Gaps: Not disability-specialized<br/>Form-based UI, 15 plus fields<br/>No natural language<br/>No school workflow<br/>Solves matching not discovery"]
     end
 
-    subgraph "USA"
-        US1["IEP Completion Rate: 95%"]
-        US2["Legal Compliance: IDEA 2004\nStrict enforcement"]
-        US3["Teacher Training: 40 hrs/year"]
-        US4["AI Adoption: Growing\nMultiple EdTech tools"]
-        US5["Parent Involvement: High\nMandatory participation"]
-        US6["Multi-disciplinary Team: Standard\nIEP Team required by law"]
+    subgraph "Haqdarshak - 40M plus users"
+        HQ1["Type: Welfare scheme platform with field agents"]
+        HQ2["Strengths: Large user base, deep govt partnerships"]
+        HQ3["Gaps: Generic not disability-specialized<br/>Per-transaction fee model<br/>No Knowledge Graph<br/>Lacks depth for 21 RPwD categories"]
     end
 
-    subgraph "UK"
-        UK1["IEP Completion Rate: 78%"]
-        UK2["Legal Compliance: SEND Code 2015\nEHCP process"]
-        UK3["Teacher Training: 30 hrs/year"]
-        UK4["AI Adoption: Moderate\nPilot programs"]
-        UK5["Parent Involvement: Moderate\n55% participation"]
-        UK6["Multi-disciplinary Team: Common\nSENCO-led teams"]
+    subgraph "UDID Portal"
+        UD1["Type: Disability registration system"]
+        UD2["Strengths: Official ID generation"]
+        UD3["Gaps: Not a benefits navigator<br/>Users must already know schemes exist<br/>No guidance on applications"]
     end
 
-    subgraph "Canada"
-        CA1["IEP Completion Rate: 88%"]
-        CA2["Legal Compliance: Provincial Acts\nVaries by province"]
-        CA3["Teacher Training: 35 hrs/year"]
-        CA4["AI Adoption: Moderate\nProvincial pilots"]
-        CA5["Parent Involvement: High\n70% participation"]
-        CA6["Multi-disciplinary Team: Common\nSchool-based teams"]
+    subgraph "SamarthSchool - Fills the Gap"
+        SS1["First disability-specific KG<br/>50 plus schemes as graph entities"]
+        SS2["Natural language queries<br/>in any Indian language"]
+        SS3["School-admin workflow<br/>designed for CWSN coordinators"]
+        SS4["Full action plan: schemes<br/>plus documents plus steps"]
+        SS5["Navigation not just search"]
     end
 
-    TITLE --> IN1
-    TITLE --> US1
-    TITLE --> UK1
-    TITLE --> CA1
+    TITLE --> MS1
+    TITLE --> HQ1
+    TITLE --> UD1
+    TITLE --> SS1
+    MS3 -.->|"SamarthSchool addresses"| SS2
+    HQ3 -.->|"SamarthSchool addresses"| SS1
+    UD3 -.->|"SamarthSchool addresses"| SS4

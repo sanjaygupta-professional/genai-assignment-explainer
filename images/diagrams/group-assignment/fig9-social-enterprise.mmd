@@ -1,37 +1,44 @@
 graph TD
-    subgraph "Revenue Sources"
-        PRIV["Private Schools\nPaid Subscriptions\n30,000 per school/year"]
-        CSR["CSR Partnerships\nCorporate Social Responsibility\nFunding from IT companies"]
-        IMPACT["Impact Investors\nSocial Impact Funds\nBlended finance"]
+    subgraph "Revenue and Funding Sources"
+        CSR["CSR Grants<br/>Tata Trusts, Infosys<br/>Wipro Foundation<br/>Year 1: INR 1.5 Cr"]
+        B2G["B2G Contracts<br/>State Education Depts<br/>Year 3-4: INR 50L-1Cr each"]
+        IMPACT["Impact Investment<br/>AssisTech, Aavishkaar<br/>Omidyar Network<br/>Year 2: INR 1.5 Cr seed"]
+        NGO["NGO and Dev Grants<br/>UNICEF, World Bank<br/>Year 2-3: INR 50L per year"]
     end
 
-    subgraph "Platform"
-        PLAT["IEP Architect Platform\nCross-Subsidization Engine"]
-        POOL["Revenue Pool"]
+    subgraph "SamarthSchool Platform"
+        PLAT["AI-Powered Benefits Navigator<br/>GraphRAG plus Knowledge Graph"]
     end
 
-    subgraph "Beneficiaries"
-        GOV["Government Schools\nFree Access\nFully subsidized"]
-        TRAIN["Teacher Training\nFree workshops\nOnboarding support"]
+    subgraph "Adoption Channels"
+        CWSN["CWSN Coordinators<br/>1 per district<br/>Samagra Shiksha network"]
+        NGOP["NGO Partners<br/>Samarthanam, CBM India<br/>School outreach programs"]
+        WA["WhatsApp Bot<br/>500M plus Indian users<br/>No app install needed"]
     end
 
-    subgraph "Impact Formula"
-        FORMULA["For every 1 rupee from private schools\n0.60 rupees cross-subsidizes\n3 government school teachers"]
+    subgraph "Social Impact"
+        CHILD["Children Served<br/>Y1: 750<br/>Y2: 3000<br/>Y3: 7500"]
+        BEN["Benefits Unlocked<br/>Y1: INR 41L applied<br/>Y2: INR 1.92 Cr<br/>Y3: INR 6.0 Cr"]
     end
 
-    subgraph "Scale Targets"
-        T1["Year 1: 100 private + 300 government schools"]
-        T2["Year 2: 250 private + 750 government schools"]
-        T3["Year 3: 500 private + 1500 government schools"]
+    subgraph "Scale Trajectory"
+        S1["Year 1: 50 schools<br/>5-school MVP plus expansion"]
+        S2["Year 2: 200 schools<br/>NGO partnerships"]
+        S3["Year 3: 500 schools<br/>B2G contracts begin"]
+        S4["Year 4 plus: 10000 schools<br/>National scale"]
     end
 
-    PRIV --> POOL
-    CSR --> POOL
-    IMPACT --> POOL
-    POOL --> PLAT
-    PLAT -->|"60% of revenue"| GOV
-    PLAT --> TRAIN
-    PLAT --> FORMULA
-    FORMULA --> T1
-    T1 --> T2
-    T2 --> T3
+    CSR --> PLAT
+    B2G --> PLAT
+    IMPACT --> PLAT
+    NGO --> PLAT
+    PLAT --> CWSN
+    PLAT --> NGOP
+    PLAT --> WA
+    CWSN --> CHILD
+    NGOP --> CHILD
+    WA --> CHILD
+    CHILD --> BEN
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4

@@ -1,45 +1,55 @@
 graph TD
-    subgraph "Authentication"
-        AUTH["Azure AD B2C\nOAuth 2.0 + MFA"]
+    subgraph "Knowledge Graph Schema"
+        S["Scheme<br/>name, ministry, level<br/>status, budget"]
     end
 
-    subgraph "CDN + Security"
-        FRONT["Azure Front Door\nCDN + WAF + DDoS Protection"]
+    subgraph "Eligibility Rules"
+        E1["EligibilityCriterion<br/>age range"]
+        E2["EligibilityCriterion<br/>income limit"]
+        E3["EligibilityCriterion<br/>disability percentage"]
     end
 
-    subgraph "Application Tier"
-        AKS["Azure Kubernetes Service\nAuto-scaling Containers"]
-        API["FastAPI Gateway\nRate Limiting + Logging"]
+    subgraph "Disability Categories"
+        D1["Visual"]
+        D2["Hearing"]
+        D3["Locomotor"]
+        D4["Intellectual"]
+        D5["Cerebral Palsy"]
+        D6["Autism"]
+        D7["... 21 RPwD categories"]
     end
 
-    subgraph "Caching Layer"
-        REDIS["Azure Redis Cache\nQuery Caching\nSession Management"]
+    subgraph "Benefits"
+        B1["Benefit<br/>Financial: scholarship<br/>Rs 6000 per year"]
+        B2["Benefit<br/>Assistive device<br/>Rs 15000 one-time"]
+        B3["Benefit<br/>Health insurance<br/>Rs 1L coverage"]
     end
 
-    subgraph "AI Services"
-        AOAI["Azure OpenAI\nGPT-5.2 + Embeddings"]
-        BENCH["International\nBenchmarking Layer\nUSA / UK / Canada Standards"]
+    subgraph "Documents Required"
+        DOC1["Disability Certificate"]
+        DOC2["Income Certificate"]
+        DOC3["Aadhaar Card"]
+        DOC4["School Enrollment"]
     end
 
-    subgraph "Data Tier"
-        COSMOS["Azure Cosmos DB\nMulti-region Replication\nStudent + IEP Data"]
-        CHROMA["ChromaDB\nVector Store"]
-        BLOB["Azure Blob Storage\nDocuments + Exports"]
+    subgraph "Government Body"
+        GOV["Administered By<br/>DEPwD or MoE<br/>or State Dept"]
     end
 
-    subgraph "Learning Loop"
-        LOOP["Feedback Aggregator\nTeacher Ratings\nModel Fine-tuning Queue"]
-    end
-
-    AUTH --> FRONT
-    FRONT --> AKS
-    AKS --> API
-    API --> REDIS
-    REDIS --> AOAI
-    API --> AOAI
-    AOAI --> BENCH
-    API --> COSMOS
-    API --> CHROMA
-    COSMOS --> BLOB
-    API --> LOOP
-    LOOP --> AOAI
+    S -->|"HAS_ELIGIBILITY"| E1
+    S -->|"HAS_ELIGIBILITY"| E2
+    S -->|"HAS_ELIGIBILITY"| E3
+    E3 -->|"APPLIES_TO_CATEGORY"| D1
+    E3 -->|"APPLIES_TO_CATEGORY"| D2
+    E3 -->|"APPLIES_TO_CATEGORY"| D3
+    E3 -->|"APPLIES_TO_CATEGORY"| D4
+    E3 -->|"APPLIES_TO_CATEGORY"| D5
+    E3 -->|"APPLIES_TO_CATEGORY"| D6
+    S -->|"PROVIDES"| B1
+    S -->|"PROVIDES"| B2
+    S -->|"PROVIDES"| B3
+    S -->|"REQUIRES_DOC"| DOC1
+    S -->|"REQUIRES_DOC"| DOC2
+    S -->|"REQUIRES_DOC"| DOC3
+    S -->|"REQUIRES_DOC"| DOC4
+    S -->|"ADMINISTERED_BY"| GOV

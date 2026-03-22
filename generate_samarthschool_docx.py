@@ -36,15 +36,29 @@ WHITE = RGBColor(0xFF, 0xFF, 0xFF)
 
 # Map figure references to diagram files and captions
 DIAGRAM_MAP = {
-    "fig1": ("fig1-rag-pipeline", "Figure 1: RAG Pipeline Architecture"),
-    "fig2": ("fig2-system-architecture", "Figure 2: System Architecture"),
-    "fig3": ("fig3-data-flow", "Figure 3: Data Flow"),
-    "fig4": ("fig4-future-architecture", "Figure 4: Future Architecture (Year 3)"),
-    "fig5": ("fig5-teacher-journey", "Figure 5: User Journey"),
-    "fig6": ("fig6-roadmap-gantt", "Figure 6: Product Roadmap Timeline"),
-    "fig7": ("fig7-roi-comparison", "Figure 7: ROI Comparison"),
-    "fig8": ("fig8-benchmarking", "Figure 8: Benchmarking & Competitive Analysis"),
-    "fig9": ("fig9-social-enterprise", "Figure 9: Social Enterprise Model"),
+    "fig1": ("fig1-rag-pipeline", "Figure 1: SamarthSchool GraphRAG Pipeline — Dual retrieval with KG eligibility matching and vector-based semantic search"),
+    "fig2": ("fig2-system-architecture", "Figure 2: System Architecture — End-to-end pipeline from data ingestion through Knowledge Graph and vector storage to multilingual response generation"),
+    "fig3": ("fig3-data-flow", "Figure 3: Multilingual Query Pipeline — Language detection, cross-lingual retrieval, and response generation across Indian languages"),
+    "fig4": ("fig4-future-architecture", "Figure 4: Knowledge Graph Schema — Entity-relationship structure for 50+ Indian disability welfare schemes"),
+    "fig5": ("fig5-teacher-journey", "Figure 5: Human-in-the-Loop Workflow — Three-level design ensuring human oversight at KG construction, query review, and quality improvement"),
+    "fig6": ("fig6-roadmap-gantt", "Figure 6: School Administrator Journey — From natural language query to personalized benefits action plan in under 5 minutes"),
+    "fig7": ("fig7-roi-comparison", "Figure 7: Social Impact ROI Model — Three-year cost-benefit trajectory from 0.20x to 2.2x social ROI"),
+    "fig8": ("fig8-benchmarking", "Figure 8: Competitive Landscape — How SamarthSchool addresses gaps left by existing solutions"),
+    "fig9": ("fig9-social-enterprise", "Figure 9: Business and Funding Model — Revenue sources, adoption channels, and social impact trajectory"),
+}
+
+# Map section headings to diagrams for inline insertion
+SECTION_DIAGRAM_INSERT = {
+    "4.1 Why RAG": "fig1",
+    "4.2 Architecture overview": "fig2",
+    "4.4 Knowledge Graph schema": "fig4",
+    "4.5 Multilingual pipeline": "fig3",
+    "4.11 Human-in-the-loop": "fig5",
+    "5.1 Phased development": "fig6",
+    "5.2 Roadmap timeline": "fig7",  # reuse fig7 (roadmap gantt) here too
+    "6.3 Social impact ROI": "fig7",
+    "7.1 Existing solutions": "fig8",
+    "7.3 Data and IP moat": "fig9",
 }
 
 
@@ -252,16 +266,7 @@ def convert_md_to_docx():
     in_table = False
     table_lines = []
     diagrams_inserted = set()
-
-    # Track which sections might benefit from a diagram
-    section_diagram_map = {
-        "4.2 Architecture overview": "fig2",
-        "4.3 Technology stack": "fig1",
-        "5.2 Roadmap timeline": "fig6",
-        "6.3 Social impact ROI": "fig7",
-        "6.7 Comparison to status quo": "fig8",
-        "7.2 What makes SamarthSchool different": "fig9",
-    }
+    pending_diagram = None  # diagram to insert after next content paragraph
 
     while i < len(lines):
         line = lines[i]
@@ -279,6 +284,12 @@ def convert_md_to_docx():
                     run.font.color.rgb = DARK
                     p.paragraph_format.space_before = Pt(4)
                     p.paragraph_format.space_after = Pt(4)
+                # Insert pending diagram after code block too
+                if pending_diagram:
+                    doc.add_paragraph()
+                    try_add_diagram(doc, pending_diagram, width=5.5)
+                    doc.add_paragraph()
+                    pending_diagram = None
                 code_lines = []
                 in_code_block = False
             else:
@@ -333,12 +344,12 @@ def convert_md_to_docx():
             h = doc.add_heading(text, level=3)
             for run in h.runs:
                 run.font.color.rgb = DARK
-            # Check if this section should have a diagram
-            for section_key, fig_key in section_diagram_map.items():
+            # Check if this section should have a diagram inserted
+            for section_key, fig_key in SECTION_DIAGRAM_INSERT.items():
                 if section_key in text and fig_key not in diagrams_inserted:
-                    # Insert diagram after the heading
+                    pending_diagram = fig_key
                     diagrams_inserted.add(fig_key)
-                    # We'll insert after the next paragraph of content
+                    break
             i += 1
             continue
 
@@ -378,6 +389,14 @@ def convert_md_to_docx():
         text = line.strip()
         p = doc.add_paragraph()
         process_inline_formatting(p, text)
+
+        # Insert pending diagram after the first content paragraph following the heading
+        if pending_diagram:
+            doc.add_paragraph()  # spacing
+            try_add_diagram(doc, pending_diagram, width=5.5)
+            doc.add_paragraph()  # spacing
+            pending_diagram = None
+
         i += 1
 
     # Flush any remaining table

@@ -1,20 +1,24 @@
 graph TD
-    A["Teacher Input\nStudent details + IEP query"] --> B["Input Validation\n+ Sanitization"]
-    B --> C{"Query Type?"}
+    A["User Query<br/>any Indian language"] --> B["Language Detection<br/>fastText lid.176"]
+    B --> C{"Hindi or<br/>regional?"}
 
-    C -->|"Keyword Match"| D["Keyword Matching\nRPWD Act, NEP 2020\nPolicy Lookup"]
-    C -->|"Semantic Query"| E["RAG Retrieval\nEmbedding + ChromaDB\nTop-K Chunks"]
+    C -->|"Yes"| D["IndicTrans2<br/>Translate to English<br/>for KG query"]
+    C -->|"English"| E["Pass through"]
+    C -->|"Romanized Hindi"| F["IndicXlit<br/>Transliterate to<br/>Devanagari"]
+    F --> D
 
-    D --> F["Context Merger\nPolicy + Semantic Results"]
-    E --> F
+    D --> G["English query<br/>for KG Cypher"]
+    E --> G
 
-    F --> G["LLM Generation\nGPT-5.2\nStructured Prompt"]
-    G --> H["Response Assembly"]
+    subgraph "Parallel Retrieval"
+        G --> H["KG Query<br/>Cypher on Neo4j or Kuzu<br/>Structured eligibility<br/>filtering"]
+        A -->|"Original language"| I["Vector Search<br/>bge-m3 cross-lingual<br/>Qdrant semantic<br/>retrieval"]
+    end
 
-    H --> I["Citation Injection\nSource Documents\nPage References"]
-    H --> J["Compliance Check\nRPWD Act Alignment\nNEP 2020 Standards"]
+    H --> J["Result Merger<br/>KG-confirmed schemes<br/>get score boost"]
+    I --> J
 
-    I --> K["Final Response\nIEP Recommendations\nwith Citations"]
-    J --> K
-
-    K --> L["Teacher Review\nEdit / Accept / Refine"]
+    J --> K["Gemini 2.0 Flash<br/>Generate response in<br/>users detected language"]
+    K --> L["Include source<br/>citations and<br/>scheme references"]
+    L --> M["Add mandatory<br/>advisory disclaimer<br/>in same language"]
+    M --> N["Final Response<br/>to user"]

@@ -1,17 +1,35 @@
 graph TD
-    subgraph "Per-School Annual Cost Comparison"
-        M["Manual IEP Process\n5 teachers x 45 hrs/yr x 1200/hr\n= 2,70,000 per year"]
-        AI["IEP Architect\nPlatform: 30,000/yr\nAzure AI: 13,500/yr\n= 43,500 per year"]
-        SAV["Savings per School\n2,26,500 per year\n84% Cost Reduction"]
+    subgraph "Social Impact ROI Trajectory"
+        Y1["Year 1<br/>50 schools<br/>750 children<br/>INR 41L benefits applied<br/>Cost: INR 2.09 Cr<br/>Social ROI: 0.20x"]
+        Y2["Year 2<br/>200 schools<br/>3000 children<br/>INR 1.92 Cr benefits applied<br/>Cost: INR 2.46 Cr<br/>Social ROI: 0.78x"]
+        Y3["Year 3<br/>500 schools<br/>7500 children<br/>INR 6.0 Cr benefits applied<br/>Cost: INR 2.75 Cr<br/>Social ROI: 2.2x"]
     end
 
-    subgraph "3-Year Investment Analysis"
-        INV["Total Investment\n2.97 Crore over 3 years\nDev + Infra + Support"]
-        RET["Total Savings\n20.27 Crore over 3 years\nAcross 1000 schools"]
-        ROI["ROI: 582%\nPayback Period: 7 months"]
+    subgraph "Cost Structure Year 1"
+        C1["Dev Team: INR 1.8 Cr"]
+        C2["LLM APIs: INR 3L"]
+        C3["Infrastructure: INR 8L"]
+        C4["KG Maintenance: INR 8L"]
+        C5["Compliance: INR 5L"]
+        C6["Operations: INR 5L"]
     end
 
-    M -->|"vs"| AI
-    AI --> SAV
-    INV -->|"generates"| RET
-    RET --> ROI
+    subgraph "Key Assumptions"
+        A1["Rs 3200 weighted avg<br/>benefit value per scheme"]
+        A2["15 CWSN per school<br/>from UDISE plus data"]
+        A3["0.3 to 2.0 benefits<br/>per child improvement"]
+        A4["65 pct disbursement<br/>success rate"]
+    end
+
+    subgraph "Break-Even Path"
+        BE["Break-even: Year 4-5<br/>via B2G contracts<br/>INR 50L-1Cr per<br/>state education dept"]
+    end
+
+    Y1 -->|"Building platform"| Y2
+    Y2 -->|"Scaling adoption"| Y3
+    Y3 -->|"B2G procurement"| BE
+    C1 --> Y1
+    C2 --> Y1
+    C3 --> Y1
+    A1 --> Y1
+    A2 --> Y1

@@ -305,6 +305,8 @@ Government schemes change through budget revisions, circulars, and amendments. T
 
 The evaluation process uses a gold-standard test set of 200+ query-answer pairs validated by disability rights advocates, supplemented with 500+ real-world queries collected during pilot. Automated RAGAS evaluation runs on every KG/document update, and human audit is conducted quarterly.
 
+**Defining "harmful misinformation"**: A response is classified as harmful if it (a) claims a child is eligible for a scheme they do not qualify for (false positive — wastes family's time and creates false hope), or (b) omits a major applicable scheme that would have provided ≥Rs 5,000 in annual benefits (false negative — causes real financial loss). The <2% threshold is measured via quarterly audits of 200 randomly sampled queries, cross-checked against ground-truth eligibility determined by the domain expert.
+
 MyScheme's rule-based matching is the baseline. If human disability counselors achieve ~80% accuracy on complex multi-criteria eligibility (field studies show counselors frequently miss obscure schemes or apply wrong income thresholds), the 90% target represents an improvement that must be validated empirically during MVP, not assumed.
 
 ### 4.8 Failure modes and mitigation
@@ -336,6 +338,8 @@ For eligibility determinations, the system is advisory, not authoritative. Every
 Building the KG is the highest-risk, highest-effort component. Government eligibility rules use complex conditional language ("eligible if the applicant belongs to SC/ST category AND has a disability certificate AND family income does not exceed Rs 2.5 lakh per annum OR Rs 3.5 lakh in case of OBC category"). Automated triple extraction from such text is error-prone.
 
 The initial KG for 50+ central schemes is manually curated, not auto-extracted. A domain expert (disability rights specialist) structures each scheme's eligibility criteria, benefits, and documents directly into the Neo4j schema. LLM-based extraction is used only for draft generation that the domain expert then validates.
+
+**Curation effort estimate**: Manually curating a single scheme's eligibility rules, benefits, required documents, and application process takes approximately 8–12 hours (reading the official gazette/circular, extracting structured fields, encoding in graph schema, and testing with synthetic personas). The 50-scheme MVP KG therefore requires ~500 hours of domain expert time, distributed over the first 6 weeks of MVP development with the domain expert and policy researcher working in parallel. This timeline is reflected in the Phase 1 roadmap (Section 5.1).
 
 For ongoing maintenance, each scheme entry has an "owner" (the domain expert responsible for keeping it current). Scheme changes detected by the crawling pipeline generate alerts for the owner to review and update. The cost of this ongoing KG maintenance is budgeted at INR 8-12 lakh per year (Section 6.2).
 
@@ -409,7 +413,7 @@ This three-level human-in-the-loop design ensures that the system augments human
 | DPDP Act compliance | Parental consent mechanism; data minimization; no profiling of children |
 | WCAG 2.1 AA + GIGW 3.0 | Full accessibility compliance; screen reader support; keyboard navigation |
 | Analytics dashboard | Per-school: schemes discovered, applications initiated, benefits accessed |
-| Offline mode | District-hub deployment: Qwen 2.5 14B on a district education office server (not individual school hardware); schools connect via local network or pre-cached responses |
+| Offline mode | District-hub deployment: Qwen 2.5 14B on a district education office server with a read-only KG snapshot exported from Neo4j (~200MB). Schools connect via local network. KG snapshots are refreshed quarterly via USB or opportunistic internet sync. This avoids running a full Neo4j instance on district hardware |
 | WhatsApp integration | Chatbot interface via WhatsApp Business API (India's most-used messaging app) |
 | Deployment | 100+ schools across 5 states |
 
@@ -485,7 +489,7 @@ The question we need to answer: why would schools adopt this when MyScheme exist
 |-----------|-------|-------|
 | Pilot schools (Year 1) | 50 | Conservative target for v1.0 (reduced from 100 to reflect realistic onboarding capacity) |
 | CWSN per school (average) | 15 | UDISE+ data: ~2.27M CWSN across ~1.5M schools |
-| Benefits accessed per child currently | 0.3 per year | Based on 28.8% certification rate and awareness data |
+| Benefits accessed per child currently | 0.3 per year | Estimated from UDISE+ coverage: of 2.27M enrolled CWSN, ~680K access at least one scheme benefit annually (28.8% with disability certificates × typical scheme utilization rate). This gives ~0.3 benefits per enrolled child per year — a conservative baseline that MVP pilot data will validate |
 | Benefits accessed with SamarthSchool | 2.0 per year | Conservative target; MVP data will validate |
 | Average monetary value per benefit accessed | Rs 3,200 per year | **Derived weighted average** (see breakdown below) |
 | Schools (Year 2) | 200 | NGO partner expansion + early B2G pilots |
@@ -515,7 +519,8 @@ A note on what "benefits accessed" means here: the family has been informed of e
 | **Compliance & Audit** (DPDP, GIGW, accessibility) | INR 5 L ($6K) | INR 3 L ($4K) | INR 3 L ($4K) |
 | **WhatsApp Business API** | INR 0 | INR 2 L ($2.4K) | INR 5 L ($6K) |
 | **Travel & Pilot Operations** | INR 5 L ($6K) | INR 8 L ($10K) | INR 10 L ($12K) |
-| **Total Cost** | **INR 2.09 Cr ($251K)** | **INR 2.46 Cr ($296K)** | **INR 2.75 Cr ($331K)** |
+| **Impact Evaluation** (surveys, data collection, DDRC cross-checks) | INR 3 L ($3.6K) | INR 5 L ($6K) | INR 8 L ($9.6K) |
+| **Total Cost** | **INR 2.12 Cr ($255K)** | **INR 2.51 Cr ($302K)** | **INR 2.83 Cr ($341K)** |
 
 Per-query unit economics (Year 1 estimates):
 - LLM tokens per query: ~2,000 (input: 1,500 context + prompt; output: 500 response)
@@ -543,7 +548,17 @@ Salary assumptions (market rates for Bangalore/Delhi NCR, 2026):
 | Estimated value of benefits applied for | INR 41 L | INR 1.92 Cr | INR 6.0 Cr |
 | **Social ROI** (value applied for ÷ cost) | **0.20x** | **0.78x** | **2.2x** |
 
-Year 1 social ROI below 1.0x is expected because the investment goes toward building the platform and KG, not maximizing throughput. The system becomes ROI-positive in social terms by mid-Year 3. These numbers use the conservative benefit value (Rs 3,200) and assume not all applications result in disbursement.
+Year 1 social ROI below 1.0x is expected because the investment goes toward building the platform and KG, not maximizing throughput. The system becomes ROI-positive in social terms by mid-Year 3. These numbers use the conservative benefit value (Rs 3,200) and measure benefits *applied for*, not benefits actually disbursed.
+
+**Disbursement success rate**: Not all applications result in actual benefit receipt. Applications may be rejected (incomplete documents, eligibility edge cases), delayed (government processing backlogs), or abandoned (families unable to follow through). We estimate a conservative 65% disbursement success rate based on reported scheme utilization rates for disability programs. Adjusted actual impact:
+
+| Disbursement Scenario | Year 1 Actual | Year 3 Actual |
+|----------------------|--------------|--------------|
+| Pessimistic (40% success) | INR 16 L | INR 2.4 Cr |
+| Base case (65% success) | INR 27 L | INR 3.9 Cr |
+| Optimistic (80% success) | INR 33 L | INR 4.8 Cr |
+
+Even at the pessimistic 40% disbursement rate, Year 3 actual benefits (INR 2.4 Cr) approach the annual operating cost (INR 2.75 Cr), demonstrating that the model works under conservative assumptions.
 
 ### 6.4 Financial revenue model
 
@@ -656,6 +671,16 @@ The main competitive moat is the Knowledge Graph itself: a structured, validated
 - Continuous monitoring and update infrastructure
 
 This is not easy to replicate. The KG gets more valuable over time as it accumulates historical scheme data, usage patterns, and validation from domain experts.
+
+Beyond the KG itself, SamarthSchool's defensibility rests on three strategic factors:
+
+1. **First-mover advantage**: Being the first disability-specialized benefits navigator in India creates an 18+ month head start before competitors recognize and enter the niche. During this window, the KG deepens with state-level data and pilot validation that newcomers would need to rebuild from scratch.
+
+2. **Institutional relationships**: Deep partnerships with Samagra Shiksha CWSN coordinators (1 per district, ~600 districts nationally) create a distribution channel that competitors must replicate. These relationships take 6–12 months to build and are earned through demonstrated impact, not marketing spend.
+
+3. **Network effects**: More schools using SamarthSchool → more feedback on incorrect/outdated scheme data → better KG accuracy → higher trust and adoption. This virtuous cycle means the product improves faster with more users, widening the gap against any late entrant.
+
+These moats are not indefinite. A well-funded competitor could replicate the KG in 12–18 months with sufficient domain expertise. Long-term defensibility requires either becoming the government's official benefits platform (via B2G integration) or expanding into adjacent domains (health insurance, housing schemes, employment programs for PwD).
 
 ---
 

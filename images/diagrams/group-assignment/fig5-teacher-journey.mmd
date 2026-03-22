@@ -1,27 +1,31 @@
 graph TD
-    subgraph "Time Comparison"
-        OLD["Traditional IEP Process\n8 hours per student"]
-        NEW["IEP Architect Process\n1.3 hours per student\n84% time reduction"]
+    subgraph "Human-in-the-Loop: Three Levels"
+        direction TB
     end
 
-    subgraph "8-Step Teacher Journey"
-        S1["Step 1: Login\nAuthenticate via school credentials"]
-        S2["Step 2: Select Student\nChoose from enrolled students\nor create new profile"]
-        S3["Step 3: Enter Details\nDisability type, grade level\ncurrent abilities, goals"]
-        S4["Step 4: Query System\nAsk for IEP recommendations\ngoals, accommodations, strategies"]
-        S5["Step 5: Review AI Response\nRead generated IEP sections\ncheck citations and compliance"]
-        S6["Step 6: Edit and Refine\nModify suggestions\nadd personal observations"]
-        S7["Step 7: Verify Compliance\nRPWD Act alignment check\nNEP 2020 standards review"]
-        S8["Step 8: Export Document\nDownload as PDF or DOCX\nShare with parents and team"]
+    subgraph "Level 1: KG Construction - Pre-Query"
+        L1A["Government PDFs<br/>and circulars"] --> L1B["LLM extracts<br/>draft KG triples"]
+        L1B --> L1C["Domain Expert<br/>validates every entry"]
+        L1C -->|"Approved"| L1D["Entry goes live<br/>in Knowledge Graph"]
+        L1C -->|"Rejected"| L1E["Corrected and<br/>re-validated"]
+        L1E --> L1C
     end
 
-    S1 --> S2
-    S2 --> S3
-    S3 --> S4
-    S4 --> S5
-    S5 --> S6
-    S6 --> S7
-    S7 --> S8
+    subgraph "Level 2: Query Review - During Use"
+        L2A["School Admin<br/>queries system"] --> L2B["SamarthSchool returns<br/>matching schemes<br/>with citations"]
+        L2B --> L2C["Admin reviews<br/>recommendations"]
+        L2C -->|"Acts on advice"| L2D["Gathers documents<br/>initiates applications"]
+        L2C -->|"Disagrees"| L2E["Ignores or<br/>seeks second opinion"]
+        L2B --> L2F["Advisory label:<br/>Please verify with<br/>your local DDRC"]
+    end
 
-    OLD -.->|"Replaced by"| S1
-    S8 -.->|"Result"| NEW
+    subgraph "Level 3: Feedback Loop - Post-Query"
+        L3A["Admin flags response<br/>as incorrect or outdated"] --> L3B["Alert sent to<br/>Domain Expert"]
+        L3B --> L3C["Expert reviews<br/>and corrects KG"]
+        L3C --> L3D["Quarterly audit:<br/>200 random queries<br/>checked for accuracy"]
+        L3D --> L3E["Accuracy trends<br/>and systematic<br/>issue identification"]
+    end
+
+    L1D -.->|"Powers"| L2B
+    L2E -.->|"Triggers"| L3A
+    L3C -.->|"Improves"| L1D

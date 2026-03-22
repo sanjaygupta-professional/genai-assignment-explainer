@@ -1,24 +1,33 @@
 graph LR
-    subgraph "Stage 1: Query Expansion"
-        A["Teacher Query"] --> B["GPT-5.2\nQuery Expansion"]
-        B --> C["Expanded Query\n+ Synonyms"]
+    subgraph INPUT["User Query"]
+        Q["School admin describes<br/>child situation<br/>in any Indian language"]
     end
 
-    subgraph "Stage 2: Hybrid Retrieval"
-        C --> D["Semantic Search\ntext-embedding-ada-002\nWeight: 1.0"]
-        C --> E["Keyword Search\nBM25\nWeight: 0.5"]
-        D --> F["ChromaDB\nVector Store"]
-        E --> F
-        F --> G["Ranked Results\nWeighted Fusion"]
+    subgraph ROUTER["Query Router"]
+        R["Intent Classification<br/>Gemini 2.0 Flash<br/>confidence threshold 0.8"]
     end
 
-    subgraph "Stage 3: Context Assembly"
-        G --> H["Top-K Chunks\nk=5"]
-        H --> I["Context Window\nAssembly"]
-        I --> J["Source Citations\nAttached"]
+    subgraph RETRIEVAL["Dual Retrieval Paths"]
+        KG["KG Path<br/>Cypher on Neo4j and Kuzu<br/>Deterministic eligibility<br/>disability x pct x age<br/>x income x state"]
+        RAG["RAG Path<br/>bge-m3 embeddings<br/>Qdrant vector search<br/>Semantic retrieval of<br/>scheme explanations"]
+        HYB["Hybrid Path<br/>Both KG plus RAG<br/>for complex queries"]
     end
 
-    subgraph "Stage 4: Response Generation"
-        J --> K["GPT-5.2\nResponse Generation"]
-        K --> L["Structured IEP\nOutput with Citations"]
+    subgraph GENERATION["Response Generation"]
+        MERGE["Result Merger<br/>KG-confirmed schemes<br/>get score boost"]
+        GEN["Gemini 2.0 Flash<br/>Response in users<br/>detected language"]
     end
+
+    subgraph OUTPUT["Response"]
+        RESP["Matching schemes<br/>Required documents<br/>Application steps<br/>Citations and disclaimer"]
+    end
+
+    Q --> R
+    R -->|"Eligibility"| KG
+    R -->|"Explanation"| RAG
+    R -->|"Complex"| HYB
+    KG --> MERGE
+    RAG --> MERGE
+    HYB --> MERGE
+    MERGE --> GEN
+    GEN --> RESP

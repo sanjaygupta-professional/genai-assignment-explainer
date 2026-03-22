@@ -1,35 +1,64 @@
 graph TD
-    subgraph "User Layer"
-        U["Teacher / Browser"]
+    subgraph "Data Ingestion Layer"
+        SCRAPE["Web Crawler<br/>Scrapy"]
+        PDF["PDF Parser<br/>Docling plus Surya OCR"]
+        GAZ["Gazette RSS<br/>Monitor"]
+        MANUAL["Manual Curation<br/>Domain Expert"]
     end
 
-    subgraph "Edge Layer"
-        CDN["Azure Front Door\nCDN + WAF"]
-    end
-
-    subgraph "Application Layer"
-        APP["Azure App Service\nStreamlit UI + FastAPI Backend"]
-    end
-
-    subgraph "AI Services"
-        AOAI["Azure OpenAI\nGPT-5.2"]
-        EMBED["Azure OpenAI\ntext-embedding-ada-002"]
-    end
-
-    subgraph "Data Layer"
-        CHROMA["ChromaDB\nVector Store"]
-        COSMOS["Azure Cosmos DB\nStudent Records + IEP History"]
+    subgraph "Processing"
+        CHUNK["Chunking<br/>Semantic plus Structural<br/>512-768 tokens"]
+        EMBED["Embedding<br/>BAAI bge-m3<br/>1024 dimensions"]
+        TRIPLE["KG Triple Extraction<br/>LLM-assisted draft<br/>plus human validation"]
+        HASH["Version and Diff<br/>SHA-256 hash<br/>update changed only"]
     end
 
     subgraph "Storage Layer"
-        BLOB["Azure Blob Storage\nDocuments, PDFs, Exports"]
+        QDRANT["Qdrant<br/>Vector Store<br/>Metadata filtering"]
+        NEO["Neo4j or Kuzu<br/>Knowledge Graph<br/>Scheme eligibility rules"]
+        PG["PostgreSQL<br/>Audit logs<br/>User data"]
     end
 
-    U --> CDN
-    CDN --> APP
-    APP --> AOAI
-    APP --> EMBED
-    EMBED --> CHROMA
-    APP --> COSMOS
-    COSMOS --> BLOB
-    APP --> BLOB
+    subgraph "Query Layer"
+        ROUTER["Query Router<br/>Intent classification"]
+        KGQ["KG Query<br/>Cypher"]
+        VEC["Vector Search<br/>bge-m3"]
+        HYBQ["Hybrid<br/>Both paths"]
+    end
+
+    subgraph "Response Layer"
+        GEN["Gemini 2.0 Flash<br/>Response generation<br/>in users language"]
+        CITE["Citations plus<br/>Confidence Score plus<br/>Advisory Disclaimer"]
+    end
+
+    subgraph "Frontend"
+        WEB["React plus Next.js<br/>WCAG 2.1 AA<br/>Mobile-first"]
+        WA["WhatsApp Bot<br/>Phase 3"]
+    end
+
+    SCRAPE --> CHUNK
+    PDF --> CHUNK
+    GAZ --> CHUNK
+    MANUAL --> TRIPLE
+    CHUNK --> EMBED
+    CHUNK --> TRIPLE
+    CHUNK --> HASH
+    EMBED --> QDRANT
+    TRIPLE --> NEO
+    HASH --> QDRANT
+
+    WEB --> ROUTER
+    WA --> ROUTER
+    ROUTER -->|"Eligibility"| KGQ
+    ROUTER -->|"Explanation"| VEC
+    ROUTER -->|"Complex"| HYBQ
+    KGQ --> NEO
+    VEC --> QDRANT
+    HYBQ --> NEO
+    HYBQ --> QDRANT
+    KGQ --> GEN
+    VEC --> GEN
+    HYBQ --> GEN
+    GEN --> CITE
+    CITE --> WEB
+    CITE --> WA
