@@ -34,10 +34,14 @@ def chunk_pdf(pdf_path: Path) -> list[Chunk]:
         text = "\n\n".join(text_parts)
 
         # Extract raw PDF bytes for this page range
-        chunk_doc = fitz.open()  # empty doc
-        chunk_doc.insert_pdf(doc, from_page=start, to_page=end - 1)
-        pdf_bytes = chunk_doc.tobytes()
-        chunk_doc.close()
+        try:
+            chunk_doc = fitz.open()  # empty doc
+            chunk_doc.insert_pdf(doc, from_page=start, to_page=end - 1)
+            pdf_bytes = chunk_doc.tobytes()
+            chunk_doc.close()
+        except RuntimeError:
+            # Some PDFs (e.g., image-only) fail insert_pdf — use empty bytes
+            pdf_bytes = b""
 
         if text.strip():  # skip empty chunks
             chunk_id = f"{scheme_id}_p{start + 1}-{end}"

@@ -4,9 +4,10 @@ Uses the same Cypher query language as Neo4j — skills transfer directly.
 Kùzu is embedded (pip install kuzu), so no Docker/server needed.
 """
 
+import json
 import kuzu
 from pathlib import Path
-from src.config import KUZU_DIR
+from src.config import KUZU_DIR, DATA_DIR
 
 
 def get_db() -> kuzu.Database:
@@ -76,6 +77,7 @@ def _list_tables(conn: kuzu.Connection, table_type: str) -> list[str]:
 
 # ── Reference data ─────────────────────────────────────────────────
 DISABILITY_CATEGORIES = [
+    # All 21 categories under RPwD Act 2016
     ("visual", "Visual Impairment", "Blindness and low vision"),
     ("hearing", "Hearing Impairment", "Deaf and hard of hearing"),
     ("locomotor", "Locomotor Disability", "Physical disability affecting movement"),
@@ -89,27 +91,56 @@ DISABILITY_CATEGORIES = [
     ("acid_attack", "Acid Attack Victims", "Survivors of acid attacks"),
     ("muscular_dystrophy", "Muscular Dystrophy", "Progressive muscle weakness"),
     ("chronic_neurological", "Chronic Neurological Conditions", "Parkinson's, multiple sclerosis"),
-    ("thalassemia", "Blood Disorders", "Thalassemia, hemophilia, sickle cell"),
+    ("thalassemia", "Thalassemia", "Inherited blood disorder"),
+    ("hemophilia", "Hemophilia", "Bleeding disorder"),
+    ("sickle_cell", "Sickle Cell Disease", "Inherited red blood cell disorder"),
+    ("deaf_blind", "Deaf-blindness", "Combined hearing and visual impairment"),
+    ("dwarfism", "Dwarfism", "Short stature condition"),
+    ("leprosy_cured", "Leprosy Cured Persons", "Persons cured of leprosy"),
+    ("parkinsons", "Parkinson's Disease", "Progressive nervous system disorder"),
+    ("multiple_sclerosis", "Multiple Sclerosis", "Autoimmune disease affecting central nervous system"),
 ]
 
 STATES = [
+    # All India + 28 States + 8 Union Territories
     ("all_india", "All India", "IN"),
-    ("karnataka", "Karnataka", "KA"),
-    ("maharashtra", "Maharashtra", "MH"),
-    ("tamil_nadu", "Tamil Nadu", "TN"),
-    ("delhi", "Delhi", "DL"),
-    ("uttar_pradesh", "Uttar Pradesh", "UP"),
-    ("west_bengal", "West Bengal", "WB"),
-    ("rajasthan", "Rajasthan", "RJ"),
-    ("madhya_pradesh", "Madhya Pradesh", "MP"),
-    ("kerala", "Kerala", "KL"),
-    ("odisha", "Odisha", "OD"),
     ("andhra_pradesh", "Andhra Pradesh", "AP"),
-    ("telangana", "Telangana", "TG"),
-    ("gujarat", "Gujarat", "GJ"),
-    ("himachal_pradesh", "Himachal Pradesh", "HP"),
+    ("arunachal_pradesh", "Arunachal Pradesh", "AR"),
+    ("assam", "Assam", "AS"),
     ("bihar", "Bihar", "BR"),
+    ("chhattisgarh", "Chhattisgarh", "CG"),
+    ("goa", "Goa", "GA"),
+    ("gujarat", "Gujarat", "GJ"),
+    ("haryana", "Haryana", "HR"),
+    ("himachal_pradesh", "Himachal Pradesh", "HP"),
+    ("jharkhand", "Jharkhand", "JH"),
+    ("karnataka", "Karnataka", "KA"),
+    ("kerala", "Kerala", "KL"),
+    ("madhya_pradesh", "Madhya Pradesh", "MP"),
+    ("maharashtra", "Maharashtra", "MH"),
+    ("manipur", "Manipur", "MN"),
+    ("meghalaya", "Meghalaya", "ML"),
+    ("mizoram", "Mizoram", "MZ"),
+    ("nagaland", "Nagaland", "NL"),
+    ("odisha", "Odisha", "OD"),
     ("punjab", "Punjab", "PB"),
+    ("rajasthan", "Rajasthan", "RJ"),
+    ("sikkim", "Sikkim", "SK"),
+    ("tamil_nadu", "Tamil Nadu", "TN"),
+    ("telangana", "Telangana", "TG"),
+    ("tripura", "Tripura", "TR"),
+    ("uttar_pradesh", "Uttar Pradesh", "UP"),
+    ("uttarakhand", "Uttarakhand", "UK"),
+    ("west_bengal", "West Bengal", "WB"),
+    # Union Territories
+    ("delhi", "Delhi", "DL"),
+    ("chandigarh", "Chandigarh", "CH"),
+    ("puducherry", "Puducherry", "PY"),
+    ("jammu_kashmir", "Jammu & Kashmir", "JK"),
+    ("ladakh", "Ladakh", "LA"),
+    ("andaman_nicobar", "Andaman & Nicobar Islands", "AN"),
+    ("dadra_nagar_haveli", "Dadra & Nagar Haveli and Daman & Diu", "DN"),
+    ("lakshadweep", "Lakshadweep", "LD"),
 ]
 
 AGE_GROUPS = [
@@ -141,9 +172,177 @@ DOCUMENT_TYPES = [
     ("medical_cert", "Medical Certificate", "Certificate from government hospital or registered practitioner"),
 ]
 
-# ── Scheme metadata (extracted from actual government PDFs) ────────
-# Each entry maps to real content in the downloaded documents.
-SCHEMES_DATA = [
+def load_schemes_from_json() -> list[dict]:
+    """Load schemes from Gemini-extracted JSON file.
+
+    Falls back to hardcoded SCHEMES_DATA if JSON doesn't exist.
+    Converts Gemini extraction format to KG-compatible format.
+    """
+    json_path = DATA_DIR / "extracted_schemes.json"
+    if not json_path.exists():
+        print("  [KG] No extracted_schemes.json found, using hardcoded fallback")
+        return _FALLBACK_SCHEMES_DATA
+
+    with open(json_path) as f:
+        raw_schemes = json.load(f)
+
+    # Valid disability category IDs
+    valid_categories = {cat_id for cat_id, _, _ in DISABILITY_CATEGORIES}
+
+    schemes = []
+    for raw in raw_schemes:
+        # Map disability categories to valid IDs
+        raw_cats = raw.get("disability_categories", [])
+        mapped_cats = []
+        for cat in raw_cats:
+            cat_lower = cat.lower().replace(" ", "_").replace("-", "_")
+            if cat_lower in valid_categories:
+                mapped_cats.append(cat_lower)
+            # Handle common variations
+            elif "visual" in cat_lower or "blind" in cat_lower:
+                mapped_cats.append("visual")
+            elif "hearing" in cat_lower or "deaf" in cat_lower:
+                mapped_cats.append("hearing")
+            elif "locomotor" in cat_lower or "physical" in cat_lower:
+                mapped_cats.append("locomotor")
+            elif "intellectual" in cat_lower or "mental_retardation" in cat_lower:
+                mapped_cats.append("intellectual")
+            elif "cerebral" in cat_lower:
+                mapped_cats.append("cerebral_palsy")
+            elif "autism" in cat_lower:
+                mapped_cats.append("autism")
+            elif "multiple" in cat_lower:
+                mapped_cats.append("multiple")
+            elif "speech" in cat_lower or "language" in cat_lower:
+                mapped_cats.append("speech")
+            elif "learning" in cat_lower or "dyslexia" in cat_lower:
+                mapped_cats.append("specific_learning")
+            elif "acid" in cat_lower:
+                mapped_cats.append("acid_attack")
+            elif "muscular" in cat_lower:
+                mapped_cats.append("muscular_dystrophy")
+            elif "parkinson" in cat_lower:
+                mapped_cats.append("parkinsons")
+            elif "thalassemia" in cat_lower:
+                mapped_cats.append("thalassemia")
+            elif "hemophilia" in cat_lower or "haemophilia" in cat_lower:
+                mapped_cats.append("hemophilia")
+            elif "sickle" in cat_lower:
+                mapped_cats.append("sickle_cell")
+            elif "dwarf" in cat_lower:
+                mapped_cats.append("dwarfism")
+            elif "leprosy" in cat_lower:
+                mapped_cats.append("leprosy_cured")
+            elif "mental" in cat_lower:
+                mapped_cats.append("mental_illness")
+        # Deduplicate
+        mapped_cats = list(dict.fromkeys(mapped_cats))
+
+        # If scheme says all 21 categories or benchmark disability, include all
+        if len(mapped_cats) >= 18 or not mapped_cats:
+            mapped_cats = [cat_id for cat_id, _, _ in DISABILITY_CATEGORIES]
+
+        # Map documents to valid IDs
+        raw_docs = raw.get("required_documents", [])
+        mapped_docs = []
+        doc_id_map = {
+            "disability_certificate": "disability_cert",
+            "disability_cert": "disability_cert",
+            "income_certificate": "income_cert",
+            "income_cert": "income_cert",
+            "aadhaar": "aadhaar",
+            "aadhaar_card": "aadhaar",
+            "bank_account": "bank_account",
+            "bank_passbook": "bank_account",
+            "photo": "photo",
+            "passport_photo": "photo",
+            "age_proof": "age_proof",
+            "birth_certificate": "age_proof",
+            "residence_proof": "residence_proof",
+            "domicile_certificate": "residence_proof",
+            "bpl_card": "bpl_card",
+            "ration_card": "bpl_card",
+            "medical_cert": "medical_cert",
+            "medical_certificate": "medical_cert",
+        }
+        for doc in raw_docs:
+            doc_lower = doc.lower().replace(" ", "_").replace("-", "_")
+            mapped_id = doc_id_map.get(doc_lower)
+            if mapped_id:
+                mapped_docs.append(mapped_id)
+            elif "disability" in doc_lower and "cert" in doc_lower:
+                mapped_docs.append("disability_cert")
+            elif "income" in doc_lower:
+                mapped_docs.append("income_cert")
+            elif "aadhaar" in doc_lower or "aadhar" in doc_lower:
+                mapped_docs.append("aadhaar")
+            elif "bank" in doc_lower:
+                mapped_docs.append("bank_account")
+            elif "photo" in doc_lower:
+                mapped_docs.append("photo")
+        mapped_docs = list(dict.fromkeys(mapped_docs))
+
+        # Determine income level
+        max_income = raw.get("max_income_inr", 0) or 0
+        if isinstance(max_income, str):
+            # Try to extract number
+            import re
+            nums = re.findall(r"[\d,]+", max_income.replace(",", ""))
+            max_income = int(nums[0]) if nums else 0
+        if max_income == 0:
+            income_levels = ["no_limit"]
+        elif max_income <= 100000:
+            income_levels = ["bpl"]
+        elif max_income <= 150000:
+            income_levels = ["bpl", "low_income"]
+        elif max_income <= 250000:
+            income_levels = ["bpl", "low_income", "ews"]
+        elif max_income <= 600000:
+            income_levels = ["bpl", "low_income", "ews", "mid_income"]
+        else:
+            income_levels = ["no_limit"]
+
+        # Determine age groups
+        min_age = raw.get("min_age", 0) or 0
+        max_age = raw.get("max_age", 0) or 0
+        age_groups = []
+        if min_age == 0 and (max_age == 0 or max_age >= 60):
+            age_groups = ["all_ages"]
+        else:
+            for ag_id, _, ag_min, ag_max in AGE_GROUPS:
+                if ag_id == "all_ages":
+                    continue
+                # Check overlap
+                if min_age <= ag_max and (max_age == 0 or max_age >= ag_min):
+                    age_groups.append(ag_id)
+            if not age_groups:
+                age_groups = ["all_ages"]
+
+        scheme = {
+            "id": raw.get("id", "unknown"),
+            "name": raw.get("name", "Unknown Scheme"),
+            "full_name": raw.get("full_name", raw.get("name", "Unknown")),
+            "ministry": raw.get("ministry", "Ministry of Social Justice and Empowerment"),
+            "level": raw.get("level", "central"),
+            "benefit_type": raw.get("benefit_type", "financial"),
+            "benefit_value_inr": raw.get("benefit_value_inr", "As per scheme guidelines"),
+            "frequency": raw.get("frequency", "as-needed"),
+            "source_pdf": raw.get("source_pdf", ""),
+            "disabilities": mapped_cats,
+            "disability_pct": raw.get("min_disability_pct", 40) or 40,
+            "states": ["all_india"],
+            "age_groups": age_groups,
+            "income_levels": income_levels,
+            "documents": mapped_docs,
+        }
+        schemes.append(scheme)
+
+    print(f"  [KG] Loaded {len(schemes)} schemes from extracted_schemes.json")
+    return schemes
+
+
+# ── Fallback scheme metadata (if no extracted JSON exists) ─────────
+_FALLBACK_SCHEMES_DATA = [
     {
         "id": "adip",
         "name": "ADIP Scheme",
@@ -312,9 +511,11 @@ def populate_reference_data(conn: kuzu.Connection) -> None:
         )
 
 
-def populate_schemes(conn: kuzu.Connection) -> None:
+def populate_schemes(conn: kuzu.Connection, schemes_data: list[dict] | None = None) -> None:
     """Insert scheme nodes and their relationships."""
-    for s in SCHEMES_DATA:
+    if schemes_data is None:
+        schemes_data = load_schemes_from_json()
+    for s in schemes_data:
         conn.execute(
             "CREATE (s:Scheme {"
             "id: $id, name: $name, full_name: $full_name, ministry: $ministry, "
