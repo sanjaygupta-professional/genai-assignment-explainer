@@ -4,6 +4,12 @@
 
 ---
 
+## Elevator Pitch
+
+83.6% of eligible Indian families are unaware of disability welfare schemes their children qualify for, and 42% never apply simply because they don't know. SamarthSchool is a GraphRAG-powered benefits navigator that lets school administrators describe a child's situation in plain language and receive a personalized action plan — matching schemes, required documents, and application steps — in under 5 minutes and in any Indian language. By structuring 50+ government schemes into a machine-queryable Knowledge Graph paired with multilingual RAG, SamarthSchool turns an information asymmetry problem into a navigation problem — and makes every entitled benefit reachable.
+
+---
+
 ## 1. Executive Summary
 
 India has over 26.8 million persons with disabilities, yet 83.6% of eligible families are unaware of scholarship schemes available to them, and 42% never apply for government benefits because they don't know the benefits exist. For children with special abilities in schools, this means lost scholarships, unclaimed assistive devices, and missed educational support worth thousands of crores annually.
@@ -89,7 +95,9 @@ The difference comes down to framing. Existing solutions treat scheme awareness 
 
 **Mission**: Build an AI-powered benefits navigator that lets school administrators find and access disability welfare schemes for their students in under 5 minutes, replacing hours of manual research across fragmented government portals.
 
-**Product Name**: **SamarthSchool** (समर्थ स्कूल). "Samarth" means capable/empowered in Hindi.
+**Product Name**: **SamarthSchool** (समर्थ स्कूल). "Samarth" (समर्थ) means capable or empowered in Hindi — the name reflects the goal of empowering both schools and children with the information they need to claim their entitlements.
+
+**What SamarthSchool is NOT**: It is not a disability registration portal (that is UDID), not a generic welfare scheme finder (that is MyScheme), and not a benefits-delivery platform. It is a disability-specific benefits *navigator* designed for school administrators — it bridges the gap between policy intent and ground-level awareness by combining structured Knowledge Graph reasoning with natural language access in Indian languages.
 
 ---
 
@@ -202,7 +210,7 @@ This hybrid approach is called GraphRAG: structured reasoning via the Knowledge 
 | **Chunking** | Semantic + Structural Hybrid | Government documents follow section/clause hierarchy (2.1, 2.1.1); chunks target 512–768 tokens with metadata enrichment per chunk |
 | **Embedding Model** | BAAI/bge-m3 (1024 dimensions) | Supports dense + sparse hybrid retrieval (critical for exact scheme name matching alongside semantic search); multilingual across Hindi, Tamil, Bengali, etc. |
 | **Vector Database** | Qdrant (self-hosted) | First-class sparse vector support for bge-m3; payload-based metadata filtering (scheme_name, state, disability_category); runs on 4GB RAM |
-| **Knowledge Graph DB** | Neo4j Community Edition 5.x | Mature Cypher query language; natural fit for scheme→eligibility→disability entity relationships; AuraDB free tier for prototyping |
+| **Knowledge Graph DB** | Neo4j Community Edition 5.x (production target); Kùzu (MVP prototype) | Mature Cypher query language; natural fit for scheme→eligibility→disability entity relationships; AuraDB free tier for prototyping. MVP uses Kùzu for its embedded, zero-config design suitable for single-machine deployment |
 | **LLM (Primary)** | Google Gemini 2.0 Flash (paid tier) | Good Hindi generation; lowest cost-per-token among frontier models (~$0.075/1M input); free tier for prototyping only, paid tier budgeted for production (see Section 6.2 unit economics) |
 | **LLM (Complex Reasoning)** | Gemini 2.5 Pro / DeepSeek-R1 | Multi-step eligibility determination requiring intersection of 5+ criteria |
 | **LLM (Self-hosted Fallback)** | Qwen 2.5 14B (quantized) | For fully offline/air-gapped deployments in schools without reliable internet |
@@ -336,6 +344,21 @@ For ongoing maintenance, each scheme entry has an "owner" (the domain expert res
 2. Cross-reference against official scheme document (source URL linked to every KG node)
 3. Domain expert sign-off
 4. Test with 5+ synthetic personas per scheme to verify correct matching
+
+### 4.11 Human-in-the-loop workflow
+
+SamarthSchool is designed as an advisory system, not an autonomous one. Human judgment is embedded at three levels:
+
+**Level 1 — Knowledge Graph Construction (pre-query)**
+Every scheme entry is validated by a disability domain expert before going live. LLM-assisted extraction produces draft KG triples from government documents, but no triple enters the production graph without human sign-off (see validation protocol above). This is the highest-stakes human review: an incorrect eligibility rule in the KG is worse than having no system at all, because it creates false confidence.
+
+**Level 2 — Query Review (during use)**
+School administrators review the AI-generated recommendations before taking any action. The system presents matching schemes with citations and confidence scores, but explicitly labels every response as advisory: *"This is an AI-generated recommendation. Please verify with your local DDRC or official scheme portal before applying."* The administrator decides which schemes to pursue, gathers documents, and initiates applications. SamarthSchool does not auto-fill forms or submit applications on behalf of users — that would carry regulatory and liability risk.
+
+**Level 3 — Feedback and Quality Improvement (post-query)**
+Administrators can flag responses as incorrect, outdated, or incomplete via an in-app feedback mechanism. Flagged responses trigger alerts to the domain expert for review and KG correction. This creates a continuous improvement loop: real-world usage reveals gaps in the Knowledge Graph that synthetic testing alone cannot catch. Quarterly audits review a random sample of queries and responses to measure accuracy trends and identify systematic issues (e.g., an entire category of state schemes being missed).
+
+This three-level human-in-the-loop design ensures that the system augments human expertise rather than replacing it. The key principle: SamarthSchool makes the administrator's job faster, not unnecessary.
 
 ---
 
@@ -645,6 +668,25 @@ SamarthSchool's GraphRAG architecture combines Neo4j's structured eligibility re
 The path to scale is realistic but not easy. Government procurement takes 12-24 months, CSR funding requires sustained relationship-building, and the Knowledge Graph needs continuous curation. Our sensitivity analysis shows the project needs external funding for 4-5 years, which is in line with how social ventures typically operate.
 
 Whether a small team with the right architecture and partnerships can close a gap that decades of government portals and NGO outreach have not is ultimately an empirical question. The MVP pilot with 5 schools will answer it. If those schools show a measurable increase in benefits accessed, the evidence base is there for everything else: B2G procurement, impact investment, national scale.
+
+---
+
+## Appendix: Course Concepts Applied
+
+This table maps key Gen AI course concepts (Course 8919: Pre-Trained Models) to their specific application in SamarthSchool:
+
+| Course Concept | SamarthSchool Application |
+|---------------|--------------------------|
+| **Retrieval-Augmented Generation (RAG)** | Core architecture: Qdrant vector store retrieves scheme document chunks to ground Gemini 2.0 Flash responses with citations. Prevents hallucination of non-existent schemes. |
+| **Embeddings** | BAAI/bge-m3 (1024-dim, multilingual) encodes scheme documents and user queries into shared embedding space. Dense+sparse hybrid enables both semantic and exact keyword matching. |
+| **Knowledge Graphs** | Neo4j stores 50+ schemes as structured entities with eligibility rules. Cypher queries perform deterministic multi-criteria matching (disability type × % × age × income × state) that pure RAG cannot. |
+| **Prompt Engineering** | Query router classifies user intent (eligibility/explanation/process) using structured prompts. Response generation prompts enforce citation inclusion, advisory disclaimers, and language-appropriate output. |
+| **Evaluation (RAGAS)** | Automated evaluation pipeline using Recall@10, Precision@5, Faithfulness, and Correctness metrics. 200+ gold-standard test personas validated by domain experts. |
+| **Pre-Trained Models** | Gemini 2.0 Flash (primary LLM), bge-m3 (embedding), fastText lid.176 (language detection), IndicTrans2 (translation) — all pre-trained models adapted to domain via RAG rather than fine-tuning. |
+| **Fine-Tuning (considered, deferred)** | Fine-tuning Gemini or Qwen on disability policy language is a Phase 3 consideration. Current approach uses RAG + KG grounding, which is more controllable and auditable for policy-sensitive outputs. |
+| **Agents (exploratory)** | Phase 4 roadmap includes agentic workflows for application status tracking and document reminders, with explicit scope limits on auto-filling government forms (regulatory risk). |
+| **Multilingual NLP** | Cross-lingual retrieval (bge-m3), translation (IndicTrans2), transliteration (IndicXlit for Romanized Hindi), and language detection (fastText) form a complete multilingual pipeline for 22 Indian languages. |
+| **Human-in-the-Loop** | Three-level design: domain expert validates KG entries, school administrator reviews AI recommendations, feedback loop enables continuous improvement (Section 4.11). |
 
 ---
 

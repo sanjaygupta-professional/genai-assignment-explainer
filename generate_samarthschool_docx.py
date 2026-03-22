@@ -1,0 +1,416 @@
+#!/usr/bin/env python3.12
+"""
+Generate SamarthSchool Group Assignment DOCX from group-assignment-report.md.
+
+Reads the markdown report and converts it to a formatted Word document with:
+- DesignArena-styled cover page
+- Embedded publication-quality diagrams (fig1-fig9)
+- Teal-header tables, proper typography, styled headings
+"""
+
+import re
+import io
+from pathlib import Path
+from datetime import date
+
+from docx import Document
+from docx.shared import Inches, Pt, Cm, RGBColor, Emu
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.oxml.ns import qn, nsdecls
+from docx.oxml import parse_xml
+
+BASE = Path("/home/opc/genai-assignment-explainer")
+REPORT_MD = BASE / "group-assignment-report.md"
+DIAGRAM_DIR = BASE / "images" / "diagrams" / "group-assignment"
+OUTPUT = BASE / "outputs" / "SamarthSchool_Group_Assignment.docx"
+OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+
+# DesignArena palette
+TEAL = RGBColor(0x48, 0x72, 0x65)
+TEAL_DARK = RGBColor(0x35, 0x55, 0x4B)
+DARK = RGBColor(0x29, 0x2C, 0x33)
+GRAY = RGBColor(0x6B, 0x72, 0x80)
+CREAM_HEX = "F7F6F5"
+WHITE = RGBColor(0xFF, 0xFF, 0xFF)
+
+# Map figure references to diagram files and captions
+DIAGRAM_MAP = {
+    "fig1": ("fig1-rag-pipeline", "Figure 1: RAG Pipeline Architecture"),
+    "fig2": ("fig2-system-architecture", "Figure 2: System Architecture"),
+    "fig3": ("fig3-data-flow", "Figure 3: Data Flow"),
+    "fig4": ("fig4-future-architecture", "Figure 4: Future Architecture (Year 3)"),
+    "fig5": ("fig5-teacher-journey", "Figure 5: User Journey"),
+    "fig6": ("fig6-roadmap-gantt", "Figure 6: Product Roadmap Timeline"),
+    "fig7": ("fig7-roi-comparison", "Figure 7: ROI Comparison"),
+    "fig8": ("fig8-benchmarking", "Figure 8: Benchmarking & Competitive Analysis"),
+    "fig9": ("fig9-social-enterprise", "Figure 9: Social Enterprise Model"),
+}
+
+
+def set_cell_shading(cell, color_hex):
+    """Set background color of a table cell."""
+    shading = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
+    cell._tc.get_or_add_tcPr().append(shading)
+
+
+def add_styled_table(doc, headers, rows):
+    """Add a formatted table with teal header row."""
+    ncols = len(headers)
+    table = doc.add_table(rows=1 + len(rows), cols=ncols)
+    table.style = "Table Grid"
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+    for j, h in enumerate(headers):
+        cell = table.cell(0, j)
+        cell.text = h
+        set_cell_shading(cell, "487265")
+        for p in cell.paragraphs:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            for run in p.runs:
+                run.bold = True
+                run.font.size = Pt(9)
+                run.font.color.rgb = WHITE
+
+    for i, row_data in enumerate(rows):
+        for j, val in enumerate(row_data):
+            if j < ncols:
+                cell = table.cell(i + 1, j)
+                cell.text = str(val).strip()
+                for p in cell.paragraphs:
+                    for run in p.runs:
+                        run.font.size = Pt(9)
+                if i % 2 == 1:
+                    set_cell_shading(cell, CREAM_HEX)
+
+    doc.add_paragraph()
+    return table
+
+
+def try_add_diagram(doc, fig_key, width=5.5):
+    """Embed a diagram PNG by figure key."""
+    if fig_key not in DIAGRAM_MAP:
+        return False
+    filename, caption = DIAGRAM_MAP[fig_key]
+    img_path = DIAGRAM_DIR / f"{filename}.png"
+    if not img_path.exists():
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run(f"[{caption} — image not found]")
+        run.italic = True
+        run.font.color.rgb = GRAY
+        return False
+    try:
+        doc.add_picture(str(img_path), width=Inches(width))
+        last = doc.paragraphs[-1]
+        last.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cap = doc.add_paragraph(caption)
+        cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cap.runs[0].italic = True
+        cap.runs[0].font.size = Pt(9)
+        return True
+    except Exception as e:
+        doc.add_paragraph(f"[{caption} — embed error: {e}]")
+        return False
+
+
+def add_cover_page(doc):
+    """Add a styled cover page."""
+    # Spacer
+    for _ in range(6):
+        doc.add_paragraph()
+
+    # Title
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run("SamarthSchool")
+    run.bold = True
+    run.font.size = Pt(36)
+    run.font.color.rgb = TEAL
+    run.font.name = "Georgia"
+
+    # Hindi
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run("समर्थ स्कूल")
+    run.font.size = Pt(20)
+    run.font.color.rgb = GRAY
+    run.font.name = "Georgia"
+
+    # Subtitle
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run("AI-Powered Benefits Navigator for Children with Special Abilities")
+    run.font.size = Pt(16)
+    run.font.color.rgb = DARK
+
+    doc.add_paragraph()
+
+    # Horizontal rule
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run("━" * 40)
+    run.font.color.rgb = TEAL
+    run.font.size = Pt(10)
+
+    doc.add_paragraph()
+
+    # Course info
+    lines = [
+        ("Group Assignment Report", Pt(14), True, DARK),
+        ("Gen AI: Pre-Trained Models (Course 8919)", Pt(12), False, GRAY),
+        ("GGU DBA Program via upGrad", Pt(12), False, GRAY),
+        ("", Pt(8), False, GRAY),
+        (f"Date: {date.today().strftime('%B %d, %Y')}", Pt(11), False, GRAY),
+    ]
+    for text, size, bold, color in lines:
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run(text)
+        run.font.size = size
+        run.bold = bold
+        run.font.color.rgb = color
+
+    doc.add_page_break()
+
+
+def parse_markdown_table(lines):
+    """Parse markdown table lines into (headers, rows)."""
+    if len(lines) < 2:
+        return None, None
+    headers = [c.strip() for c in lines[0].split("|")[1:-1]]
+    # Skip separator line (line 1)
+    rows = []
+    for line in lines[2:]:
+        cells = [c.strip() for c in line.split("|")[1:-1]]
+        if cells:
+            rows.append(cells)
+    return headers, rows
+
+
+def process_inline_formatting(paragraph, text):
+    """Add text to paragraph with bold/italic inline formatting."""
+    # Split on **bold** and *italic* patterns
+    parts = re.split(r'(\*\*.*?\*\*|\*.*?\*)', text)
+    for part in parts:
+        if part.startswith("**") and part.endswith("**"):
+            run = paragraph.add_run(part[2:-2])
+            run.bold = True
+            run.font.size = Pt(11)
+        elif part.startswith("*") and part.endswith("*") and not part.startswith("**"):
+            run = paragraph.add_run(part[1:-1])
+            run.italic = True
+            run.font.size = Pt(11)
+        else:
+            run = paragraph.add_run(part)
+            run.font.size = Pt(11)
+
+
+def convert_md_to_docx():
+    """Main conversion: read markdown, produce formatted DOCX."""
+    doc = Document()
+
+    # Page setup
+    section = doc.sections[0]
+    section.page_width = Cm(21)
+    section.page_height = Cm(29.7)
+    section.top_margin = Cm(2.54)
+    section.bottom_margin = Cm(2.54)
+    section.left_margin = Cm(2.54)
+    section.right_margin = Cm(2.54)
+
+    # Styles
+    style = doc.styles["Normal"]
+    style.font.name = "Calibri"
+    style.font.size = Pt(11)
+    style.paragraph_format.space_after = Pt(6)
+    style.paragraph_format.line_spacing = 1.15
+
+    for level in range(1, 4):
+        hs = doc.styles[f"Heading {level}"]
+        hs.font.name = "Calibri"
+        if level == 1:
+            hs.font.color.rgb = TEAL
+            hs.font.size = Pt(18)
+        elif level == 2:
+            hs.font.color.rgb = TEAL_DARK
+            hs.font.size = Pt(14)
+        else:
+            hs.font.color.rgb = DARK
+            hs.font.size = Pt(12)
+
+    # Cover page
+    add_cover_page(doc)
+
+    # Read markdown
+    md_text = REPORT_MD.read_text(encoding="utf-8")
+    lines = md_text.split("\n")
+
+    i = 0
+    in_code_block = False
+    code_lines = []
+    in_table = False
+    table_lines = []
+    diagrams_inserted = set()
+
+    # Track which sections might benefit from a diagram
+    section_diagram_map = {
+        "4.2 Architecture overview": "fig2",
+        "4.3 Technology stack": "fig1",
+        "5.2 Roadmap timeline": "fig6",
+        "6.3 Social impact ROI": "fig7",
+        "6.7 Comparison to status quo": "fig8",
+        "7.2 What makes SamarthSchool different": "fig9",
+    }
+
+    while i < len(lines):
+        line = lines[i]
+
+        # Code blocks
+        if line.strip().startswith("```"):
+            if in_code_block:
+                # End code block — add as formatted text
+                code_text = "\n".join(code_lines)
+                if code_text.strip():
+                    p = doc.add_paragraph()
+                    run = p.add_run(code_text)
+                    run.font.name = "Consolas"
+                    run.font.size = Pt(9)
+                    run.font.color.rgb = DARK
+                    p.paragraph_format.space_before = Pt(4)
+                    p.paragraph_format.space_after = Pt(4)
+                code_lines = []
+                in_code_block = False
+            else:
+                in_code_block = True
+            i += 1
+            continue
+
+        if in_code_block:
+            code_lines.append(line)
+            i += 1
+            continue
+
+        # Table handling
+        if "|" in line and line.strip().startswith("|") and line.strip().endswith("|"):
+            if not in_table:
+                in_table = True
+                table_lines = []
+            table_lines.append(line)
+            i += 1
+            continue
+        elif in_table:
+            # Table ended — render it
+            headers, rows = parse_markdown_table(table_lines)
+            if headers and rows:
+                add_styled_table(doc, headers, rows)
+            in_table = False
+            table_lines = []
+            # Don't increment i — reprocess current line
+            continue
+
+        # Skip title line (handled by cover page)
+        if i == 0 and line.startswith("# "):
+            i += 1
+            continue
+
+        # Horizontal rules
+        if line.strip() == "---":
+            i += 1
+            continue
+
+        # Headings
+        if line.startswith("#### "):
+            text = line[5:].strip()
+            h = doc.add_heading(text, level=3)
+            for run in h.runs:
+                run.font.color.rgb = DARK
+            i += 1
+            continue
+
+        if line.startswith("### "):
+            text = line[4:].strip()
+            h = doc.add_heading(text, level=3)
+            for run in h.runs:
+                run.font.color.rgb = DARK
+            # Check if this section should have a diagram
+            for section_key, fig_key in section_diagram_map.items():
+                if section_key in text and fig_key not in diagrams_inserted:
+                    # Insert diagram after the heading
+                    diagrams_inserted.add(fig_key)
+                    # We'll insert after the next paragraph of content
+            i += 1
+            continue
+
+        if line.startswith("## "):
+            text = line[3:].strip()
+            # Strip numbering prefix like "1. " for cleaner headings
+            clean_text = re.sub(r"^\d+\.\s+", "", text)
+            h = doc.add_heading(clean_text, level=1)
+            for run in h.runs:
+                run.font.color.rgb = TEAL
+            i += 1
+            continue
+
+        # Bullet points
+        if line.strip().startswith("- "):
+            text = line.strip()[2:]
+            p = doc.add_paragraph(style="List Bullet")
+            process_inline_formatting(p, text)
+            i += 1
+            continue
+
+        # Numbered items
+        m = re.match(r"^(\d+)\.\s+(.+)", line.strip())
+        if m and not line.startswith("#"):
+            text = m.group(2)
+            p = doc.add_paragraph(style="List Number")
+            process_inline_formatting(p, text)
+            i += 1
+            continue
+
+        # Empty lines
+        if not line.strip():
+            i += 1
+            continue
+
+        # Regular paragraphs
+        text = line.strip()
+        p = doc.add_paragraph()
+        process_inline_formatting(p, text)
+        i += 1
+
+    # Flush any remaining table
+    if in_table and table_lines:
+        headers, rows = parse_markdown_table(table_lines)
+        if headers and rows:
+            add_styled_table(doc, headers, rows)
+
+    # Insert diagrams at the end as an appendix if not already embedded
+    remaining_figs = [k for k in DIAGRAM_MAP if k not in diagrams_inserted]
+    if remaining_figs:
+        doc.add_page_break()
+        h = doc.add_heading("Appendix: Architecture Diagrams", level=1)
+        for run in h.runs:
+            run.font.color.rgb = TEAL
+
+        p = doc.add_paragraph()
+        run = p.add_run(
+            "The following publication-quality diagrams illustrate key aspects of the "
+            "SamarthSchool architecture, data flow, roadmap, and business model."
+        )
+        run.font.size = Pt(11)
+        run.font.color.rgb = GRAY
+        doc.add_paragraph()
+
+        for fig_key in DIAGRAM_MAP:
+            try_add_diagram(doc, fig_key, width=5.8)
+            doc.add_paragraph()
+
+    doc.save(str(OUTPUT))
+    print(f"Saved: {OUTPUT}")
+    print(f"Size: {OUTPUT.stat().st_size / 1024 / 1024:.1f} MB")
+
+
+if __name__ == "__main__":
+    convert_md_to_docx()
