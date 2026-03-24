@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SamarthSchool — Find government disability welfare schemes your family is eligible for. Free, bilingual, accessible.">
+<meta name="theme-color" content="#006760">
+<title>SamarthSchool | Benefits Navigator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        surface: "#EDFFFE",
+        "surface-dim": "#D2FFFE",
+        "surface-container": "#C0F6F5",
+        "surface-container-low": "#D8FFFF",
+        "surface-container-lowest": "#FFFFFF",
+        primary: "#006760",
+        "primary-light": "#72F1E4",
+        "primary-container": "#B2FFF4",
+        "on-primary": "#FFFFFF",
+        "on-primary-container": "#005852",
+        secondary: "#854F00",
+        "secondary-container": "#FFE0B2",
+        "on-secondary-container": "#693D00",
+        tertiary: "#6C5A00",
+        "tertiary-container": "#FFD709",
+        "on-tertiary-container": "#5B4B00",
+        "on-surface": "#003536",
+        "on-surface-variant": "#3F7475",
+        outline: "#6DA7A7",
+        "outline-variant": "#B0D8D8",
+        gold: "#D4A843",
+        "gold-light": "#FDF5E0",
+        rose: "#C26B7A",
+        "rose-light": "#FFF0F2",
+        success: "#2D8A5E",
+        "success-light": "#E6F7EE",
+      },
+      fontFamily: {
+        sans: ["Plus Jakarta Sans", "Noto Sans Devanagari", "system-ui", "sans-serif"],
+      },
+      borderRadius: {DEFAULT:"1rem", lg:"1.5rem", xl:"2rem", "2xl":"3rem", "3xl":"4rem", full:"9999px"},
+    },
+  },
+}
+</script>
+<style>
+  body { font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', system-ui, sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .filled { font-variation-settings: 'FILL' 1; }
+  .bg-gradient-primary { background: linear-gradient(135deg, #006760 0%, #4DD8C0 100%); }
+  .bg-gradient-gold { background: linear-gradient(135deg, #D4A843 0%, #F0D880 100%); }
+  [data-view] { display: none; }
+  [data-view].active { display: block; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .card-opt { transition: all 0.2s ease; }
+  .card-opt:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,53,54,0.08); }
+  .card-opt.selected { border-color: #006760; background: #E0FFF9; box-shadow: 0 0 0 2px #006760; }
+  .skip-link { position:absolute; top:-100px; left:16px; z-index:1000; }
+  .skip-link:focus { top:16px; }
+  @media print {
+    header, nav, .fab, .action-bar, [data-view]:not(#view-results) { display:none !important; }
+    #view-results { display:block !important; }
+  }
+  /* Accessibility: high contrast override */
+  .hc body, .hc { background:#000!important; color:#fff!important; }
+  .hc .card-opt, .hc .result-card { border-color:#888!important; background:#111!important; }
+  .hc header { background:rgba(0,0,0,0.9)!important; }
+  .hc .text-on-surface-variant { color:#ccc!important; }
+  /* Large text mode */
+  .lg-text { font-size: 20px; }
+  .lg-text h1 { font-size: 2.8rem!important; }
+  .lg-text h2 { font-size: 2rem!important; }
+</style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Skip link -->
+<a href="#main" class="skip-link px-4 py-2 bg-primary text-white rounded-lg font-bold">Skip to main content</a>
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,53,54,0.04)] border-b border-outline-variant/30">
+  <div class="flex justify-between items-center px-5 py-3 max-w-3xl mx-auto">
+    <a href="#" class="flex items-center gap-2.5" onclick="nav('welcome');return false">
+      <span class="material-symbols-outlined filled text-primary text-3xl">volunteer_activism</span>
+      <div>
+        <span class="text-lg font-extrabold tracking-tight text-primary">SamarthSchool</span>
+        <span class="block text-[11px] text-on-surface-variant leading-none" data-t="logo-sub">Benefits Navigator</span>
+      </div>
+    </a>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleA11y('lg')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-sm font-bold text-on-surface-variant hover:bg-primary-container transition-colors" title="Toggle large text" aria-label="Toggle large text">A+</button>
+      <button onclick="toggleA11y('hc')" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-sm font-bold text-on-surface-variant hover:bg-primary-container transition-colors" title="Toggle high contrast" aria-label="Toggle high contrast">◐</button>
+      <button id="lang-btn" onclick="toggleLang()" class="px-3.5 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-bold text-sm hover:scale-105 active:scale-95 transition-all">हिंदी</button>
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main id="main" class="pt-20 pb-32 max-w-3xl mx-auto px-5">
+
+<!-- ════════ WELCOME ════════ -->
+<section data-view id="view-welcome" class="active">
+  <div class="py-10 text-center space-y-6">
+    <div class="inline-flex items-center gap-2 px-4 py-2 bg-tertiary-container text-on-tertiary-container rounded-full font-semibold text-sm">
+      <span class="material-symbols-outlined text-sm">verified</span>
+      <span data-t="badge">From 11 Official Government Documents</span>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1] text-on-surface">
+      <span data-t="hero-1">Every child deserves</span> <span class="text-primary" data-t="hero-2">support</span>
+    </h1>
+
+    <p class="text-lg text-on-surface-variant max-w-lg mx-auto leading-relaxed" data-t="hero-sub">
+      Find government welfare schemes your family is eligible for — in 4 simple steps. Free, private, and works offline.
+    </p>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+      <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
+        <span class="text-2xl font-extrabold text-primary block">52</span>
+        <span class="text-xs text-on-surface-variant" data-t="stat-s">Schemes</span>
+      </div>
+      <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
+        <span class="text-2xl font-extrabold text-primary block">21</span>
+        <span class="text-xs text-on-surface-variant" data-t="stat-c">Categories</span>
+      </div>
+      <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
+        <span class="text-2xl font-extrabold text-primary block">11</span>
+        <span class="text-xs text-on-surface-variant" data-t="stat-d">Source Docs</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="space-y-3 pt-4">
+      <button onclick="nav('disability')" class="w-full sm:w-auto px-10 py-4 rounded-full bg-gradient-primary text-white font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition-all">
+        <span data-t="cta-start">Find Eligible Schemes</span> →
+      </button>
+      <div class="text-sm text-on-surface-variant pt-2" data-t="or-ask">or describe your situation below ↓</div>
+    </div>
+  </div>
+
+  <!-- Bento Quick Links -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-8">
+    <button onclick="nav('disability')" class="group p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:shadow-xl transition-all text-left">
+      <div class="w-12 h-12 bg-primary-container text-on-primary-container rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-2xl">fact_check</span>
+      </div>
+      <h3 class="font-bold text-base mb-1" data-t="bento-1">Guided Search</h3>
+      <p class="text-sm text-on-surface-variant" data-t="bento-1d">Step-by-step, no typing needed</p>
+    </button>
+    <button onclick="nav('chat')" class="group p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:shadow-xl transition-all text-left">
+      <div class="w-12 h-12 bg-secondary-container text-on-secondary-container rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-2xl">support_agent</span>
+      </div>
+      <h3 class="font-bold text-base mb-1" data-t="bento-2">Ask AI</h3>
+      <p class="text-sm text-on-surface-variant" data-t="bento-2d">In English or Hindi</p>
+    </button>
+    <button onclick="nav('disability')" class="group p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:shadow-xl transition-all text-left">
+      <div class="w-12 h-12 bg-tertiary-container text-on-tertiary-container rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-2xl">description</span>
+      </div>
+      <h3 class="font-bold text-base mb-1" data-t="bento-3">Document Guide</h3>
+      <p class="text-sm text-on-surface-variant" data-t="bento-3d">Know what papers you need</p>
+    </button>
+  </div>
+
+  <!-- Trust -->
+  <p class="text-center text-xs text-on-surface-variant/60 py-4" data-t="trust">
+    Data sourced from disabilityaffairs.gov.in, socialjustice.gov.in, scholarships.gov.in, and nationaltrust.nic.in
+  </p>
+</section>
+
+<!-- ════════ STEP: DISABILITY ════════ -->
+<section data-view id="view-disability">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('welcome')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="back">Back</span>
+    </button>
+    <div class="flex gap-1.5 mb-6" id="prog-1"></div>
+    <h2 class="text-2xl font-extrabold tracking-tight mb-1" data-t="q-dis">What type of disability?</h2>
+    <p class="text-sm text-on-surface-variant mb-6" data-t="h-dis">Select one or more categories that apply.</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="dis-grid"></div>
+  <button id="more-cats-btn" onclick="toggleMore()" class="w-full mt-3 py-3 rounded-xl border-2 border-dashed border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary text-sm font-semibold transition-colors">
+    <span data-t="show-more">Show all 21 categories (RPwD Act 2016)</span>
+  </button>
+  <div class="flex gap-3 mt-8">
+    <button onclick="goAge()" class="flex-1 py-4 rounded-full bg-gradient-primary text-white font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all"><span data-t="next">Continue</span> →</button>
+  </div>
+</section>
+
+<!-- ════════ STEP: AGE ════════ -->
+<section data-view id="view-age">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('disability')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="back">Back</span>
+    </button>
+    <div class="flex gap-1.5 mb-6" id="prog-2"></div>
+    <h2 class="text-2xl font-extrabold tracking-tight mb-1" data-t="q-age">How old is the person?</h2>
+    <p class="text-sm text-on-surface-variant mb-6" data-t="h-age">Many schemes have age criteria.</p>
+  </div>
+  <div class="flex items-center justify-center gap-6 py-10">
+    <button onclick="chgAge(-1)" class="w-16 h-16 rounded-full border-2 border-outline-variant bg-surface-container-lowest text-primary text-3xl font-bold hover:bg-primary-container transition-colors flex items-center justify-center" aria-label="Decrease age">−</button>
+    <div class="text-center">
+      <div id="age-num" class="text-6xl font-extrabold text-primary leading-none">10</div>
+      <div class="text-sm text-on-surface-variant mt-1" data-t="years">years</div>
+    </div>
+    <button onclick="chgAge(1)" class="w-16 h-16 rounded-full border-2 border-outline-variant bg-surface-container-lowest text-primary text-3xl font-bold hover:bg-primary-container transition-colors flex items-center justify-center" aria-label="Increase age">+</button>
+  </div>
+  <input type="range" min="0" max="100" value="10" id="age-slider" class="w-full accent-primary" oninput="setAge(+this.value)">
+  <div class="flex gap-3 mt-8 items-center">
+    <button onclick="goState(true)" class="flex-1 py-4 rounded-full bg-gradient-primary text-white font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all"><span data-t="next">Continue</span> →</button>
+    <button onclick="goState(false)" class="text-sm text-on-surface-variant underline hover:text-primary" data-t="skip">Skip</button>
+  </div>
+</section>
+
+<!-- ════════ STEP: STATE ════════ -->
+<section data-view id="view-state">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('age')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="back">Back</span>
+    </button>
+    <div class="flex gap-1.5 mb-6" id="prog-3"></div>
+    <h2 class="text-2xl font-extrabold tracking-tight mb-1" data-t="q-state">Which state?</h2>
+    <p class="text-sm text-on-surface-variant mb-4" data-t="h-state">Most central schemes are available across India.</p>
+  </div>
+  <input type="text" id="state-q" placeholder="Search states..." class="w-full px-5 py-3.5 rounded-xl border-2 border-outline-variant bg-surface-container-lowest text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 transition-colors" autocomplete="off">
+  <div class="mt-3 max-h-80 overflow-y-auto space-y-1" id="state-list"></div>
+  <div class="flex gap-3 mt-8 items-center">
+    <button onclick="goIncome(true)" class="flex-1 py-4 rounded-full bg-gradient-primary text-white font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all"><span data-t="next">Continue</span> →</button>
+    <button onclick="goIncome(false)" class="text-sm text-on-surface-variant underline hover:text-primary" data-t="skip">Skip</button>
+  </div>
+</section>
+
+<!-- ════════ STEP: INCOME ════════ -->
+<section data-view id="view-income">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('state')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="back">Back</span>
+    </button>
+    <div class="flex gap-1.5 mb-6" id="prog-4"></div>
+    <h2 class="text-2xl font-extrabold tracking-tight mb-1" data-t="q-inc">Family's annual income?</h2>
+    <p class="text-sm text-on-surface-variant mb-6" data-t="h-inc">Some schemes have income limits. This stays private on your device.</p>
+  </div>
+  <div class="space-y-3" id="inc-grid"></div>
+  <div class="flex gap-3 mt-8 items-center">
+    <button onclick="showResults()" class="flex-1 py-4 rounded-full bg-gradient-gold text-on-surface font-bold text-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-lg align-middle mr-1">search</span> <span data-t="find">Find My Schemes</span>
+    </button>
+    <button onclick="SEL.income=null;showResults()" class="text-sm text-on-surface-variant underline hover:text-primary" data-t="skip">Skip</button>
+  </div>
+</section>
+
+<!-- ════════ RESULTS ════════ -->
+<section data-view id="view-results">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('income')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="change">Change search</span>
+    </button>
+  </div>
+  <div id="res-summary"></div>
+  <div id="res-profile" class="mb-4"></div>
+  <div id="doc-tracker" class="mb-6"></div>
+  <div class="action-bar flex flex-wrap gap-2 justify-center mb-6">
+    <a id="wa-btn" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-green-400 text-green-700 font-bold text-sm hover:bg-green-50 transition-colors">
+      <span class="material-symbols-outlined text-lg">share</span> <span data-t="share-wa">WhatsApp</span>
+    </a>
+    <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-outline-variant text-on-surface-variant font-bold text-sm hover:bg-surface-container transition-colors">
+      <span class="material-symbols-outlined text-lg">print</span> <span data-t="print">Print</span>
+    </button>
+    <button onclick="nav('welcome')" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-outline-variant text-on-surface-variant font-bold text-sm hover:bg-surface-container transition-colors">
+      <span class="material-symbols-outlined text-lg">refresh</span> <span data-t="new-search">New Search</span>
+    </button>
+  </div>
+  <div id="res-cards"></div>
+  <div class="mt-8 p-5 bg-rose-light rounded-xl border border-rose/20 text-sm leading-relaxed">
+    <strong>⚠️ <span data-t="disc-t">Important Disclaimer</span></strong><br>
+    <span data-t="disc-b">This is guidance based on official government documents, not legal advice. Verify with your nearest DDRC or visit</span>
+    <a href="https://disabilityaffairs.gov.in" target="_blank" rel="noopener" class="text-primary font-bold">disabilityaffairs.gov.in</a>
+  </div>
+</section>
+
+<!-- ════════ CHAT ════════ -->
+<section data-view id="view-chat">
+  <div class="pt-6 pb-2">
+    <button onclick="nav('welcome')" class="text-sm text-on-surface-variant hover:text-primary transition-colors mb-4 flex items-center gap-1">
+      <span class="material-symbols-outlined text-lg">arrow_back</span> <span data-t="back">Back</span>
+    </button>
+    <h2 class="text-2xl font-extrabold tracking-tight mb-1" data-t="q-chat">Ask in your own words</h2>
+    <p class="text-sm text-on-surface-variant mb-4" data-t="h-chat">Describe your situation in English or Hindi. Example: "My daughter has cerebral palsy, age 8, we live in Karnataka, income Rs 1.5 lakh."</p>
+  </div>
+  <div class="flex gap-2">
+    <textarea id="chat-in" rows="3" class="flex-1 px-4 py-3 rounded-xl border-2 border-outline-variant bg-surface-container-lowest text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 resize-none transition-colors" data-t-ph="chat-ph"></textarea>
+    <div class="flex flex-col gap-2">
+      <button id="voice-btn" onclick="toggleVoice()" class="w-12 h-12 rounded-xl border-2 border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:border-rose hover:text-rose transition-colors flex items-center justify-center" aria-label="Voice input">
+        <span class="material-symbols-outlined">mic</span>
+      </button>
+      <button onclick="sendChat()" class="w-12 h-12 rounded-xl bg-gradient-primary text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all" aria-label="Send">
+        <span class="material-symbols-outlined">send</span>
+      </button>
+    </div>
+  </div>
+  <div id="chat-out" class="mt-4"></div>
+  <p class="text-center text-xs text-on-surface-variant/60 mt-4" data-t="chat-note">Chat requires server connection. The guided search works fully offline.</p>
+</section>
+
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/30 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,53,54,0.06)]">
+  <div class="flex justify-around items-center h-16 px-4">
+    <button onclick="nav('welcome')" class="flex flex-col items-center text-primary px-4 py-1">
+      <span class="material-symbols-outlined filled text-xl">home</span>
+      <span class="text-[11px] font-semibold">Home</span>
+    </button>
+    <button onclick="nav('disability')" class="flex flex-col items-center text-on-surface-variant/60 hover:text-primary px-4 py-1 transition-colors">
+      <span class="material-symbols-outlined text-xl">search</span>
+      <span class="text-[11px] font-semibold" data-t="nav-find">Find</span>
+    </button>
+    <button onclick="nav('chat')" class="flex flex-col items-center text-on-surface-variant/60 hover:text-primary px-4 py-1 transition-colors">
+      <span class="material-symbols-outlined text-xl">chat</span>
+      <span class="text-[11px] font-semibold" data-t="nav-ask">Ask</span>
+    </button>
+  </div>
+</nav>
+
+<!-- FAB — Chat -->
+<button onclick="nav('chat')" class="fab hidden md:flex fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-primary text-white shadow-2xl items-center justify-center hover:scale-110 active:scale-90 transition-all z-40" aria-label="Open chat">
+  <span class="material-symbols-outlined filled text-3xl">support_agent</span>
+</button>
+
+<!-- Footer (visible in results) -->
+<footer class="text-center py-6 px-5 text-xs text-on-surface-variant/50 border-t border-outline-variant/20 max-w-3xl mx-auto">
+  <a href="https://disabilityaffairs.gov.in" target="_blank" rel="noopener" class="text-primary hover:underline">Dept. of Empowerment of PwD</a> ·
+  <a href="https://scholarships.gov.in" target="_blank" rel="noopener" class="text-primary hover:underline">National Scholarship Portal</a> ·
+  <a href="https://nationaltrust.nic.in" target="_blank" rel="noopener" class="text-primary hover:underline">The National Trust</a>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   DATA
+   ══════════════════════════════════════════════════════════ */
+const ALL_CATS=["visual","hearing","locomotor","intellectual","mental_illness","cerebral_palsy","autism","multiple","speech","specific_learning","acid_attack","muscular_dystrophy","chronic_neurological","thalassemia","hemophilia","sickle_cell","deaf_blind","dwarfism","leprosy_cured","parkinsons","multiple_sclerosis"];
+
+const SCHEMES=[
+{id:"adip_scheme",n:"ADIP Scheme",fn:"Assistance to Disabled Persons for Aids/Appliances (ADIP)",m:"Ministry of Social Justice & Empowerment",bt:"equipment",bv:"Get hearing aids, wheelchairs, crutches, prosthetics, or other assistive devices — free if income is under Rs.15,000/month, or at discounted cost up to Rs.10,000",f:"one-time",dc:["*"],amin:0,amax:0,inc:120000,docs:["disability_certificate","aadhaar","income_certificate"],url:"https://adip.depwd.gov.in/",ap:"Step 1: Visit adip.depwd.gov.in and register. Step 2: Fill the online form with your disability details. Step 3: Upload your disability certificate and Aadhaar. Step 4: Your nearest District Rehabilitation Centre (DRC) will contact you for verification and fitting."},
+{id:"ddrs",n:"DDRS Rehabilitation",fn:"Deendayal-Divyangjan Rehabilitation Scheme",m:"MoSJE",bt:"service",bv:"Free vocational training, special education, and community rehabilitation through local NGOs — helps build skills for independent living",f:"as-needed",dc:["*"],amin:0,amax:0,inc:0,url:"https://grants-msje.gov.in/ngo-login",ap:"This scheme works through NGOs, not individual applications. Ask your nearest District Disability Rehabilitation Centre (DDRC) which local organizations offer DDRS services in your area. They can connect you with free training and rehab programs."},
+{id:"sipda",n:"SIPDA",fn:"Scheme for Implementation of PwD Act",m:"MoSJE",bt:"service",bv:"Makes public buildings wheelchair-accessible, issues UDID cards, and runs disability awareness campaigns in your area — you benefit automatically",f:"as-needed",dc:["*"],amin:0,amax:0,inc:0,ap:"You don't need to apply separately. To get your UDID card (which unlocks most other schemes), visit swavlambancard.gov.in or your nearest district hospital's disability assessment board."},
+{id:"pre_matric",n:"Pre-Matric Scholarship",fn:"Pre-Matric Scholarship for Students with Disabilities",m:"DEPwD",bt:"financial",bv:"Rs.500–800 every month for 10 months (covers school expenses) + Rs.2,000–4,000/year for books and supplies. That's up to Rs.12,000/year to help keep your child in school",f:"monthly",dc:["*"],amin:0,amax:0,inc:250000,docs:["disability_certificate","income_certificate","photograph","age_proof"],url:"https://scholarships.gov.in/",ap:"Step 1: Go to scholarships.gov.in and click 'New Registration'. Step 2: Create an account using Aadhaar or mobile number. Step 3: Fill in student details, disability info, and family income. Step 4: Upload scanned documents (disability certificate, income certificate, photo). Step 5: Your school will verify the application. Money comes directly to the student's bank account."},
+{id:"post_matric",n:"Post-Matric Scholarship",fn:"Post-Matric Scholarship for Students with Disabilities",m:"DEPwD",bt:"financial",bv:"Covers up to Rs.1.40 lakh/year in college fees + Rs.650–1,200/month living allowance + Rs.4,000/year for books. Can cover almost the full cost of higher education",f:"monthly",dc:["*"],amin:0,amax:0,inc:250000,docs:["disability_certificate","income_certificate","photograph","age_proof"],url:"https://scholarships.gov.in/",ap:"Step 1: Register at scholarships.gov.in (same portal as Pre-Matric). Step 2: Select 'Post-Matric Scholarship for PwD' from the scheme list. Step 3: Fill in your college details and upload documents. Step 4: Your college will verify enrollment. Money transfers directly to your bank account — no middlemen."},
+{id:"top_class",n:"Top Class Scholarship",fn:"Top Class Education Scholarship for Students with Disabilities",m:"DEPwD",bt:"financial",bv:"The most generous scholarship: up to Rs.1.90 lakh/year for fees + Rs.3,000/month living allowance + one-time Rs.45,000 for a laptop + Rs.30,000 for assistive devices",f:"monthly",dc:["*"],amin:0,amax:0,inc:800000,docs:["disability_certificate","income_certificate"],url:"https://scholarships.gov.in/",ap:"Step 1: Check if your college is in the 'notified institutions' list on the DEPwD website. Step 2: Apply through scholarships.gov.in. Step 3: Upload disability certificate, income proof, and admission letter. Step 4: Your college verifies, and the scholarship is disbursed directly."},
+{id:"overseas",n:"Overseas Scholarship",fn:"National Overseas Scholarship for Students with Disabilities",m:"DEPwD",bt:"financial",bv:"Study abroad fully funded: USD $15,400/year (USA) or GBP £9,900/year (UK) + full tuition + flight tickets + medical insurance. Covers Masters and PhD programs",f:"annual",dc:["*"],amin:0,amax:35,inc:600000,docs:["disability_certificate","income_certificate"],url:"https://depwd.gov.in/",ap:"Step 1: Get admission to a recognized foreign university first. Step 2: Download the application form from depwd.gov.in. Step 3: Submit the filled form with your admission letter, disability certificate, and income proof. Step 4: A selection committee reviews applications — results are published on the DEPwD website."},
+{id:"fellowship",n:"National Fellowship",fn:"National Fellowship for Persons with Disabilities (NFPwD)",m:"MoSJE",bt:"financial",bv:"Rs.25,000/month for the first 2 years, then Rs.28,000/month — supports you through your entire M.Phil or Ph.D research, plus annual book and equipment grants",f:"monthly",dc:["*"],amin:0,amax:0,inc:0,docs:["disability_certificate"],url:"https://ugc.ac.in/",ap:"Step 1: You must be enrolled in M.Phil/PhD at a recognized university. Step 2: Apply online through the UGC website (ugc.ac.in) when the annual notification is released. Step 3: Submit your disability certificate and university enrollment proof. Step 4: Selection is based on UGC-NET/equivalent qualification."},
+{id:"free_coaching",n:"Free Coaching",fn:"Free Coaching for Students with Disabilities",m:"MoSJE",bt:"training",bv:"Free coaching for competitive exams (UPSC, banking, SSC, etc.) + Rs.2,500–5,000/month living stipend + Rs.2,000/month extra for disability-related needs + Rs.5,000 for books",f:"monthly",dc:["*"],amin:0,amax:0,inc:800000,docs:["disability_certificate"],url:"https://scholarships.gov.in/",ap:"Step 1: Find an empanelled coaching institute near you (list available on scholarships.gov.in). Step 2: Apply through the coaching institute — they handle the paperwork. Step 3: Once selected, coaching is completely free and you receive a monthly stipend directly in your bank account."},
+{id:"employment_incentive",n:"Employment Incentive",fn:"Employment Incentive for PwD in Private Sector",m:"MoSJE",bt:"financial",bv:"When you get hired by a private company, the government pays your employer's share of EPF and ESI contributions for 10 years — making employers more willing to hire PwD",f:"as-needed",dc:["*"],amin:18,amax:0,inc:0,ap:"You don't apply for this directly. When a private company hires you, they can claim this benefit. Mention this scheme to potential employers — it costs them nothing to hire you since the government covers their contribution."},
+{id:"nhfdc_loan",n:"NHFDC Loan",fn:"NHFDC Loan Scheme (Rs.3–25 lakh)",m:"NHFDC",bt:"loan",bv:"Low-interest loans to start your own business: Rs.3 lakh for a shop/trading, Rs.5 lakh for services, Rs.10 lakh for agriculture or a vehicle, up to Rs.25 lakh for a professional setup",f:"one-time",dc:["*"],amin:18,amax:0,inc:0,url:"https://www.ndfdc.nic.in/",ap:"Step 1: Visit ndfdc.nic.in to find the State Channelising Agency (SCA) in your state. Step 2: Contact the SCA office — they will explain which loan type suits your plan. Step 3: Submit your application with a simple business plan and disability certificate. Step 4: The SCA processes your loan at concessional interest rates."},
+{id:"divyangjan_swablamban",n:"Swablamban Yojana",fn:"Divyangjan Swablamban Yojana",m:"DEPwD",bt:"loan",bv:"Affordable credit to start earning: whether it's a small shop, tailoring unit, food stall, or any self-employment activity — get the capital you need at low interest",f:"one-time",dc:["*"],amin:18,amax:0,inc:0,docs:["UDID_card","aadhaar"],url:"https://www.ndfdc.nic.in/",ap:"Step 1: Get your UDID card first (swavlambancard.gov.in). Step 2: Visit ndfdc.nic.in and find partner banks/agencies in your state. Step 3: Apply through the partner with your UDID and a description of what you want to do. Step 4: Loans are disbursed through partner banks with easy repayment terms."},
+{id:"niramaya",n:"Niramaya Insurance",fn:"Niramaya Health Insurance (Rs.1 lakh cover)",m:"National Trust",bt:"insurance",bv:"Rs.1,00,000 health insurance per year at very low premium (Rs.250–500/year depending on family income). Covers hospitalization, therapy, medicines, and regular checkups",f:"annual",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:0,inc:0,docs:["disability_certificate"],url:"http://niramayascheme.com/niramaya",ap:"Step 1: Find a Registered Organization (RO) of the National Trust near you — list at nationaltrust.nic.in. Step 2: Visit the RO with your disability certificate. Step 3: They will help you fill the form and collect the small premium (Rs.250–500). Step 4: Your insurance card will be issued, valid for one year. Renew annually through the same RO."},
+{id:"samarth",n:"SAMARTH Care",fn:"SAMARTH Respite Care Scheme",m:"National Trust",bt:"service",bv:"A safe temporary home when your family is in crisis — provides shelter, food, medical care, and daily support. Available for emergencies and short-term relief for caregivers",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:0,inc:0,docs:["disability_certificate","BPL_certificate","aadhaar"],url:"https://nationaltrust.nic.in/",ap:"Step 1: Contact a Registered Organization (RO) of the National Trust in your district. Step 2: Explain your situation — they understand emergencies. Step 3: Bring disability certificate and BPL/income proof. Step 4: The RO will arrange temporary care. For emergencies, call the National Trust helpline."},
+{id:"gharaunda",n:"GHARAUNDA Home",fn:"GHARAUNDA Group Home for Adults",m:"National Trust",bt:"housing",bv:"A permanent home for adults with disabilities — provides lifelong shelter, food, daily care, and a community of support. Gives families peace of mind about their loved one's future",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:18,amax:0,inc:0,docs:["disability_certificate","BPL_certificate","aadhaar"],url:"https://nationaltrust.nic.in/",ap:"Step 1: Visit nationaltrust.nic.in and find Registered Organizations running GHARAUNDA in your area. Step 2: Visit the facility with the person and their disability certificate. Step 3: The RO will assess needs and explain the process. Step 4: Admission is based on availability — BPL families get priority."},
+{id:"disha",n:"DISHA Early Intervention",fn:"DISHA Early Intervention & School Readiness (0–10 yrs)",m:"National Trust",bt:"service",bv:"Free day-care with trained therapists for children 0–10 years: speech therapy, physiotherapy, occupational therapy, counseling, and school readiness training — the earlier you start, the better the outcomes",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:10,inc:0,docs:["birth_certificate","UDID_card","BPL_certificate"],url:"https://nationaltrust.nic.in/",ap:"Step 1: Find a DISHA centre near you at nationaltrust.nic.in (search by district). Step 2: Visit with your child, their birth certificate, and UDID/disability certificate. Step 3: The centre will assess your child and create a personalized therapy plan. Step 4: Sessions are free — attend regularly for best results."},
+{id:"vikaas",n:"VIKAAS Day Care",fn:"VIKAAS Day Care (10+ years)",m:"National Trust",bt:"service",bv:"Daily skill-building for persons above 10: communication skills, self-care training, vocational skills, and social activities — helps build independence and confidence",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:10,amax:0,inc:0,docs:["UDID_card","BPL_certificate"],url:"https://nationaltrust.nic.in/",ap:"Step 1: Find a VIKAAS centre at nationaltrust.nic.in. Step 2: Visit with the person's UDID card and income proof. Step 3: The centre will assess abilities and create a training plan. Step 4: Regular attendance is free for BPL/LIG families."},
+{id:"sahyogi",n:"SAHYOGI Training",fn:"SAHYOGI Caregiver Training",m:"National Trust",bt:"training",bv:"Training for family caregivers: learn proper care techniques, therapy exercises you can do at home, and how to support your loved one's development. You also receive Rs.5,000–10,000 as a stipend during training",f:"one-time",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:0,inc:0,ap:"Step 1: Ask any National Trust Registered Organization if they offer SAHYOGI training. Step 2: Enrol as a caregiver — the basic course takes a few weeks. Step 3: Training is free and you receive a stipend. Step 4: After training, you can provide better care at home and may find employment as a trained caregiver."},
+{id:"gyan_prabha",n:"GYAN PRABHA",fn:"GYAN PRABHA Educational Support",m:"National Trust",bt:"financial",bv:"Covers school/college fees, transportation to school, books, uniforms, and other education expenses — removes financial barriers to your child's education",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:0,inc:0,ap:"Step 1: Contact a National Trust Registered Organization in your area. Step 2: Show your child's disability certificate and school enrollment. Step 3: The RO will process your application for educational support. Step 4: Support covers actual expenses — keep fee receipts and bills."},
+{id:"sambhav",n:"SAMBHAV Devices",fn:"SAMBHAV Aids & Assistive Devices",m:"National Trust",bt:"equipment",bv:"Get assistive devices, special software, communication boards, and adaptive equipment — with hands-on demonstration so you know exactly how to use them",f:"as-needed",dc:["autism","cerebral_palsy","intellectual","multiple"],amin:0,amax:0,inc:0,ap:"Step 1: Visit a National Trust Registered Organization that runs SAMBHAV. Step 2: They will assess what devices would help most. Step 3: You can try devices before receiving them — staff will train you on proper use. Step 4: Devices are provided based on need assessment."},
+{id:"rvy",n:"Vayoshri Yojana",fn:"Rashtriya Vayoshri Yojana (Senior Citizens 60+)",m:"MoSJE",bt:"equipment",bv:"Free walking sticks, hearing aids, wheelchairs, spectacles, and other daily-living aids for senior citizens from BPL families — distributed at special camps in your district",f:"one-time",dc:["*"],amin:60,amax:0,inc:180000,docs:["aadhaar","disability_certificate","income_certificate"],ap:"You don't apply online for this. The District Collector organizes camps where devices are distributed. Step 1: Contact your District Social Welfare Office and ask about the next camp. Step 2: Bring your Aadhaar, BPL card, and disability certificate to the camp. Step 3: Devices are fitted and given on the spot."},
+{id:"disability_pension",n:"Disability Pension",fn:"Disability Pension",m:"State Social Welfare",bt:"financial",bv:"Monthly cash pension deposited directly to your bank account — amount varies by state (typically Rs.500–2,500/month). A regular income you can count on",f:"monthly",dc:["*"],amin:0,amax:0,inc:0,docs:["disability_certificate","aadhaar","bank_account"],ap:"Step 1: Visit your nearest Block Development Office or Gram Panchayat (rural) or Municipal Office (urban). Step 2: Ask for the disability pension application form. Step 3: Submit with disability certificate, Aadhaar, and bank passbook copy. Step 4: After verification, pension starts coming monthly to your bank account. Processing takes 1–3 months."},
+{id:"care_giver",n:"Caregiver Allowance",fn:"Caregiver Allowance (80%+ disability)",m:"State Social Welfare",bt:"financial",bv:"Monthly allowance for family members who care full-time for someone with severe disability (80%+) — acknowledges the vital work caregivers do",f:"monthly",dc:["*"],amin:0,amax:0,inc:0,docs:["disability_certificate","aadhaar"],ap:"Step 1: Your state must have notified this allowance (check with District Social Welfare Officer). Step 2: Apply at the Block Development Office with the 80%+ disability certificate. Step 3: A home visit may be conducted to verify the care arrangement."},
+{id:"free_aids",n:"Free Aids & Surgery",fn:"Free Aids, Appliances, Medicine & Corrective Surgery",m:"State Social Welfare",bt:"service",bv:"Completely free: assistive devices, medicines, diagnostic tests, and corrective surgeries at government hospitals — no income limit, available to all PwD",f:"as-needed",dc:["*"],amin:0,amax:0,inc:0,ap:"Step 1: Visit the disability department of your nearest government/district hospital. Step 2: Show your disability certificate. Step 3: The doctors will assess what aids, medicines, or surgery you need. Step 4: Everything is provided free — if something isn't available at your hospital, they can refer you to a larger facility."},
+{id:"igndps",n:"IGNDPS Pension",fn:"Indira Gandhi National Disability Pension",m:"Min. of Rural Development",bt:"financial",bv:"Monthly pension for BPL families — Rs.300/month from central government + your state adds more (total often Rs.1,000–2,500/month depending on state)",f:"monthly",dc:["*"],amin:18,amax:0,inc:0,docs:["disability_certificate","BPL_certificate","aadhaar"],ap:"Step 1: Visit your Gram Panchayat (rural) or Ward Office (urban). Step 2: Ask for IGNDPS application form. Step 3: Submit with 80%+ disability certificate, BPL card, Aadhaar, and bank details. Step 4: The Block Development Officer approves. Pension starts within 1–3 months."},
+{id:"national_fund",n:"National Fund",fn:"Financial Assistance under National Fund for PwD",m:"DEPwD",bt:"financial",bv:"Special support if you or your child excels in sports, music, dance, art, or theater — covers travel, equipment, and participation fees for state and national events",f:"as-needed",dc:["*"],amin:0,amax:0,inc:0,url:"https://nationalfund.depwd.gov.in/",ap:"Step 1: Register at nationalfund.depwd.gov.in. Step 2: Upload proof of achievement (certificates, medals, rankings from at least state-level events). Step 3: Submit your UDID and a description of the event/support needed. Step 4: The committee reviews monthly — approved funds are transferred directly."},
+{id:"gst_exemption",n:"GST Exemption",fn:"GST Exemption Certificate for Vehicle Purchase",m:"Heavy Industries",bt:"financial",bv:"Save Rs.1–3 lakh on a car or scooter purchase: pay only 18% GST instead of 28% + cess. Available once every 5 years for persons with locomotor disability",f:"one-time",dc:["locomotor"],amin:18,amax:0,inc:0,docs:["UDID_card","PAN","aadhaar","income_tax_returns"],url:"https://gecs.heavyindustries.gov.in/",ap:"Step 1: Go to gecs.heavyindustries.gov.in and register. Step 2: Upload your UDID card, PAN, Aadhaar, and last 3 years' income tax returns. Step 3: A self-declaration that you haven't used this benefit in the last 5 years. Step 4: Certificate is issued online — show it to the car dealer to get the reduced GST rate."},
+];
+
+const DIS_CATS=[
+{id:"visual",icon:"visibility",en:"Visual Impairment",hi:"दृष्टि बाधित",d:"Blindness & low vision"},
+{id:"hearing",icon:"hearing",en:"Hearing Impairment",hi:"श्रवण बाधित",d:"Deaf & hard of hearing"},
+{id:"locomotor",icon:"accessible",en:"Locomotor Disability",hi:"चलने-फिरने की अक्षमता",d:"Physical/movement disability"},
+{id:"intellectual",icon:"psychology",en:"Intellectual Disability",hi:"बौद्धिक अक्षमता",d:"Including learning disabilities"},
+{id:"autism",icon:"extension",en:"Autism Spectrum",hi:"ऑटिज़्म",d:"Autism spectrum disorder"},
+{id:"cerebral_palsy",icon:"emergency",en:"Cerebral Palsy",hi:"सेरेब्रल पाल्सी",d:"Neurological movement condition"},
+{id:"mental_illness",icon:"sentiment_neutral",en:"Mental Illness",hi:"मानसिक बीमारी",d:"Psychiatric conditions"},
+{id:"multiple",icon:"group_work",en:"Multiple Disabilities",hi:"बहु-विकलांगता",d:"Two or more combined"},
+{id:"speech",icon:"record_voice_over",en:"Speech & Language",hi:"वाक् अक्षमता",d:"Speech/language disability",x:1},
+{id:"specific_learning",icon:"menu_book",en:"Learning Disability",hi:"अधिगम अक्षमता",d:"Dyslexia, dyscalculia",x:1},
+{id:"acid_attack",icon:"shield",en:"Acid Attack Survivors",hi:"तेज़ाब पीड़ित",d:"Acid attack survivors",x:1},
+{id:"muscular_dystrophy",icon:"fitness_center",en:"Muscular Dystrophy",hi:"मस्कुलर डिस्ट्रॉफी",d:"Progressive muscle weakness",x:1},
+{id:"chronic_neurological",icon:"bolt",en:"Chronic Neurological",hi:"तंत्रिका रोग",d:"Parkinson's, MS etc.",x:1},
+{id:"thalassemia",icon:"water_drop",en:"Thalassemia",hi:"थैलेसीमिया",d:"Blood disorder",x:1},
+{id:"hemophilia",icon:"water_drop",en:"Hemophilia",hi:"हीमोफीलिया",d:"Bleeding disorder",x:1},
+{id:"sickle_cell",icon:"water_drop",en:"Sickle Cell",hi:"सिकल सेल",d:"Red blood cell disorder",x:1},
+{id:"deaf_blind",icon:"do_not_touch",en:"Deaf-Blindness",hi:"बधिर-अंधता",d:"Combined hearing & visual",x:1},
+{id:"dwarfism",icon:"straighten",en:"Dwarfism",hi:"बौनापन",d:"Short stature",x:1},
+{id:"leprosy_cured",icon:"healing",en:"Leprosy Cured",hi:"कुष्ठ मुक्त",d:"Leprosy cured persons",x:1},
+{id:"parkinsons",icon:"pan_tool",en:"Parkinson's",hi:"पार्किंसन",d:"Progressive nerve disorder",x:1},
+{id:"multiple_sclerosis",icon:"bolt",en:"Multiple Sclerosis",hi:"मल्टीपल स्क्लेरोसिस",d:"Autoimmune CNS disease",x:1},
+];
+
+const STATES=[
+{id:"all_india",en:"All India (National)",hi:"पूरे भारत"},
+{id:"andhra_pradesh",en:"Andhra Pradesh",hi:"आंध्र प्रदेश"},{id:"arunachal_pradesh",en:"Arunachal Pradesh",hi:"अरुणाचल प्रदेश"},{id:"assam",en:"Assam",hi:"असम"},{id:"bihar",en:"Bihar",hi:"बिहार"},{id:"chhattisgarh",en:"Chhattisgarh",hi:"छत्तीसगढ़"},{id:"delhi",en:"Delhi",hi:"दिल्ली"},{id:"goa",en:"Goa",hi:"गोवा"},{id:"gujarat",en:"Gujarat",hi:"गुजरात"},{id:"haryana",en:"Haryana",hi:"हरियाणा"},{id:"himachal_pradesh",en:"Himachal Pradesh",hi:"हिमाचल प्रदेश"},{id:"jharkhand",en:"Jharkhand",hi:"झारखंड"},{id:"karnataka",en:"Karnataka",hi:"कर्नाटक"},{id:"kerala",en:"Kerala",hi:"केरल"},{id:"madhya_pradesh",en:"Madhya Pradesh",hi:"मध्य प्रदेश"},{id:"maharashtra",en:"Maharashtra",hi:"महाराष्ट्र"},{id:"manipur",en:"Manipur",hi:"मणिपुर"},{id:"meghalaya",en:"Meghalaya",hi:"मेघालय"},{id:"mizoram",en:"Mizoram",hi:"मिज़ोरम"},{id:"nagaland",en:"Nagaland",hi:"नागालैंड"},{id:"odisha",en:"Odisha",hi:"ओडिशा"},{id:"punjab",en:"Punjab",hi:"पंजाब"},{id:"rajasthan",en:"Rajasthan",hi:"राजस्थान"},{id:"sikkim",en:"Sikkim",hi:"सिक्किम"},{id:"tamil_nadu",en:"Tamil Nadu",hi:"तमिल नाडु"},{id:"telangana",en:"Telangana",hi:"तेलंगाना"},{id:"tripura",en:"Tripura",hi:"त्रिपुरा"},{id:"uttar_pradesh",en:"Uttar Pradesh",hi:"उत्तर प्रदेश"},{id:"uttarakhand",en:"Uttarakhand",hi:"उत्तराखंड"},{id:"west_bengal",en:"West Bengal",hi:"पश्चिम बंगाल"},{id:"jammu_kashmir",en:"Jammu & Kashmir",hi:"जम्मू कश्मीर"},{id:"ladakh",en:"Ladakh",hi:"लद्दाख"},{id:"chandigarh",en:"Chandigarh",hi:"चंडीगढ़"},{id:"puducherry",en:"Puducherry",hi:"पुडुचेरी"},
+];
+
+const INC_LEVELS=[
+{id:"bpl",max:100000,icon:"home",en:"Below ₹1 lakh/yr",hi:"₹1 लाख/वर्ष से कम",d_en:"~₹8,300/month",d_hi:"~₹8,300/माह"},
+{id:"low",max:250000,icon:"cottage",en:"₹1–2.5 lakh/yr",hi:"₹1–2.5 लाख/वर्ष",d_en:"~₹8,300–20,800/mo",d_hi:"~₹8,300–20,800/माह"},
+{id:"mid",max:600000,icon:"apartment",en:"₹2.5–6 lakh/yr",hi:"₹2.5–6 लाख/वर्ष",d_en:"~₹20,800–50,000/mo",d_hi:"~₹20,800–50,000/माह"},
+{id:"upper",max:800000,icon:"domain",en:"₹6–8 lakh/yr",hi:"₹6–8 लाख/वर्ष",d_en:"~₹50,000–66,700/mo",d_hi:"~₹50,000–66,700/माह"},
+{id:"above",max:9999999,icon:"trending_up",en:"Above ₹8 lakh/yr",hi:"₹8 लाख+ /वर्ष",d_en:"Some schemes still apply",d_hi:"कुछ योजनाएं उपलब्ध"},
+];
+
+const DOC_TIPS={
+disability_certificate:{en:"Visit your district hospital's disability assessment board. A team of doctors will evaluate and issue a certificate showing disability percentage (40%+ needed for most schemes). Takes 1–2 visits. Or apply for UDID at swavlambancard.gov.in — it works as both ID and certificate.",hi:"ज़िला अस्पताल के विकलांगता मूल्यांकन बोर्ड में जाएं। डॉक्टर मूल्यांकन करेंगे और प्रमाण पत्र देंगे (40%+ आवश्यक)। 1-2 बार जाना होगा। या UDID के लिए swavlambancard.gov.in पर आवेदन करें।"},
+income_certificate:{en:"Visit your Tehsil (revenue) office with Aadhaar and a self-declaration of income. The Tehsildar issues the certificate, usually within 7–15 days. Valid for 1 year. Some states also issue it through e-District portals online.",hi:"अपने तहसील कार्यालय में आधार और आय घोषणा के साथ जाएं। तहसीलदार 7-15 दिन में प्रमाण पत्र जारी करेंगे। 1 वर्ष मान्य। कुछ राज्यों में e-District पोर्टल से ऑनलाइन भी मिलता है।"},
+aadhaar:{en:"Free enrollment at any Aadhaar centre — no charges at all. Find your nearest centre at uidai.gov.in. Bring any existing ID. Takes about 30 minutes. Children can get Aadhaar too (with parent's Aadhaar).",hi:"किसी भी आधार केंद्र पर निःशुल्क नामांकन। निकटतम केंद्र uidai.gov.in पर खोजें। कोई भी मौजूदा ID लाएं। ~30 मिनट। बच्चों को भी मिलता है (माता-पिता के आधार के साथ)।"},
+age_proof:{en:"Any of these work: birth certificate (from municipal office), school admission register extract, or Aadhaar card. Hospital birth record is also accepted.",hi:"इनमें से कोई भी: जन्म प्रमाण पत्र (नगरपालिका से), स्कूल प्रवेश रजिस्टर, या आधार कार्ड। अस्पताल का जन्म रिकॉर्ड भी मान्य।"},
+photograph:{en:"Get 8–10 recent passport-size colour photos printed (costs Rs.30–50 at any photo studio). Keep them handy — almost every application needs 2–4 copies.",hi:"8-10 हाल की पासपोर्ट साइज़ रंगीन फ़ोटो प्रिंट करवाएं (Rs.30-50, किसी भी फ़ोटो स्टूडियो में)। सभी आवेदनों में 2-4 प्रतियां लगती हैं।"},
+BPL_certificate:{en:"Your BPL/Antyodaya ration card serves as proof. If you don't have one, visit your nearest Food & Civil Supplies office or Gram Panchayat to apply. Some schemes also accept an income certificate showing income below Rs.1 lakh/year.",hi:"आपका BPL/अंत्योदय राशन कार्ड प्रमाण के रूप में काम करता है। अगर नहीं है तो खाद्य एवं आपूर्ति विभाग या ग्राम पंचायत में आवेदन करें। कुछ योजनाएं Rs.1 लाख से कम आय प्रमाण भी स्वीकार करती हैं।"},
+UDID_card:{en:"UDID (Unique Disability ID) is the most important document — it works as disability certificate + identity card. Apply free at swavlambancard.gov.in or visit your district hospital's assessment board. Takes 2–4 weeks after assessment.",hi:"UDID (विशिष्ट विकलांगता पहचान) सबसे ज़रूरी दस्तावेज़ है — यह प्रमाण पत्र + पहचान पत्र दोनों है। swavlambancard.gov.in पर निःशुल्क आवेदन करें या ज़िला अस्पताल जाएं। मूल्यांकन के बाद 2-4 सप्ताह।"},
+birth_certificate:{en:"From the municipal corporation (urban) or Gram Panchayat (rural) where the child was born. If birth wasn't registered, the hospital birth record or a school certificate showing date of birth also works.",hi:"नगर निगम (शहर) या ग्राम पंचायत (गांव) से जहां बच्चे का जन्म हुआ। अगर जन्म पंजीकृत नहीं है तो अस्पताल रिकॉर्ड या स्कूल प्रमाण पत्र भी चलेगा।"},
+PAN:{en:"Apply free online at incometax.gov.in or visit any TIN-NSDL facilitation centre. Takes 15–20 days. Aadhaar can also work as PAN for many purposes now.",hi:"incometax.gov.in पर निःशुल्क ऑनलाइन आवेदन करें या TIN-NSDL केंद्र जाएं। 15-20 दिन लगते हैं। कई कामों के लिए आधार भी PAN के रूप में चलता है।"},
+bank_account:{en:"Open a zero-balance Jan Dhan account at any bank branch — free, no minimum balance needed. Bring Aadhaar and one photo. Many scheme benefits are transferred directly to your bank account.",hi:"किसी भी बैंक शाखा में जन धन खाता खोलें — निःशुल्क, न्यूनतम शेष नहीं। आधार और एक फ़ोटो लाएं। कई योजनाओं का पैसा सीधे बैंक खाते में आता है।"},
+income_tax_returns:{en:"Filed through incometax.gov.in. If you don't file ITR, a CA can help you file for previous years (usually Rs.500–1,000 per year).",hi:"incometax.gov.in से फ़ाइल करें। अगर ITR फ़ाइल नहीं किया तो CA पिछले वर्षों के लिए मदद कर सकता है (Rs.500-1,000/वर्ष)।"},
+};
+
+/* ══════════════════════════════════════════════════════════
+   I18N
+   ══════════════════════════════════════════════════════════ */
+const T={
+"logo-sub":{en:"Benefits Navigator",hi:"लाभ मार्गदर्शक"},
+"badge":{en:"From 11 Official Government Documents",hi:"11 आधिकारिक सरकारी दस्तावेज़ों से"},
+"hero-1":{en:"Every child deserves",hi:"हर बच्चे को मिलना चाहिए"},
+"hero-2":{en:"support",hi:"सहायता"},
+"hero-sub":{en:"Find government welfare schemes your family is eligible for — in 4 simple steps. Free, private, works offline.",hi:"4 आसान चरणों में सरकारी कल्याण योजनाएं खोजें। निःशुल्क, गोपनीय, ऑफ़लाइन।"},
+"stat-s":{en:"Schemes",hi:"योजनाएं"},"stat-c":{en:"Categories",hi:"श्रेणियां"},"stat-d":{en:"Source Docs",hi:"स्रोत दस्तावेज़"},
+"cta-start":{en:"Find Eligible Schemes",hi:"पात्र योजनाएं खोजें"},
+"or-ask":{en:"or describe your situation below ↓",hi:"या नीचे अपनी स्थिति बताएं ↓"},
+"bento-1":{en:"Guided Search",hi:"मार्गदर्शित खोज"},"bento-1d":{en:"Step-by-step, no typing needed",hi:"चरण-दर-चरण, टाइपिंग नहीं"},
+"bento-2":{en:"Ask AI",hi:"AI से पूछें"},"bento-2d":{en:"In English or Hindi",hi:"अंग्रेज़ी या हिंदी में"},
+"bento-3":{en:"Document Guide",hi:"दस्तावेज़ मार्गदर्शिका"},"bento-3d":{en:"Know what papers you need",hi:"जानें कौन से कागज़ात चाहिए"},
+"trust":{en:"Data from disabilityaffairs.gov.in, socialjustice.gov.in, scholarships.gov.in, nationaltrust.nic.in",hi:"disabilityaffairs.gov.in, socialjustice.gov.in, scholarships.gov.in से डेटा"},
+"back":{en:"Back",hi:"वापस"},"next":{en:"Continue",hi:"आगे बढ़ें"},"skip":{en:"Skip",hi:"छोड़ें"},
+"show-more":{en:"Show all 21 categories (RPwD Act 2016)",hi:"सभी 21 श्रेणियां (RPwD 2016)"},
+"q-dis":{en:"What type of disability?",hi:"विकलांगता का प्रकार?"},"h-dis":{en:"Select one or more categories.",hi:"एक या अधिक श्रेणी चुनें।"},
+"q-age":{en:"How old is the person?",hi:"उम्र कितनी है?"},"h-age":{en:"Many schemes have age criteria.",hi:"कई योजनाओं में आयु मानदंड हैं।"},"years":{en:"years",hi:"वर्ष"},
+"q-state":{en:"Which state?",hi:"कौन सा राज्य?"},"h-state":{en:"Most central schemes are available across India.",hi:"अधिकांश केंद्रीय योजनाएं पूरे भारत में उपलब्ध हैं।"},
+"q-inc":{en:"Family's annual income?",hi:"परिवार की वार्षिक आय?"},"h-inc":{en:"Some schemes have income limits. Stays private on your device.",hi:"कुछ योजनाओं में आय सीमा है। आपके डिवाइस पर गोपनीय।"},
+"find":{en:"Find My Schemes",hi:"मेरी योजनाएं खोजें"},
+"change":{en:"Change search",hi:"खोज बदलें"},"share-wa":{en:"WhatsApp",hi:"WhatsApp"},"print":{en:"Print",hi:"प्रिंट"},"new-search":{en:"New Search",hi:"नई खोज"},
+"disc-t":{en:"Important Disclaimer",hi:"महत्वपूर्ण अस्वीकरण"},
+"disc-b":{en:"This is guidance based on official documents, not legal advice. Verify with your nearest DDRC or visit",hi:"यह मार्गदर्शन है, कानूनी सलाह नहीं। अपने DDRC से सत्यापित करें या देखें"},
+"q-chat":{en:"Ask in your own words",hi:"अपने शब्दों में पूछें"},
+"h-chat":{en:'Describe your situation. Example: "My daughter has cerebral palsy, age 8, Karnataka, income Rs 1.5 lakh."',hi:'उदाहरण: "मेरी बेटी को सेरेब्रल पाल्सी है, 8 साल, कर्नाटक, आय 1.5 लाख।"'},
+"chat-ph":{en:"Type your question...",hi:"अपना प्रश्न लिखें..."},
+"chat-note":{en:"Chat requires server connection. Guided search works offline.",hi:"चैट सर्वर आवश्यक। मार्गदर्शित खोज ऑफ़लाइन।"},
+"nav-find":{en:"Find",hi:"खोजें"},"nav-ask":{en:"Ask",hi:"पूछें"},
+"found":{en:"{n} schemes found",hi:"{n} योजनाएं मिलीं"},
+"no-match":{en:"No exact matches",hi:"कोई सटीक मिलान नहीं"},
+"no-match-d":{en:"Try broadening your search or ask AI.",hi:"खोज व्यापक करें या AI से पूछें।"},
+"docs-title":{en:"Your Document Checklist",hi:"आपकी दस्तावेज़ सूची"},
+"docs-sub":{en:"All unique documents needed across eligible schemes.",hi:"सभी पात्र योजनाओं के लिए आवश्यक दस्तावेज़।"},
+"docs-of":{en:"{a}/{b} ready",hi:"{a}/{b} तैयार"},
+"benefit":{en:"Benefit",hi:"लाभ"},"how-apply":{en:"How to Apply",hi:"आवेदन कैसे करें"},"docs-need":{en:"Documents",hi:"दस्तावेज़"},
+"thinking":{en:"Thinking…",hi:"सोच रहा हूँ…"},
+"chat-err":{en:"Could not connect to server. Try guided search instead.",hi:"सर्वर से कनेक्ट नहीं हो सका।"},
+};
+
+/* ══════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════ */
+let L="en";
+const SEL={dis:new Set(),age:null,state:null,income:null};
+let docChecks=JSON.parse(localStorage.getItem("ss_docs")||"{}");
+let moreShown=false;
+
+/* ══════════════════════════════════════════════════════════
+   I18N
+   ══════════════════════════════════════════════════════════ */
+function t(k,v){let s=(T[k]||{})[L]||k;if(v)Object.entries(v).forEach(([a,b])=>s=s.replace("{"+a+"}",b));return s;}
+
+function applyT(){
+  document.querySelectorAll("[data-t]").forEach(el=>{const s=(T[el.dataset.t]||{})[L];if(s)el.textContent=s;});
+  document.querySelectorAll("[data-t-ph]").forEach(el=>{const s=(T[el.dataset.tPh]||{})[L];if(s)el.placeholder=s;});
+  document.getElementById("lang-btn").textContent=L==="en"?"हिंदी":"English";
+  document.documentElement.lang=L==="en"?"en":"hi";
+}
+function toggleLang(){L=L==="en"?"hi":"en";localStorage.setItem("ss_lang",L);applyT();renderDis();renderStates();renderInc();}
+
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════════════════ */
+function nav(id){
+  document.querySelectorAll("[data-view]").forEach(v=>v.classList.remove("active"));
+  const el=document.getElementById("view-"+id);
+  if(el){el.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});}
+}
+
+function prog(step){
+  const colors=["bg-primary","bg-primary","bg-primary","bg-primary"];
+  return [1,2,3,4].map(i=>`<div class="flex-1 h-1 rounded-full ${i<step?"bg-primary":i===step?"bg-gold":"bg-outline-variant/40"}"></div>`).join("");
+}
+
+/* ══════════════════════════════════════════════════════════
+   DISABILITY GRID — safe DOM construction
+   ══════════════════════════════════════════════════════════ */
+function renderDis(){
+  const g=document.getElementById("dis-grid");
+  g.textContent="";
+  DIS_CATS.forEach(c=>{
+    if(c.x&&!moreShown)return;
+    const btn=document.createElement("button");
+    btn.className="card-opt flex items-start gap-3 p-4 bg-surface-container-lowest rounded-xl border-2 "+(SEL.dis.has(c.id)?"selected border-primary":"border-outline-variant/40");
+    btn.setAttribute("role","checkbox");
+    btn.setAttribute("aria-checked",SEL.dis.has(c.id));
+    btn.onclick=()=>{SEL.dis.has(c.id)?SEL.dis.delete(c.id):SEL.dis.add(c.id);renderDis();};
+
+    const icon=document.createElement("span");
+    icon.className="material-symbols-outlined text-2xl text-primary mt-0.5";
+    icon.textContent=c.icon;
+
+    const wrap=document.createElement("div");
+    const lbl=document.createElement("div");
+    lbl.className="font-bold text-sm";
+    lbl.textContent=L==="en"?c.en:c.hi;
+    const lbl2=document.createElement("div");
+    lbl2.className="text-xs text-on-surface-variant";
+    lbl2.textContent=L==="en"?c.hi:c.en;
+    const desc=document.createElement("div");
+    desc.className="text-xs text-on-surface-variant/60 mt-0.5";
+    desc.textContent=c.d;
+    wrap.append(lbl,lbl2,desc);
+    btn.append(icon,wrap);
+    g.appendChild(btn);
+  });
+  document.getElementById("prog-1").innerHTML=prog(1);
+}
+
+function toggleMore(){
+  moreShown=!moreShown;
+  const btn=document.getElementById("more-cats-btn");
+  btn.textContent=moreShown?(L==="en"?"Show fewer":"कम दिखाएं"):t("show-more");
+  renderDis();
+}
+
+function goAge(){
+  if(SEL.dis.size===0){document.getElementById("dis-grid").classList.add("ring-2","ring-rose");setTimeout(()=>document.getElementById("dis-grid").classList.remove("ring-2","ring-rose"),2000);return;}
+  document.getElementById("prog-2").innerHTML=prog(2);
+  nav("age");
+}
+
+/* ══════════════════════════════════════════════════════════
+   AGE
+   ══════════════════════════════════════════════════════════ */
+let curAge=10;
+function setAge(v){curAge=Math.max(0,Math.min(100,v));document.getElementById("age-num").textContent=curAge;document.getElementById("age-slider").value=curAge;}
+function chgAge(d){setAge(curAge+d);}
+function goState(save){if(save)SEL.age=curAge;else SEL.age=null;document.getElementById("prog-3").innerHTML=prog(3);nav("state");}
+
+/* ══════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════ */
+function renderStates(q=""){
+  const list=document.getElementById("state-list");
+  list.textContent="";
+  const ql=q.toLowerCase();
+  STATES.filter(s=>s.en.toLowerCase().includes(ql)||s.hi.includes(q)).forEach(s=>{
+    const btn=document.createElement("button");
+    btn.className="w-full text-left px-4 py-3 rounded-xl text-sm transition-colors "+(SEL.state===s.id?"bg-primary-container font-bold border border-primary":"hover:bg-surface-container border border-transparent");
+    btn.onclick=()=>{SEL.state=s.id;renderStates(q);};
+    btn.textContent=L==="en"?`${s.en} — ${s.hi}`:`${s.hi} — ${s.en}`;
+    list.appendChild(btn);
+  });
+}
+function goIncome(save){if(!save)SEL.state=null;document.getElementById("prog-4").innerHTML=prog(4);nav("income");}
+
+/* ══════════════════════════════════════════════════════════
+   INCOME
+   ══════════════════════════════════════════════════════════ */
+function renderInc(){
+  const g=document.getElementById("inc-grid");
+  g.textContent="";
+  INC_LEVELS.forEach(inc=>{
+    const btn=document.createElement("button");
+    btn.className="card-opt flex items-center gap-4 p-4 bg-surface-container-lowest rounded-xl border-2 w-full text-left "+(SEL.income===inc.id?"selected border-primary":"border-outline-variant/40");
+    btn.onclick=()=>{SEL.income=inc.id;renderInc();};
+
+    const icon=document.createElement("span");
+    icon.className="material-symbols-outlined text-2xl text-gold";
+    icon.textContent=inc.icon;
+
+    const wrap=document.createElement("div");
+    const lbl=document.createElement("div");
+    lbl.className="font-bold text-sm";
+    lbl.textContent=L==="en"?inc.en:inc.hi;
+    const desc=document.createElement("div");
+    desc.className="text-xs text-on-surface-variant";
+    desc.textContent=L==="en"?inc.d_en:inc.d_hi;
+    wrap.append(lbl,desc);
+    btn.append(icon,wrap);
+    g.appendChild(btn);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   FILTER ENGINE
+   ══════════════════════════════════════════════════════════ */
+function filter(){
+  const incMax=SEL.income?INC_LEVELS.find(i=>i.id===SEL.income)?.max||9999999:null;
+  return SCHEMES.filter(s=>{
+    if(SEL.dis.size>0){const sc=s.dc[0]==="*"?ALL_CATS:s.dc;if(![...SEL.dis].some(d=>sc.includes(d)))return false;}
+    if(SEL.age!==null){if(s.amin>0&&SEL.age<s.amin)return false;if(s.amax>0&&SEL.age>s.amax)return false;}
+    if(incMax!==null&&s.inc>0&&incMax>s.inc)return false;
+    return true;
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESULTS — safe DOM construction
+   ══════════════════════════════════════════════════════════ */
+function showResults(){
+  const res=filter();
+
+  // Summary
+  const sum=document.getElementById("res-summary");
+  sum.textContent="";
+  const box=document.createElement("div");
+  box.className="text-center p-6 rounded-xl mb-6 "+(res.length>0?"bg-success-light border border-green-200":"bg-rose-light border border-rose/20");
+  const h=document.createElement("div");
+  h.className="text-2xl font-extrabold mb-1";
+  h.textContent=res.length>0?t("found",{n:res.length}):t("no-match");
+  box.appendChild(h);
+  if(res.length===0){const p=document.createElement("div");p.className="text-sm text-on-surface-variant";p.textContent=t("no-match-d");box.appendChild(p);}
+  sum.appendChild(box);
+
+  // Profile
+  const prof=document.getElementById("res-profile");
+  prof.textContent="";
+  const pCard=document.createElement("div");
+  pCard.className="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30 text-sm mb-4";
+  const disNames=[...SEL.dis].map(d=>{const c=DIS_CATS.find(x=>x.id===d);return c?(L==="en"?c.en:c.hi):d;}).join(", ");
+  const stName=SEL.state?STATES.find(s=>s.id===SEL.state)?.[L]||"":L==="en"?"Any":"कोई भी";
+  const incName=SEL.income?INC_LEVELS.find(i=>i.id===SEL.income)?.[L]||"":"—";
+  let profText=disNames;
+  if(SEL.age!==null)profText+=` · ${SEL.age} ${t("years")}`;
+  profText+=` · ${stName} · ${incName}`;
+  pCard.textContent=profText;
+  prof.appendChild(pCard);
+
+  // Document tracker
+  const allDocs=new Set();
+  res.forEach(s=>(s.docs||[]).forEach(d=>allDocs.add(d.toLowerCase().replace(/\s+/g,"_"))));
+  const dtBox=document.getElementById("doc-tracker");
+  dtBox.textContent="";
+  if(allDocs.size>0){
+    const da=[...allDocs];
+    const wrap=document.createElement("div");
+    wrap.className="p-5 bg-gold-light rounded-xl border border-gold/20 mb-6";
+    const title=document.createElement("h3");
+    title.className="font-extrabold text-lg mb-1";
+    title.textContent=t("docs-title");
+    const sub=document.createElement("p");
+    sub.className="text-sm text-on-surface-variant mb-3";
+    sub.textContent=t("docs-sub");
+    const bar=document.createElement("div");
+    bar.className="h-2 bg-gold/20 rounded-full mb-4 overflow-hidden";
+    const fill=document.createElement("div");
+    fill.className="h-full bg-success rounded-full transition-all duration-500";
+    const done=da.filter(d=>docChecks[d]).length;
+    fill.style.width=Math.round(done/da.length*100)+"%";
+    bar.appendChild(fill);
+    const count=document.createElement("div");
+    count.className="text-xs font-bold text-on-surface-variant mb-3";
+    count.textContent=t("docs-of",{a:done,b:da.length});
+    const ul=document.createElement("ul");
+    ul.className="space-y-2";
+    da.forEach(d=>{
+      const li=document.createElement("li");
+      li.className="flex items-start gap-3";
+      const cb=document.createElement("input");
+      cb.type="checkbox";cb.checked=!!docChecks[d];
+      cb.className="mt-1 w-5 h-5 accent-emerald-600 cursor-pointer rounded";
+      cb.onchange=()=>{docChecks[d]=cb.checked;localStorage.setItem("ss_docs",JSON.stringify(docChecks));
+        const nd=da.filter(x=>docChecks[x]).length;fill.style.width=Math.round(nd/da.length*100)+"%";count.textContent=t("docs-of",{a:nd,b:da.length});};
+      const label=document.createElement("div");
+      const name=document.createElement("div");
+      name.className="font-semibold text-sm";
+      name.textContent=d.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+      label.appendChild(name);
+      if(DOC_TIPS[d]){const tip=document.createElement("div");tip.className="text-xs text-on-surface-variant/70";tip.textContent=DOC_TIPS[d][L]||"";label.appendChild(tip);}
+      li.append(cb,label);ul.appendChild(li);
+    });
+    wrap.append(title,sub,count,bar,ul);
+    dtBox.appendChild(wrap);
+  }
+
+  // Scheme cards
+  const cards=document.getElementById("res-cards");
+  cards.textContent="";
+  const badgeColors={financial:"bg-gold-light text-amber-800",equipment:"bg-sky-100 text-sky-800",service:"bg-emerald-50 text-emerald-800",insurance:"bg-violet-50 text-violet-800",loan:"bg-orange-50 text-orange-800",training:"bg-teal-50 text-teal-800",housing:"bg-amber-50 text-amber-800"};
+  res.forEach(s=>{
+    const card=document.createElement("div");
+    card.className="result-card p-5 bg-surface-container-lowest rounded-xl border border-outline-variant/30 mb-4 hover:shadow-lg transition-shadow";
+    const badge=document.createElement("span");
+    badge.className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 "+(badgeColors[s.bt]||"bg-gray-100 text-gray-700");
+    badge.textContent=s.bt||"other";
+    const name=document.createElement("h3");
+    name.className="font-extrabold text-lg mb-1";
+    name.textContent=s.fn;
+    const ministry=document.createElement("p");
+    ministry.className="text-xs text-on-surface-variant mb-3";
+    ministry.textContent=s.m;
+    card.append(badge,name,ministry);
+    if(s.bv){
+      const bv=document.createElement("div");
+      bv.className="p-3 bg-surface rounded-lg border-l-4 border-gold text-sm mb-4";
+      const bvTitle=document.createElement("div");
+      bvTitle.className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1";
+      bvTitle.textContent=t("benefit");
+      const bvText=document.createElement("div");
+      bvText.textContent=s.bv;
+      bv.append(bvTitle,bvText);
+      card.appendChild(bv);
+    }
+    if(s.docs&&s.docs.length>0){
+      const dTitle=document.createElement("div");
+      dTitle.className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2";
+      dTitle.textContent=t("docs-need");
+      card.appendChild(dTitle);
+      s.docs.forEach(d=>{
+        const row=document.createElement("div");
+        row.className="flex items-center gap-2 py-1 text-sm";
+        const cb=document.createElement("input");
+        cb.type="checkbox";cb.className="w-4 h-4 accent-emerald-600 rounded";
+        const norm=d.toLowerCase().replace(/\s+/g,"_");
+        cb.checked=!!docChecks[norm];
+        cb.onchange=()=>{docChecks[norm]=cb.checked;localStorage.setItem("ss_docs",JSON.stringify(docChecks));};
+        const lbl=document.createElement("span");
+        lbl.textContent=d.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+        row.append(cb,lbl);card.appendChild(row);
+      });
+    }
+    if(s.ap||s.url){
+      const sec=document.createElement("div");
+      sec.className="mt-4 pt-4 border-t border-outline-variant/20";
+      const aTitle=document.createElement("div");
+      aTitle.className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2";
+      aTitle.textContent=t("how-apply");
+      sec.appendChild(aTitle);
+      if(s.ap){const p=document.createElement("p");p.className="text-sm mb-2";p.textContent=s.ap;sec.appendChild(p);}
+      if(s.url){const a=document.createElement("a");a.href=s.url.startsWith("http")?s.url:"https://"+s.url;a.target="_blank";a.rel="noopener";a.className="text-sm text-primary font-bold break-all";a.textContent=s.url;sec.appendChild(a);}
+      card.appendChild(sec);
+    }
+    cards.appendChild(card);
+  });
+
+  // WhatsApp share
+  const wa=document.getElementById("wa-btn");
+  let wt=`🙏 *SamarthSchool*\n${disNames}\n`;
+  if(SEL.age!==null)wt+=`Age: ${SEL.age}\n`;
+  wt+=`\n*${res.length} schemes found:*\n\n`;
+  res.slice(0,5).forEach((s,i)=>{wt+=`${i+1}. *${s.n}*\n`;});
+  if(res.length>5)wt+=`+${res.length-5} more\n`;
+  wt+=`\n🔗 ${location.href}`;
+  wa.href="https://wa.me/?text="+encodeURIComponent(wt);
+
+  nav("results");
+}
+
+/* ══════════════════════════════════════════════════════════
+   CHAT
+   ══════════════════════════════════════════════════════════ */
+async function sendChat(){
+  const inp=document.getElementById("chat-in");
+  const q=inp.value.trim();if(!q)return;
+  const out=document.getElementById("chat-out");
+  out.textContent="";
+  const loading=document.createElement("div");
+  loading.className="text-center py-10 text-on-surface-variant italic";
+  loading.textContent=t("thinking");
+  out.appendChild(loading);
+  try{
+    const r=await fetch("http://127.0.0.1:8000/query",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});
+    const d=await r.json();
+    out.textContent="";
+    const box=document.createElement("div");
+    box.className="p-5 bg-surface-container-lowest rounded-xl border border-outline-variant/30 whitespace-pre-wrap text-sm leading-relaxed";
+    box.textContent=d.response||"No response";
+    out.appendChild(box);
+  }catch(e){
+    out.textContent="";
+    const err=document.createElement("div");
+    err.className="p-5 bg-rose-light rounded-xl border border-rose/20 text-sm";
+    err.textContent=t("chat-err");
+    out.appendChild(err);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   VOICE
+   ══════════════════════════════════════════════════════════ */
+let rec=null,recording=false;
+function toggleVoice(){
+  if(!("webkitSpeechRecognition" in window||"SpeechRecognition" in window)){alert("Voice not supported in this browser.");return;}
+  if(recording){rec.stop();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  rec=new SR();rec.lang=L==="en"?"en-IN":"hi-IN";rec.interimResults=true;
+  const btn=document.getElementById("voice-btn"),inp=document.getElementById("chat-in");
+  rec.onstart=()=>{recording=true;btn.classList.add("bg-rose-light","border-rose","text-rose","animate-pulse");};
+  rec.onend=()=>{recording=false;btn.classList.remove("bg-rose-light","border-rose","text-rose","animate-pulse");};
+  rec.onresult=(e)=>{let t="";for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;inp.value=t;};
+  rec.onerror=()=>{recording=false;btn.classList.remove("bg-rose-light","border-rose","text-rose","animate-pulse");};
+  rec.start();
+}
+
+/* ══════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ══════════════════════════════════════════════════════════ */
+function toggleA11y(type){
+  if(type==="lg")document.documentElement.classList.toggle("lg-text");
+  if(type==="hc")document.documentElement.classList.toggle("hc");
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded",()=>{
+  L=localStorage.getItem("ss_lang")||(navigator.language.startsWith("hi")?"hi":"en");
+  applyT();renderDis();renderStates();renderInc();
+  document.getElementById("state-q").addEventListener("input",e=>renderStates(e.target.value));
+  document.getElementById("chat-in").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}});
+});
+</script>
+</body>
+</html>
