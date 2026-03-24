@@ -1,28 +1,36 @@
 #!/usr/bin/env python3.12
-"""FastAPI server for SamarthSchool with Twilio WhatsApp webhook.
+"""FastAPI server for SamarthSchool — Benefits Navigator + WhatsApp.
 
 Endpoints:
+  GET  /          — Serves the Benefits Navigator web app
+  POST /query     — AI-powered natural language query (RAG + KG pipeline)
+  POST /filter    — Structured eligibility filter (direct KG query, fast)
   POST /whatsapp  — Twilio webhook (receives WhatsApp messages, returns Action Guide)
   GET  /health    — Health check
-  POST /query     — Direct API query (for testing without WhatsApp)
 
 Run:
+  cd rag-pipeline
   uvicorn src.server:app --host 127.0.0.1 --port 8000
 
-For WhatsApp testing, expose via Cloudflare Tunnel:
+For public access, expose via Cloudflare Tunnel:
   cloudflared tunnel --url http://localhost:8000
-  → paste the public URL into Twilio Sandbox webhook config
+  → gives you a free https://*.trycloudflare.com URL
+  → paste into Twilio Sandbox webhook config for WhatsApp
 """
 
 import os
 import logging
+from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import PlainTextResponse, JSONResponse
+from fastapi.responses import PlainTextResponse, JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.pipeline import query_pipeline
 from src.whatsapp_formatter import format_for_whatsapp, truncate_for_whatsapp
+
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("samarthschool")
@@ -64,9 +72,56 @@ app = FastAPI(
 )
 
 
+# ── Frontend ───────────────────────────────────────────────────────
+@app.get("/", include_in_schema=False)
+async def serve_frontend():
+    """Serve the Benefits Navigator web app."""
+    index = STATIC_DIR / "index.html"
+    if index.exists():
+        return FileResponse(index, media_type="text/html")
+    return JSONResponse(
+        {"error": "Frontend not found. Place index.html in static/"},
+        status_code=404,
+    )
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "samarthschool"}
+
+
+# ── Structured filter (fast, no LLM call) ─────────────────────────
+@app.post("/filter")
+async def filter_schemes(request: Request):
+    """Structured eligibility query — searches KG directly.
+
+    JSON body (all fields optional):
+      {"disability": "autism", "age": 8, "income": 150000}
+
+    Returns matching schemes without calling Gemini — much faster
+    than /query for the guided wizard flow.
+    """
+    body = await request.json()
+    disability = body.get("disability")
+    age = body.get("age")
+    income = body.get("income")
+
+    try:
+        from src.knowledge_graph import get_db, query_eligible_schemes
+        import kuzu
+
+        db = get_db()
+        conn = kuzu.Connection(db)
+        results = query_eligible_schemes(
+            conn,
+            disability=disability,
+            age=age,
+            max_income=income,
+        )
+        return JSONResponse({"schemes": results, "count": len(results)})
+    except Exception as e:
+        log.error(f"Filter error: {e}")
+        return JSONResponse({"schemes": [], "count": 0, "error": str(e)})
 
 
 @app.post("/query")

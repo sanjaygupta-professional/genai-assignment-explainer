@@ -786,7 +786,7 @@ async function sendChat(){
   loading.textContent=t("thinking");
   out.appendChild(loading);
   try{
-    const r=await fetch("http://127.0.0.1:8000/query",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});
+    const r=await fetch("/query",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:q})});
     const d=await r.json();
     out.textContent="";
     const box=document.createElement("div");
