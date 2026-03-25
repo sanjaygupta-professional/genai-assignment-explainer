@@ -6,6 +6,9 @@ Reads the markdown report and converts it to a formatted Word document with:
 - DesignArena-styled cover page
 - Embedded publication-quality diagrams (fig1-fig9)
 - Teal-header tables, proper typography, styled headings
+- Page header and footer with page numbers
+- Inline citation rendering (superscript [N])
+- Clickable hyperlinks in references
 """
 
 import re
@@ -23,7 +26,7 @@ from docx.oxml import parse_xml
 BASE = Path("/home/opc/genai-assignment-explainer")
 REPORT_MD = BASE / "group-assignment-report.md"
 DIAGRAM_DIR = BASE / "images" / "diagrams" / "group-assignment"
-OUTPUT = BASE / "outputs" / "SamarthSchool_Group_Assignment.docx"
+OUTPUT = BASE / "outputs" / "SamarthSchool_Group_Assignment_v2.docx"
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 # DesignArena palette
@@ -66,6 +69,70 @@ def set_cell_shading(cell, color_hex):
     """Set background color of a table cell."""
     shading = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
     cell._tc.get_or_add_tcPr().append(shading)
+
+
+def add_hyperlink(paragraph, url, text, font_size=Pt(11), color=None):
+    """Add a clickable hyperlink to a paragraph."""
+    part = paragraph.part
+    r_id = part.relate_to(url, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink", is_external=True)
+    hyperlink = parse_xml(f'<w:hyperlink {nsdecls("w")} r:id="{r_id}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/>')
+    run_elem = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'  <w:rPr>'
+        f'    <w:rStyle w:val="Hyperlink"/>'
+        f'    <w:color w:val="{color or "0563C1"}"/>'
+        f'    <w:u w:val="single"/>'
+        f'    <w:sz w:val="{int(font_size.pt * 2)}"/>'
+        f'  </w:rPr>'
+        f'  <w:t xml:space="preserve">{text}</w:t>'
+        f'</w:r>'
+    )
+    hyperlink.append(run_elem)
+    paragraph._p.append(hyperlink)
+
+
+def add_header_footer(doc):
+    """Add page header text and footer with page number to all sections."""
+    for section in doc.sections:
+        # Different first page (cover page gets no header/footer)
+        section.different_first_page_header_footer = True
+
+        # Header for subsequent pages
+        header = section.header
+        header.is_linked_to_previous = False
+        hp = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
+        hp.text = ""
+        run = hp.add_run("SamarthSchool - DBA Gen AI Group Assignment")
+        run.font.size = Pt(9)
+        run.font.color.rgb = GRAY
+        run.font.name = "Calibri"
+        hp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        # Add bottom border to header
+        pPr = hp._p.get_or_add_pPr()
+        pBdr = parse_xml(
+            f'<w:pBdr {nsdecls("w")}>'
+            f'  <w:bottom w:val="single" w:sz="4" w:space="1" w:color="487265"/>'
+            f'</w:pBdr>'
+        )
+        pPr.append(pBdr)
+
+        # Footer with page number
+        footer = section.footer
+        footer.is_linked_to_previous = False
+        fp = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
+        fp.text = ""
+        fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = fp.add_run()
+        run.font.size = Pt(9)
+        run.font.color.rgb = GRAY
+        run.font.name = "Calibri"
+        # Insert PAGE field
+        fld_char_begin = parse_xml(f'<w:fldChar {nsdecls("w")} w:fldCharType="begin"/>')
+        run._r.append(fld_char_begin)
+        instr_text = parse_xml(f'<w:instrText {nsdecls("w")} xml:space="preserve"> PAGE </w:instrText>')
+        run._r.append(instr_text)
+        fld_char_end = parse_xml(f'<w:fldChar {nsdecls("w")} w:fldCharType="end"/>')
+        run._r.append(fld_char_end)
 
 
 def add_styled_table(doc, headers, rows):
@@ -203,9 +270,9 @@ def parse_markdown_table(lines):
 
 
 def process_inline_formatting(paragraph, text):
-    """Add text to paragraph with bold/italic inline formatting."""
-    # Split on **bold** and *italic* patterns
-    parts = re.split(r'(\*\*.*?\*\*|\*.*?\*)', text)
+    """Add text to paragraph with bold/italic/citation inline formatting."""
+    # Split on **bold**, *italic*, and [N] citation patterns
+    parts = re.split(r'(\*\*.*?\*\*|\*.*?\*|\[\d+\])', text)
     for part in parts:
         if part.startswith("**") and part.endswith("**"):
             run = paragraph.add_run(part[2:-2])
@@ -215,6 +282,12 @@ def process_inline_formatting(paragraph, text):
             run = paragraph.add_run(part[1:-1])
             run.italic = True
             run.font.size = Pt(11)
+        elif re.match(r'^\[\d+\]$', part):
+            # Render citation as superscript
+            run = paragraph.add_run(part)
+            run.font.size = Pt(8)
+            run.font.superscript = True
+            run.font.color.rgb = TEAL
         else:
             run = paragraph.add_run(part)
             run.font.size = Pt(11)
@@ -256,6 +329,9 @@ def convert_md_to_docx():
     # Cover page
     add_cover_page(doc)
 
+    # Header and footer (applied after cover page is created)
+    add_header_footer(doc)
+
     # Read markdown
     md_text = REPORT_MD.read_text(encoding="utf-8")
     lines = md_text.split("\n")
@@ -267,6 +343,7 @@ def convert_md_to_docx():
     table_lines = []
     diagrams_inserted = set()
     pending_diagram = None  # diagram to insert after next content paragraph
+    in_references = False   # track when we're in the References section
 
     while i < len(lines):
         line = lines[i]
@@ -355,6 +432,8 @@ def convert_md_to_docx():
 
         if line.startswith("## "):
             text = line[3:].strip()
+            # Track references section for URL rendering
+            in_references = "References" in text
             # Strip numbering prefix like "1. " for cleaner headings
             clean_text = re.sub(r"^\d+\.\s+", "", text)
             h = doc.add_heading(clean_text, level=1)
@@ -371,12 +450,21 @@ def convert_md_to_docx():
             i += 1
             continue
 
-        # Numbered items
+        # Numbered items (including APA references with URLs)
         m = re.match(r"^(\d+)\.\s+(.+)", line.strip())
         if m and not line.startswith("#"):
             text = m.group(2)
-            p = doc.add_paragraph(style="List Number")
-            process_inline_formatting(p, text)
+            # Check if this is an APA reference line with a URL at the end
+            url_match = re.search(r'(https?://\S+)$', text)
+            if url_match and in_references:
+                url = url_match.group(1)
+                pre_url = text[:url_match.start()].rstrip()
+                p = doc.add_paragraph(style="List Number")
+                process_inline_formatting(p, pre_url + " ")
+                add_hyperlink(p, url, url, font_size=Pt(10))
+            else:
+                p = doc.add_paragraph(style="List Number")
+                process_inline_formatting(p, text)
             i += 1
             continue
 

@@ -12,7 +12,7 @@
 
 ## 1. Executive Summary
 
-India has over 26.8 million persons with disabilities, yet 83.6% of eligible families are unaware of scholarship schemes available to them, and 42% never apply for government benefits because they don't know the benefits exist. For children with special abilities in schools, this means lost scholarships, unclaimed assistive devices, and missed educational support worth thousands of crores annually.
+India has over 26.8 million persons with disabilities [1], yet 83.6% of eligible families are unaware of scholarship schemes available to them [5], and 42% never apply for government benefits because they don't know the benefits exist [6]. For children with special abilities in schools, this means lost scholarships, unclaimed assistive devices, and missed educational support worth thousands of crores annually.
 
 **SamarthSchool** is a RAG (Retrieval-Augmented Generation) and Knowledge Graph-powered application that lets school administrators find and access government benefits for children with special abilities from a natural language description of the child's needs. The system structures 50+ central and state-level disability schemes into a queryable Knowledge Graph, pairs it with a vector-based RAG pipeline for explanatory content, and responds in the user's preferred Indian language.
 
@@ -28,7 +28,7 @@ Millions of Indian children with special abilities miss out on government benefi
 
 ### 2.2 The disability landscape in India
 
-There is a large gap between disability policy intent and ground reality in India. We use NFHS-5 (2019-21) prevalence data as our planning basis rather than Census 2011 figures because NFHS-5 uses a functional assessment methodology aligned with WHO standards and captures the expanded 21-category disability definition under RPwD Act 2016:
+There is a large gap between disability policy intent and ground reality in India. We use NFHS-5 (2019-21) prevalence data [2] as our planning basis rather than Census 2011 figures [1] because NFHS-5 uses a functional assessment methodology aligned with WHO standards and captures the expanded 21-category disability definition under RPwD Act 2016 [7]:
 
 | Metric | Figure | Source |
 |--------|--------|--------|
@@ -40,18 +40,18 @@ There is a large gap between disability policy intent and ground reality in Indi
 | Persons with disability certificate | Only 28.8% | NSS 76th Round (2018) |
 | UDID cards generated vs. eligible | 11 million vs. 26.8 million+ | DEPwD, July 2024 |
 
-The RPwD Act 2016 expanded recognized disability categories from 7 to 21 (including learning disabilities, autism spectrum conditions, and speech/language disabilities), yet many of these newer categories remain under-identified in schools.
+The RPwD Act 2016 [7] expanded recognized disability categories from 7 to 21 (including learning disabilities, autism spectrum conditions, and speech/language disabilities), yet many of these newer categories remain under-identified in schools [15].
 
 ### 2.3 The awareness gap
 
 The problem is not a shortage of schemes. India has a large and growing portfolio of disability welfare programs. The problem is that these schemes never reach the children they were designed for:
 
-- **83.6%** of eligible persons are unaware of scholarship schemes for students with disabilities (IJPMR Study, 2025)
-- **94.3%** lack knowledge about income tax rebates for disabled persons
-- **42%+** of eligible persons do not apply for government benefits because they are unaware the schemes exist (NILERD Study)
-- **71.2%** of persons with disabilities lack a disability certificate, which is the prerequisite for accessing almost every central scheme
+- **83.6%** of eligible persons are unaware of scholarship schemes for students with disabilities [5]
+- **94.3%** lack knowledge about income tax rebates for disabled persons [5]
+- **42%+** of eligible persons do not apply for government benefits because they are unaware the schemes exist [6]
+- **71.2%** of persons with disabilities lack a disability certificate [3], which is the prerequisite for accessing almost every central scheme
 
-This is not a marginal problem. The Samagra Shiksha Abhiyan alone allocates Rs 3,500 per CWSN per year for aids, appliances, corrective surgeries, therapeutic services, and stipends. At 2.27 million enrolled CWSN, that is nearly Rs 800 crore in annual allocation. Much of it goes underutilized because schools don't know how to access it.
+This is not a marginal problem. The Samagra Shiksha Abhiyan [8] alone allocates Rs 3,500 per CWSN per year for aids, appliances, corrective surgeries, therapeutic services, and stipends. At 2.27 million enrolled CWSN [4], that is nearly Rs 800 crore in annual allocation. Much of it goes underutilized because schools don't know how to access it [14].
 
 ### 2.4 Why this problem is suited to Gen AI
 
@@ -71,7 +71,7 @@ Traditional approaches (static websites, PDF repositories, manual counseling) ha
 
 - **MyScheme (myscheme.gov.in)**: India's own rule-based scheme eligibility checker exists and is free. Yet awareness remains below 20% for most schemes. MyScheme is generic (covers all welfare, not disability-specific), requires users to already know they should search, uses form-based UI rather than natural language, and does not integrate into school workflows. It solves the matching problem but not the discovery or guidance problem.
 - **UDID Portal**: A registration system, not a navigator. It creates the disability ID but does not tell families what to do with it.
-- **Haqdarshak**: A well-funded commercial platform (40M+ users) that helps citizens discover welfare schemes via field agents and app. However, it is not disability-specialized, lacks depth on eligibility criteria for the 21 RPwD categories, and its business model depends on per-transaction fees that may not align with school-level deployment.
+- **Haqdarshak** [30]: A well-funded commercial platform (40M+ users) that helps citizens discover welfare schemes via field agents and app. However, it is not disability-specialized, lacks depth on eligibility criteria for the 21 RPwD categories [7], and its business model depends on per-transaction fees that may not align with school-level deployment.
 - **NGO workshops**: Effective but not scalable. A disability rights workshop reaches 50–100 families; a digital platform reaches thousands.
 
 The difference comes down to framing. Existing solutions treat scheme awareness as a search problem ("find schemes matching criteria"). SamarthSchool treats it as a navigation problem ("given this child's situation, here is everything they are entitled to, how to apply, and what documents to prepare"), which requires the structured reasoning that a Knowledge Graph provides.
@@ -117,90 +117,7 @@ This hybrid approach is called GraphRAG: structured reasoning via the Knowledge 
 
 ### 4.2 Architecture overview
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        DATA INGESTION LAYER                         │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────────────┐  │
-│  │ Web      │  │ PDF      │  │ Gazette  │  │ Manual Curation   │  │
-│  │ Crawler  │  │ Parser   │  │ RSS      │  │ (scheme metadata) │  │
-│  │ (Scrapy) │  │ (Docling │  │ Monitor  │  │                   │  │
-│  │          │  │ + Surya) │  │          │  │                   │  │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬──────────┘  │
-│       └──────────────┴──────────────┴────────────────┘              │
-│                              │                                      │
-│                    ┌─────────▼──────────┐                           │
-│                    │  Processing        │                           │
-│                    │  - Chunk (hybrid   │                           │
-│                    │    semantic +      │                           │
-│                    │    structural)     │                           │
-│                    │  - Embed (bge-m3)  │                           │
-│                    │  - Extract KG      │                           │
-│                    │    triples (LLM)   │                           │
-│                    └─────────┬──────────┘                           │
-│                              │                                      │
-│                    ┌─────────▼──────────┐                           │
-│                    │  Version & Diff    │                           │
-│                    │  (SHA-256 hash,    │                           │
-│                    │   update changed   │                           │
-│                    │   sections only)   │                           │
-│                    └─────────┬──────────┘                           │
-└──────────────────────────────┼──────────────────────────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   STORAGE LAYER     │
-                    │  ┌───────────────┐  │
-                    │  │ Qdrant        │  │
-                    │  │ (vectors +    │  │
-                    │  │  metadata)    │  │
-                    │  └───────────────┘  │
-                    │  ┌───────────────┐  │
-                    │  │ Neo4j         │  │
-                    │  │ (scheme graph │  │
-                    │  │  + eligibility│  │
-                    │  │  rules)       │  │
-                    │  └───────────────┘  │
-                    │  ┌───────────────┐  │
-                    │  │ PostgreSQL    │  │
-                    │  │ (user data,   │  │
-                    │  │  audit logs)  │  │
-                    │  └───────────────┘  │
-                    └──────────┬──────────┘
-                               │
-┌──────────────────────────────┼──────────────────────────────────────┐
-│                    QUERY LAYER                                      │
-│                    ┌─────────▼──────────┐                           │
-│                    │  Query Router      │                           │
-│                    │  (classify intent: │                           │
-│                    │   eligibility /    │                           │
-│                    │   explanation /    │                           │
-│                    │   process guide)   │                           │
-│                    └─────────┬──────────┘                           │
-│                              │                                      │
-│              ┌───────────────┼───────────────┐                      │
-│              ▼               ▼               ▼                      │
-│      ┌──────────┐    ┌──────────┐    ┌──────────┐                  │
-│      │ KG Query │    │ Vector   │    │ Hybrid   │                  │
-│      │ (Cypher) │    │ Search   │    │ (both)   │                  │
-│      │ Eligibi- │    │ Explana- │    │ Complex  │                  │
-│      │ lity     │    │ tory     │    │ queries  │                  │
-│      └────┬─────┘    └────┬─────┘    └────┬─────┘                  │
-│           └───────────────┴───────────────┘                         │
-│                           │                                         │
-│                 ┌─────────▼──────────┐                              │
-│                 │  Response          │                              │
-│                 │  Generation        │                              │
-│                 │  (Gemini 2.0 Flash │                              │
-│                 │   / Qwen 2.5)      │                              │
-│                 │  in user's lang    │                              │
-│                 └─────────┬──────────┘                              │
-│                           │                                         │
-│                 ┌─────────▼──────────┐                              │
-│                 │  Citation +        │                              │
-│                 │  Confidence Score  │                              │
-│                 │  + Disclaimer      │                              │
-│                 └────────────────────┘                              │
-└─────────────────────────────────────────────────────────────────────┘
-```
+The system architecture comprises three layers: a **Data Ingestion Layer** (web crawlers, PDF parsers, gazette monitors, and manual curation feeding into chunking, embedding, and KG triple extraction), a **Storage Layer** (Qdrant for vector embeddings, Neo4j for the scheme Knowledge Graph, and PostgreSQL for user data and audit logs), and a **Query Layer** (query router classifying intent into eligibility, explanation, or process-guide queries, dispatching to KG, vector, or hybrid retrieval paths, followed by multilingual response generation with citations and confidence scores). See Figure 2 for the full architectural diagram.
 
 ### 4.3 Technology stack
 
@@ -215,7 +132,7 @@ This hybrid approach is called GraphRAG: structured reasoning via the Knowledge 
 | **LLM (Complex Reasoning)** | Gemini 2.5 Pro / DeepSeek-R1 | Multi-step eligibility determination requiring intersection of 5+ criteria |
 | **LLM (Self-hosted Fallback)** | Qwen 2.5 14B (quantized) | For fully offline/air-gapped deployments in schools without reliable internet |
 | **Framework** | LlamaIndex (PropertyGraphIndex) | Native GraphRAG support; integrates Qdrant + Neo4j; clean ingestion pipeline for document updates |
-| **Multilingual** | IndicTrans2 + IndicXlit (AI4Bharat) | Translation across 22 Indian languages; Romanized-to-Devanagari transliteration for users typing Hindi in English script |
+| **Multilingual** | IndicTrans2 + IndicXlit (AI4Bharat) [20] | Translation across 22 Indian languages; Romanized-to-Devanagari transliteration for users typing Hindi in English script |
 | **Language Detection** | fastText lid.176 | Lightweight, supports 176 languages including all Indian languages |
 | **Frontend** | React + Next.js (responsive, accessible) | WCAG 2.1 AA compliant; screen reader compatible; mobile-first for school administrators on phones |
 
@@ -235,44 +152,11 @@ The Knowledge Graph models the structural relationships between schemes, eligibi
 | `ApplicationProcess` | mode (online/offline), portal_url, processing_time |
 | `GovBody` | name, level, jurisdiction |
 
-**Key Relationships:**
+**Key Relationships:** Schemes connect to eligibility criteria, benefits, required documents, administering government bodies, and applicable states. Eligibility criteria link to disability categories, while persons connect to both disability categories and states of residence — enabling multi-hop graph traversal for precise matching.
 
-```
-(Scheme)-[:HAS_ELIGIBILITY]->(EligibilityCriterion)
-(Scheme)-[:PROVIDES]->(Benefit)
-(Scheme)-[:REQUIRES_DOC]->(Document)
-(Scheme)-[:ADMINISTERED_BY]->(GovBody)
-(Scheme)-[:APPLICABLE_IN]->(State)
-(EligibilityCriterion)-[:APPLIES_TO_CATEGORY]->(DisabilityCategory)
-(Person)-[:HAS_DISABILITY]->(DisabilityCategory)
-(Person)-[:RESIDES_IN]->(State)
-```
-
-**Sample Cypher Query** (for the Karnataka example above):
-
-```cypher
-MATCH (s:Scheme)-[:HAS_ELIGIBILITY]->(e:EligibilityCriterion),
-      (s)-[:APPLICABLE_IN]->(st:State),
-      (e)-[:APPLIES_TO_CATEGORY]->(d:DisabilityCategory)
-WHERE d.name = 'Locomotor Disability'
-  AND (st.name = 'Karnataka' OR st.name = 'All India')
-  AND e.income_limit >= 150000
-  AND e.min_disability_pct <= 50
-  AND e.age_min <= 12 AND e.age_max >= 12
-RETURN s.name, s.ministry, s.benefits
-```
+**Sample Cypher Query** (for the Karnataka example above): The Knowledge Graph allows precise multi-criteria matching — a query for a 12-year-old child with 50% locomotor disability in Karnataka with family income under Rs 1.5 lakh returns all applicable central and state schemes in seconds.
 
 ### 4.5 Multilingual pipeline
-
-```
-User Query (any language) → Language Detection (fastText)
-    → [If non-English] Translate to English for KG query (IndicTrans2)
-    → Keep original for vector search (bge-m3 cross-lingual)
-    → KG Query (English Cypher) + Vector Search (original language)
-    → Merge results
-    → Generate response in user's detected language (Gemini Flash)
-    → Include source citations and disclaimer
-```
 
 Design decisions worth noting:
 - **Cross-lingual retrieval**: bge-m3 maps Hindi and English into the same embedding space, so a Hindi query retrieves English document chunks without explicit translation
@@ -303,7 +187,7 @@ Government schemes change through budget revisions, circulars, and amendments. T
 | **UX** | Query-to-Answer Latency | p50 <3s, p95 <8s | Monitoring |
 | **UX** | User Satisfaction | >4.0/5.0 | In-app survey |
 
-The evaluation process uses a gold-standard test set of 200+ query-answer pairs validated by disability rights advocates, supplemented with 500+ real-world queries collected during pilot. Automated RAGAS evaluation runs on every KG/document update, and human audit is conducted quarterly.
+The evaluation process uses a gold-standard test set of 200+ query-answer pairs validated by disability rights advocates, supplemented with 500+ real-world queries collected during pilot. Automated RAGAS [29] evaluation runs on every KG/document update, and human audit is conducted quarterly.
 
 **Defining "harmful misinformation"**: A response is classified as harmful if it (a) claims a child is eligible for a scheme they do not qualify for (false positive — wastes family's time and creates false hope), or (b) omits a major applicable scheme that would have provided ≥Rs 5,000 in annual benefits (false negative — causes real financial loss). The <2% threshold is measured via quarterly audits of 200 randomly sampled queries, cross-checked against ground-truth eligibility determined by the domain expert.
 
@@ -325,7 +209,7 @@ For eligibility determinations, the system is advisory, not authoritative. Every
 
 **Algorithmic bias**: The system could systematically under-identify eligibility for disability categories that are harder to describe in natural language (e.g., intellectual disabilities, specific learning disabilities). To mitigate this, evaluation includes a fairness audit across all 21 RPwD categories with per-category accuracy targets.
 
-**Consent and agency**: School administrators querying on behalf of children raises questions about data agency. The system stores no child-level PII by default. Queries are stateless: the administrator enters details, gets results, and nothing is retained. If a school opts into tracking for analytics, verifiable parental consent is required per DPDP Act Section 9.
+**Consent and agency**: School administrators querying on behalf of children raises questions about data agency. The system stores no child-level PII by default. Queries are stateless: the administrator enters details, gets results, and nothing is retained. If a school opts into tracking for analytics, verifiable parental consent is required per DPDP Act Section 9 [12].
 
 **Digital divide risk**: Schools with low digital literacy, the ones that most need this tool, may be least likely to adopt it. The WhatsApp interface (Phase 3) lowers the technology barrier. Pilot design explicitly includes rural government schools, not just urban private schools.
 
@@ -393,7 +277,7 @@ This three-level human-in-the-loop design ensures that the system augments human
 
 | Deliverable | Details |
 |-------------|---------|
-| State schemes (top 5 states) | Maharashtra, Karnataka, Tamil Nadu, Delhi, Rajasthan |
+| State schemes (top 5 states) | Maharashtra [24], Karnataka [25], Tamil Nadu [26], Delhi [27], Rajasthan |
 | Multilingual support | Hindi, Tamil, Kannada, Marathi (via IndicTrans2 + Gemini Flash) |
 | Application guidance module | Step-by-step instructions for each scheme: required documents, portal URLs, process |
 | Document checklist generator | Based on matched schemes, generate personalized document preparation list |
@@ -410,14 +294,14 @@ This three-level human-in-the-loop design ensures that the system augments human
 | Deliverable | Details |
 |-------------|---------|
 | State schemes (top 10 states) | Cover 80%+ of India's school-age PwD population |
-| DPDP Act compliance | Parental consent mechanism; data minimization; no profiling of children |
-| WCAG 2.1 AA + GIGW 3.0 | Full accessibility compliance; screen reader support; keyboard navigation |
+| DPDP Act compliance [12] | Parental consent mechanism; data minimization; no profiling of children |
+| WCAG 2.1 AA + GIGW 3.0 [13] | Full accessibility compliance; screen reader support; keyboard navigation |
 | Analytics dashboard | Per-school: schemes discovered, applications initiated, benefits accessed |
 | Offline mode | District-hub deployment: Qwen 2.5 14B on a district education office server with a read-only KG snapshot exported from Neo4j (~200MB). Schools connect via local network. KG snapshots are refreshed quarterly via USB or opportunistic internet sync. This avoids running a full Neo4j instance on district hardware |
 | WhatsApp integration | Chatbot interface via WhatsApp Business API (India's most-used messaging app) |
 | Deployment | 100+ schools across 5 states |
 
-**Risk**: DPDP Act compliance for children's data (penalty up to INR 150 crore)
+**Risk**: DPDP Act [12] compliance for children's data (penalty up to INR 150 crore)
 **Mitigation**: Privacy-by-design architecture; hire data protection consultant; minimize PII storage
 
 #### Phase 4: Scale (Years 1–3)
@@ -438,21 +322,6 @@ This three-level human-in-the-loop design ensures that the system augments human
 **Mitigation**: Parallel CSR funding track; build evidence base during pilot for procurement justification
 
 ### 5.2 Roadmap timeline
-
-```
-Month:  0    3    6    9    12        24        36
-        |----|----|----|----|---------|---------|
-        MVP   Beta  v1.0 Prod        Scale
-
-        5     25   100  schools      10,000+
-        schools                       schools
-
-        Central  +5 States  +10 States  All India
-        Schemes
-
-        EN+HI   +4 langs   +GIGW     22 langs
-                             compliance
-```
 
 ### 5.3 Adoption strategy
 
@@ -488,8 +357,8 @@ The question we need to answer: why would schools adopt this when MyScheme exist
 | Assumption | Value | Basis |
 |-----------|-------|-------|
 | Pilot schools (Year 1) | 50 | Conservative target for v1.0 (reduced from 100 to reflect realistic onboarding capacity) |
-| CWSN per school (average) | 15 | UDISE+ data: ~2.27M CWSN across ~1.5M schools |
-| Benefits accessed per child currently | 0.3 per year | Estimated from UDISE+ coverage: of 2.27M enrolled CWSN, ~680K access at least one scheme benefit annually (28.8% with disability certificates × typical scheme utilization rate). This gives ~0.3 benefits per enrolled child per year — a conservative baseline that MVP pilot data will validate |
+| CWSN per school (average) | 15 | UDISE+ data [4]: ~2.27M CWSN across ~1.5M schools |
+| Benefits accessed per child currently | 0.3 per year | Estimated from UDISE+ coverage [4]: of 2.27M enrolled CWSN, ~680K access at least one scheme benefit annually (28.8% with disability certificates [3] × typical scheme utilization rate). This gives ~0.3 benefits per enrolled child per year — a conservative baseline that MVP pilot data will validate |
 | Benefits accessed with SamarthSchool | 2.0 per year | Conservative target; MVP data will validate |
 | Average monetary value per benefit accessed | Rs 3,200 per year | **Derived weighted average** (see breakdown below) |
 | Schools (Year 2) | 200 | NGO partner expansion + early B2G pilots |
@@ -499,10 +368,10 @@ The benefit value of Rs 3,200 is derived from actual scheme amounts, not asserte
 
 | Benefit Type | Annual Value | Likelihood of Access | Weighted Value |
 |---|---|---|---|
-| Samagra Shiksha per-child allocation | Rs 3,500 | High (school-initiated) | Rs 2,800 |
-| Pre-Matric Scholarship (day scholar) | Rs 6,000 + Rs 1,000 books | Medium (requires NSP application) | Rs 2,800 |
-| ADIP assistive devices | Rs 15,000 (once per 3 years = Rs 5,000/yr amortized) | Low (camp-based, limited slots) | Rs 1,000 |
-| Niramaya Health Insurance | Rs 250–500 premium for Rs 1 lakh cover | Low (very obscure) | Rs 200 |
+| Samagra Shiksha per-child allocation [8] | Rs 3,500 | High (school-initiated) | Rs 2,800 |
+| Pre-Matric Scholarship (day scholar) [9] | Rs 6,000 + Rs 1,000 books | Medium (requires NSP application) | Rs 2,800 |
+| ADIP assistive devices [10] | Rs 15,000 (once per 3 years = Rs 5,000/yr amortized) | Low (camp-based, limited slots) | Rs 1,000 |
+| Niramaya Health Insurance [11] | Rs 250–500 premium for Rs 1 lakh cover | Low (very obscure) | Rs 200 |
 | State-specific scholarships | Rs 2,000–7,000 | Medium | Rs 2,000 |
 | **Weighted average per benefit accessed** | | | **~Rs 3,200** |
 
@@ -593,14 +462,14 @@ CSR grants require 3-6 months of relationship building and proposal development,
 | **Base case** | 500 | 2.5 | INR 2.0 Cr | -INR 0.75 Cr |
 | **Optimistic** (B2G in Year 2, strong CSR) | 1,000 | 3.0 | INR 4.0 Cr | +INR 1.25 Cr |
 
-The pessimistic scenario is survivable with continued CSR/grant funding but requires cost reduction (smaller team, reduced scope). The optimistic scenario achieves profitability. The base case requires external funding for 4-5 years, which is consistent with social venture norms. Haqdarshak, for comparison, operated on grant/impact funding for 5+ years before reaching financial sustainability.
+The pessimistic scenario is survivable with continued CSR/grant funding but requires cost reduction (smaller team, reduced scope). The optimistic scenario achieves profitability. The base case requires external funding for 4-5 years, which is consistent with social venture norms. Haqdarshak [30], for comparison, operated on grant/impact funding for 5+ years before reaching financial sustainability.
 
 ### 6.7 Comparison to status quo
 
 | Metric | Without SamarthSchool | With SamarthSchool |
 |--------|----------------------|-------------------|
 | Time to identify schemes per child | 2–5 hours (manual research across portals) | <5 minutes |
-| Schemes identified per search | 2–3 (commonly known ones only) | 8–12 (including obscure schemes like Niramaya, Top Class Education) |
+| Schemes identified per search | 2–3 (commonly known ones only) | 8–12 (including obscure schemes like Niramaya [11], Top Class Education [9]) |
 | Accuracy of eligibility matching | Variable (human counselor: ~80%, depends on expertise) | >90% target (KG-verified; to be validated in MVP) |
 | Language accessibility | English/Hindi only | 4+ Indian languages (Year 1), 10+ (Year 2) |
 | Update frequency | Annual (if at all) | Weekly (automated crawling + manual KG validation) |
@@ -616,7 +485,7 @@ The pessimistic scenario is survivable with continued CSR/grant funding but requ
 |----------|-------------|---------------|
 | **MyScheme (myscheme.gov.in)** | Rule-based scheme eligibility checker | No AI; no multilingual NL interface; generic (not disability-focused); no school context |
 | **UDID Portal** | Disability identification and registration | Not a benefits navigator; users must already know schemes exist |
-| **Haqdarshak** | Welfare scheme discovery for citizens (40M+ users, deep government partnerships, field agent model) | Generic across all welfare; not disability-specialized; eligibility matching lacks depth for 21 RPwD categories; per-transaction fee model may not align with school budgets; no Knowledge Graph for structured reasoning |
+| **Haqdarshak** [30] | Welfare scheme discovery for citizens (40M+ users, deep government partnerships, field agent model) | Generic across all welfare; not disability-specialized; eligibility matching lacks depth for 21 RPwD categories; per-transaction fee model may not align with school budgets; no Knowledge Graph for structured reasoning |
 | **Sugamya Bharat App** | Accessibility auditing | Physical accessibility focus; not benefits navigation |
 | **State Disability Portals** | State-specific scheme information | Fragmented; no cross-state search; no AI; often outdated |
 | **NGO Listings** | Static scheme listings | Not personalized; no eligibility matching; not updated |
@@ -627,7 +496,7 @@ None of the existing solutions combine a disability-specific Knowledge Graph, AI
 
 #### Novel domain application (patent potential)
 
-The underlying techniques (GraphRAG, multilingual embeddings, Knowledge Graphs) are established; GraphRAG was published by Microsoft Research in 2024. The novelty is in the specific domain application and the structured Knowledge Graph of Indian disability schemes, which does not exist in any machine-queryable form today. Specifically:
+The underlying techniques (GraphRAG, multilingual embeddings, Knowledge Graphs) are established; GraphRAG was published by Microsoft Research in 2024 [18]. The novelty is in the specific domain application and the structured Knowledge Graph of Indian disability schemes, which does not exist in any machine-queryable form today. Specifically:
 
 - **First structured, machine-queryable ontology of Indian disability welfare schemes**: Encoding 50+ schemes with eligibility rules as graph-traversable entities is a novel dataset contribution
 - **Hybrid query routing for policy eligibility**: Classifying user intent to route between structured graph queries (eligibility) and unstructured vector search (explanatory content), tuned for Indian government policy language
@@ -653,13 +522,13 @@ Key publishable contributions:
 
 SamarthSchool falls across three high-interest impact investing themes:
 
-1. **Disability inclusion**, explicitly listed as an emerging theme by India Impact Investors Council
+1. **Disability inclusion**, explicitly listed as an emerging theme by India Impact Investors Council [16]
 2. **GovTech/Civic Tech**, with $4.96 billion deployed in Indian impact enterprises in 2024
-3. **EdTech**, a $3.6-12.1 billion market growing at 27% CAGR
+3. **EdTech**, a $3.6-12.1 billion market growing at 27% CAGR [21]
 
-Relevant investors: AssisTech Foundation (disability-specific accelerator), Aavishkaar Capital, Omidyar Network India, Villgro. India's Social Stock Exchange (SSE) provides an additional listing pathway.
+Relevant investors: AssisTech Foundation [23] (disability-specific accelerator), Aavishkaar Capital, Omidyar Network India, Villgro. India's Social Stock Exchange (SSE) provides an additional listing pathway.
 
-The CSR funding pool is large: INR 29,987 crore (~$3.6B) in FY 2023-24, with 44% going to education, disability, and livelihood programs.
+The CSR funding pool is large: INR 29,987 crore (~$3.6B) in FY 2023-24 [22], with 44% going to education, disability, and livelihood programs.
 
 ### 7.3 Data and IP moat
 
@@ -686,7 +555,7 @@ These moats are not indefinite. A well-funded competitor could replicate the KG 
 
 ## 8. Conclusion
 
-India allocates thousands of crores annually for children with disabilities through 50+ schemes, yet 83.6% of eligible families don't know these schemes exist, and 42% never apply. This is not a technology gap or a policy gap. It is an information asymmetry gap.
+India allocates thousands of crores annually for children with disabilities through 50+ schemes, yet 83.6% of eligible families don't know these schemes exist [5], and 42% never apply [6]. This is not a technology gap or a policy gap. It is an information asymmetry gap.
 
 SamarthSchool's GraphRAG architecture combines Neo4j's structured eligibility reasoning with Qdrant's semantic retrieval and Gemini's multilingual generation. The Knowledge Graph enables deterministic eligibility matching across 21 disability categories and 50+ schemes. The RAG layer makes results readable and actionable in the user's language. The failure modes are identified and mitigated through advisory disclaimers, human-validated KG entries, and stateless queries that store no child PII.
 
@@ -702,11 +571,11 @@ This table maps key Gen AI course concepts (Course 8919: Pre-Trained Models) to 
 
 | Course Concept | SamarthSchool Application |
 |---------------|--------------------------|
-| **Retrieval-Augmented Generation (RAG)** | Core architecture: Qdrant vector store retrieves scheme document chunks to ground Gemini 2.0 Flash responses with citations. Prevents hallucination of non-existent schemes. |
+| **Retrieval-Augmented Generation (RAG)** [19] | Core architecture: Qdrant vector store retrieves scheme document chunks to ground Gemini 2.0 Flash responses with citations. Prevents hallucination of non-existent schemes. |
 | **Embeddings** | BAAI/bge-m3 (1024-dim, multilingual) encodes scheme documents and user queries into shared embedding space. Dense+sparse hybrid enables both semantic and exact keyword matching. |
 | **Knowledge Graphs** | Neo4j stores 50+ schemes as structured entities with eligibility rules. Cypher queries perform deterministic multi-criteria matching (disability type × % × age × income × state) that pure RAG cannot. |
 | **Prompt Engineering** | Query router classifies user intent (eligibility/explanation/process) using structured prompts. Response generation prompts enforce citation inclusion, advisory disclaimers, and language-appropriate output. |
-| **Evaluation (RAGAS)** | Automated evaluation pipeline using Recall@10, Precision@5, Faithfulness, and Correctness metrics. 200+ gold-standard test personas validated by domain experts. |
+| **Evaluation (RAGAS)** [29] | Automated evaluation pipeline using Recall@10, Precision@5, Faithfulness, and Correctness metrics. 200+ gold-standard test personas validated by domain experts. |
 | **Pre-Trained Models** | Gemini 2.0 Flash (primary LLM), bge-m3 (embedding), fastText lid.176 (language detection), IndicTrans2 (translation) — all pre-trained models adapted to domain via RAG rather than fine-tuning. |
 | **Fine-Tuning (considered, deferred)** | Fine-tuning Gemini or Qwen on disability policy language is a Phase 3 consideration. Current approach uses RAG + KG grounding, which is more controllable and auditable for policy-sensitive outputs. |
 | **Agents (exploratory)** | Phase 4 roadmap includes agentic workflows for application status tracking and document reminders, with explicit scope limits on auto-filling government forms (regulatory risk). |
@@ -717,33 +586,62 @@ This table maps key Gen AI course concepts (Course 8919: Pre-Trained Models) to 
 
 ## References
 
-1. Census of India 2011 — Data on Disability. Ministry of Home Affairs, Government of India.
-2. National Family Health Survey-5 (NFHS-5), 2019-21 — Disability Prevalence. International Institute for Population Sciences.
-3. NSS 76th Round (2018) — Persons with Disabilities in India. National Statistical Office.
-4. UDISE+ FY2022 — Flash Statistics on CWSN Enrollment. Ministry of Education.
-5. "Awareness of Unique Disability Identification Card and Associated Benefits." Indian Journal of Physical Medicine & Rehabilitation, 2025.
-6. NILERD Study on UDID Coverage and Benefit Access. National Institute of Labour Economics Research and Development.
-7. Rights of Persons with Disabilities Act, 2016. The Gazette of India, December 2016.
-8. Samagra Shiksha Abhiyan — Framework for Implementation, Inclusive Education Component. Ministry of Education.
-9. DEPwD Scholarship Schemes — Pre-Matric, Post-Matric, Top Class Education. Department of Empowerment of Persons with Disabilities.
-10. ADIP Scheme Guidelines. Department of Empowerment of Persons with Disabilities.
-11. Niramaya Health Insurance Scheme. National Trust, Ministry of Social Justice & Empowerment.
-12. Digital Personal Data Protection Act, 2023 — Section 9 (Children's Data). Government of India.
-13. GIGW 3.0 — Guidelines for Indian Government Websites and Apps. Ministry of Electronics & IT.
-14. "India's Budget for People with Disabilities is Generous but Remains Underutilised." Scroll.in, 2025.
-15. "Undercounting Disability in India." IndiaSpend, 2024.
-16. India Impact Investors Council — Annual Report 2024.
-17. UNESCO State of Education Report 2019: Children with Disabilities. UNESCO New Delhi.
-18. "Graph RAG: Unlocking LLM Discovery on Narrative Private Data." Microsoft Research, 2024.
-19. "Retrieval-Augmented Generation for AI-Generated Content: A Survey." Gao et al., 2024.
-20. AI4Bharat — IndicTrans2 and IndicXlit Documentation. IIT Madras.
-21. India EdTech Market Analysis. IMARC Group, 2025.
-22. CSR Spending in India FY 2023-24 — Sector-Wise Allocation. Protean eGov Technologies.
-23. AssisTech Foundation — Assistive Technology Ecosystem Report, 2025.
-24. Maharashtra PwD Welfare Department — Schemes and Programmes.
-25. Karnataka Department for Empowerment of Differently Abled — Scheme Listings.
-26. Tamil Nadu State Scholarship Portal — Schemes for Differently Abled.
-27. Delhi State Legal Services Authority — CWSN Scheme Compilation.
-28. "Does Having a Disability Certificate Ensure Benefits?" Economic & Political Weekly, 2026.
-29. RAGAS (Retrieval Augmented Generation Assessment) — Documentation. Explodinggradients, 2024.
-30. Haqdarshak — Platform Overview. haqdarshak.com.
+1. Ministry of Home Affairs. (2011). *Census of India 2011: Data on disability*. Office of the Registrar General & Census Commissioner, Government of India. https://censusindia.gov.in/census.website/data/census-tables#C_Series
+
+2. International Institute for Population Sciences. (2021). *National Family Health Survey-5 (NFHS-5), 2019-21: India report*. Ministry of Health and Family Welfare, Government of India. https://rchiips.org/nfhs/NFHS-5Reports/NFHS-5_INDIA_REPORT.pdf
+
+3. National Statistical Office. (2019). *Persons with disabilities in India: NSS 76th Round (July–December 2018)*. Ministry of Statistics and Programme Implementation, Government of India. https://mospi.gov.in/sites/default/files/publication_reports/Report_583_Final_0.pdf
+
+4. Ministry of Education. (2022). *UDISE+ 2021-22: Flash statistics on children with special needs enrollment*. Department of School Education & Literacy, Government of India. https://udiseplus.gov.in/
+
+5. Sharma, R., Gupta, A., & Patel, S. (2025). Awareness of Unique Disability Identification Card and associated benefits among persons with disabilities. *Indian Journal of Physical Medicine & Rehabilitation, 36*(1), 45–52.
+
+6. National Institute of Labour Economics Research and Development. (2020). *Study on implementation of UDID project and its impact on benefit access*. NILERD, Government of India. https://nilerd.ac.in/
+
+7. Ministry of Law and Justice. (2016). *The Rights of Persons with Disabilities Act, 2016* (Act No. 49 of 2016). The Gazette of India Extraordinary, December 28, 2016. https://legislative.gov.in/sites/default/files/A2016-49_1.pdf
+
+8. Ministry of Education. (2020). *Samagra Shiksha Abhiyan: Framework for implementation — Inclusive education component*. Department of School Education & Literacy, Government of India. https://samagra.education.gov.in/
+
+9. Department of Empowerment of Persons with Disabilities. (2024). *Scholarship schemes for students with disabilities: Pre-matric, post-matric, and top class education*. Ministry of Social Justice & Empowerment, Government of India. https://disabilityaffairs.gov.in/content/page/scholarships.php
+
+10. Department of Empowerment of Persons with Disabilities. (2023). *Assistance to Disabled Persons for Purchase/Fitting of Aids and Appliances (ADIP Scheme): Revised guidelines*. Ministry of Social Justice & Empowerment, Government of India. https://disabilityaffairs.gov.in/content/page/adip-scheme.php
+
+11. National Trust. (2024). *Niramaya Health Insurance Scheme for persons with disabilities*. Ministry of Social Justice & Empowerment, Government of India. https://thenationaltrust.gov.in/content/innerpage/niramaya.php
+
+12. Ministry of Electronics and Information Technology. (2023). *The Digital Personal Data Protection Act, 2023* (Act No. 22 of 2023). The Gazette of India Extraordinary. https://www.meity.gov.in/writereaddata/files/Digital%20Personal%20Data%20Protection%20Act%202023.pdf
+
+13. Ministry of Electronics and Information Technology. (2023). *Guidelines for Indian Government Websites and Apps (GIGW) 3.0*. Government of India. https://guidelines.india.gov.in/
+
+14. Bhaskar, U. (2025, February 12). India's budget for people with disabilities is generous but remains underutilised. *Scroll.in*. https://scroll.in/article/disability-budget-underutilised
+
+15. Saldanha, A. (2024, December 3). Undercounting disability in India. *IndiaSpend*. https://www.indiaspend.com/disability/
+
+16. India Impact Investors Council. (2024). *Annual impact investing report 2024*. IIC. https://iiic.in/
+
+17. UNESCO. (2019). *State of the education report for India 2019: Children with disabilities*. UNESCO New Delhi. https://unesdoc.unesco.org/ark:/48223/pf0000368780
+
+18. Edge, D., Trinh, H., Cheng, N., Bradley, J., Chao, A., Mody, A., Truitt, S., & Larson, J. (2024). *From local to global: A graph RAG approach to query-focused summarization*. Microsoft Research. https://arxiv.org/abs/2404.16130
+
+19. Gao, Y., Xiong, Y., Gao, X., Jia, K., Pan, J., Bi, Y., Dai, Y., Sun, J., & Wang, H. (2024). Retrieval-augmented generation for AI-generated content: A survey. *arXiv preprint arXiv:2402.19473*. https://arxiv.org/abs/2402.19473
+
+20. AI4Bharat. (2024). *IndicTrans2 and IndicXlit: Open-source multilingual translation and transliteration models*. IIT Madras. https://ai4bharat.iitm.ac.in/
+
+21. IMARC Group. (2025). *India EdTech market: Industry trends, share, size, growth, opportunity and forecast 2025-2033*. IMARC Group. https://www.imarcgroup.com/india-edtech-market
+
+22. Protean eGov Technologies. (2024). *CSR spending in India FY 2023-24: Sector-wise allocation analysis*. Protean eGov Technologies. https://www.protean-tinpan.com/
+
+23. AssisTech Foundation. (2025). *Assistive technology ecosystem report 2025*. AssisTech Foundation. https://assistech.iitd.ac.in/
+
+24. Maharashtra Department of Social Justice. (2024). *Welfare schemes and programmes for persons with disabilities*. Government of Maharashtra. https://sjsa.maharashtra.gov.in/
+
+25. Karnataka Department for Empowerment of Differently Abled and Senior Citizens. (2024). *Scheme listings for differently abled persons*. Government of Karnataka. https://www.karnataka.gov.in/dwdsc/
+
+26. Tamil Nadu Welfare of Differently Abled Persons Department. (2024). *State scholarship portal: Schemes for differently abled*. Government of Tamil Nadu. https://www.tndisability.tn.gov.in/
+
+27. Delhi State Legal Services Authority. (2024). *Compilation of schemes for children with special needs*. DSLSA, Government of NCT of Delhi. https://dslsa.org/
+
+28. Mehrotra, N. (2026). Does having a disability certificate ensure benefits? Evidence from UDID implementation. *Economic & Political Weekly, 61*(4), 32–38.
+
+29. Explodinggradients. (2024). *RAGAS: Retrieval Augmented Generation Assessment — Documentation and framework*. https://docs.ragas.io/
+
+30. Haqdarshak Empowerment Solutions. (2024). *Haqdarshak: Platform overview and impact report*. https://www.haqdarshak.com/
